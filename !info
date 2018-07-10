@@ -1,0 +1,7 @@
+poczytać na temat wykonywania tcyh samych akcji w wielu miejscach
+np. usuwanie rekordu jest i na liście i w widoku gabinetów
+teoretycznie można będzie zrobic odwołanie do officeService.removeOffice(office)
+ale wtedy i tak zostaje owiniecie tego w ion-confirm
+co wtedy? dublować, czy da się jakoś ładnie DRY
+
+przerobić gabinety na ngmodel

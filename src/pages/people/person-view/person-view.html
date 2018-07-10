@@ -1,0 +1,114 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Uczestnik {{person.name}}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentPopover($event, person)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      Zwrot grzecznościowy
+      <ion-note item-end>
+        {{ person.gender ? 'Pani' : 'Pan' }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Adres E-mail
+      <ion-note item-end>
+        {{ person.email }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Telefon komórkowy
+      <ion-note item-end>
+        {{ person.phone }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Liczba gabinetów
+      <ion-note item-end>
+        {{ person.officesNo }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Użytkowniczka/użytkownik Sonicare
+      <ion-note item-end>
+        {{ person.sonicareUser ? 'Tak' : 'Nie' }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Zainteresowany/a rekomendowaniem Sonicare
+      <ion-note item-end>
+        {{ person.sonicareRecom ? 'Tak' : 'Nie' }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Zainteresowany/a otrzymaniem kodów rabatowych
+      <ion-note item-end>
+        {{ person.wantCodes ? 'Tak' : 'Nie' }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Wręczono pakiet startowy
+      <ion-note item-end>
+        {{ person.gotStarter ? 'Tak' : 'Nie' }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Numer pakietu starotowgo
+      <ion-note item-end>
+        {{ person.starterNo }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Wręczono ekspozytor Sonicare
+      <ion-note item-end>
+        {{ person.gotExpositor ? 'Tak' : 'Nie' }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Zgłaszam udział w programie
+      <ion-note item-end>
+        {{ person.agreeReg ? 'Tak' : 'Nie' }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Zgoda marketingowa 1
+      <ion-note item-end>
+        {{ person.agreeMark1 ? 'Tak' : 'Nie' }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Zgoda marketingowa 2
+      <ion-note item-end>
+        {{ person.agreeMark2 ? 'Tak' : 'Nie' }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Zgoda marketingowa 3
+      <ion-note item-end>
+        {{ person.agreeMark3 ? 'Tak' : 'Nie' }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Zgoda marketingowa 4
+      <ion-note item-end>
+        {{ person.agreeMark4 ? 'Tak' : 'Nie' }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Informacje dodatkowe
+      <ion-note item-end>
+        {{ person.additionalData }}
+      </ion-note>
+    </ion-item>
+  </ion-list>
+</ion-content>

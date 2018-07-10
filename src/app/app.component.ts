@@ -3,8 +3,10 @@ import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
+import { EventsPage } from '../pages/events/events';
+import { OfficesPage } from '../pages/offices/offices';
+import { SettingsPage } from '../pages/settings/setings';
+import { PeoplePage } from '../pages/people/people';
 
 @Component({
   templateUrl: 'app.html'
@@ -12,7 +14,7 @@ import { ListPage } from '../pages/list/list';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = HomePage;
+  rootPage: any = EventsPage;
 
   pages: Array<{title: string, component: any}>;
 
@@ -21,8 +23,10 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
+      { title: 'Wizyty', component: EventsPage },
+      { title: 'Gabinety', component: OfficesPage },
+      { title: 'Uczestnicy', component: PeoplePage },
+      { title: 'Ustawienia', component: SettingsPage }
     ];
 
   }
@@ -32,6 +36,7 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
+      this.statusBar.backgroundColorByHexString("#E64A19");
       this.splashScreen.hide();
     });
   }
