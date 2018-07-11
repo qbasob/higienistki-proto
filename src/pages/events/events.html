@@ -7,6 +7,34 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  TODO
+<ion-content>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-down" pullingText="Przeciągnij w dół aby odświeżyć" refreshingSpinner="crescent"
+      refreshingText="Ładowanie...">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-searchbar></ion-searchbar>
+
+  <ion-list>
+    <ion-item-sliding *ngFor="let event of events">
+      <button ion-item (click)="details(event)">
+        {{event.name}}
+        <ion-note item-end>
+           {{event.date | date: 'dd.MM.yyyy'}}
+        </ion-note>
+      </button>
+      <ion-item-options side="right">
+        <button ion-button disabled color="light" (click)="details(event)">Podgląd [TODO]</button>
+        <button ion-button disabled color="light" (click)="edit(event)">Edytuj [TODO]</button>
+        <button ion-button color="danger" (click)="remove(event)">Usuń</button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-fab right bottom>
+    <button (click)="add()" ion-fab color="secondary">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>

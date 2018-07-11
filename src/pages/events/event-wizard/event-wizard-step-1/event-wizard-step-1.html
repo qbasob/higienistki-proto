@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Wybór gabinetu</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-item-group>
+    <ion-item-divider color="light">Wskaż gabinet który odwiedzasz</ion-item-divider>
+    <ion-item>
+      <ion-label floating>Miejscowość</ion-label>
+      <ion-select>
+        <ion-option *ngFor="let city of cities">
+          {{city}}
+        </ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Nazwa</ion-label>
+      <ion-select>
+        <ion-option *ngFor="let office of offices">
+          {{office}}
+        </ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-item-group>
+
+  <!-- <ion-row>
+    <ion-col text-center>
+      <button ion-button (click)="save()">Dalej</button>
+    </ion-col>
+  </ion-row> -->
+
+  <ion-item-group>
+    <ion-item-divider color="light">lub dodaj nowy gabinet</ion-item-divider>
+    <ion-item>
+      <ion-label floating>Nazwa</ion-label>
+      <ion-input type="text" value="{{ office?.name }}"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Ulica</ion-label>
+      <ion-input type="text" value="{{ office?.street }}"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Nr budynku</ion-label>
+      <ion-input type="text" value="{{ office?.buildingNo }}"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Nr mieszkania</ion-label>
+      <ion-input type="text" value="{{ office?.localNo }}"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Kod pocztowy</ion-label>
+      <ion-input type="text" value="{{ office?.postal }}"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Miejscowość</ion-label>
+      <ion-input type="text" value="{{ office?.city }}"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Powiat</ion-label>
+      <ion-input type="text" value="{{ office?.county }}"></ion-input>
+    </ion-item>
+  </ion-item-group>
+
+  <ion-row>
+    <ion-col text-center>
+      <button ion-button (click)="next()">Dalej</button>
+      <button ion-button color="light" (click)="cancel()">Anuluj</button>
+    </ion-col>
+  </ion-row>
+</ion-content>

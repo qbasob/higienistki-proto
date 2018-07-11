@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController } from 'ionic-angular';
-import { Person } from '../../../shared/person.model';
 
 @Component({
   selector: 'page-person-popover',

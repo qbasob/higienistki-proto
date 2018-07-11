@@ -11,4 +11,7 @@ export class SettingsPage {
 
   }
 
+  showTutorial() {
+    this.navCtrl.setRoot('WelcomeSlidesPage');
+  }
 }

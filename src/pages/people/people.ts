@@ -4,6 +4,7 @@ import { Person, Gender } from '../../shared/person.model';
 import * as faker from 'faker';
 import { PersonViewPage } from './person-view/person-view';
 import { PersonEditPage } from './person-edit/person-edit';
+import { PersonViewAcceptPage } from './person-view-accept/person-view-accept';
 
 @Component({
   selector: 'page-people',
@@ -43,6 +44,12 @@ export class PeoplePage {
 
   details(person) {
     this.navCtrl.push(PersonViewPage, {
+      person
+    });
+  }
+
+  accept(person) {
+    this.navCtrl.push(PersonViewAcceptPage, {
       person
     });
   }

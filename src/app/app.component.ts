@@ -2,10 +2,11 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { Storage } from '@ionic/storage';
 
 import { EventsPage } from '../pages/events/events';
 import { OfficesPage } from '../pages/offices/offices';
-import { SettingsPage } from '../pages/settings/setings';
+import { SettingsPage } from '../pages/settings/settings';
 import { PeoplePage } from '../pages/people/people';
 
 @Component({
@@ -18,8 +19,21 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
-    this.initializeApp();
+  constructor(
+    public platform: Platform,
+    public statusBar: StatusBar,
+    public splashScreen: SplashScreen,
+    private storage: Storage,
+  ) {
+    // this.initializeApp();
+
+    this.storage.get('hasSeenTutorial')
+      .then((hasSeenTutorial) => {
+        if (!hasSeenTutorial) {
+          this.rootPage = 'WelcomeSlidesPage';
+        }
+        this.initializeApp();
+      });
 
     // used for an example of ngFor and navigation
     this.pages = [

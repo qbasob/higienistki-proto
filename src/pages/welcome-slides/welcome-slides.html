@@ -1,0 +1,52 @@
+<ion-header no-border>
+  <ion-navbar>
+    <ion-buttons end *ngIf="showSkip">
+      <button ion-button (click)="startApp()" color="light">Pomiń</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content no-bounce>
+  <ion-slides #slides (ionSlideWillChange)="onSlideChangeStart($event)" pager>
+
+    <ion-slide color="primary">
+      <img src="assets/imgs/tutorial-slide-1.jpg" class="slide-image"/>
+      <h2 class="slide-title">
+        Witaj w aplikacji NAZWA PROGRAMU
+      </h2>
+      <p>
+        Ten samouczek pozwoli ci zapoznać się z podstawowymi sposobami poruszania się po aplikacji.
+      </p>
+    </ion-slide>
+
+    <ion-slide>
+      <img src="assets/imgs/tutorial-slide-2.jpg" class="slide-image"/>
+      <h2 class="slide-title" >Listy</h2>
+      <p>
+        Dane możesz odświeżać, przeciągajnąc palcem w dół na liście rekordów
+      </p>
+    </ion-slide>
+
+    <ion-slide>
+      <img src="assets/imgs/tutorial-slide-3.jpg" class="slide-image"/>
+      <h2 class="slide-title">Akcje</h2>
+      <p>Dostęp do akcji wybranego rekordu otrzymujesz po przeciągnięciu palca w lewo na danym rekordzie.</p>
+    </ion-slide>
+
+    <ion-slide>
+      <img src="assets/imgs/tutorial-slide-4.jpg" class="slide-image"/>
+      <h2 class="slide-title">Dodawanie</h2>
+      <p>Rekord można dodać klikając na przycisk w prawym dolnym rogu.</p>
+    </ion-slide>
+
+    <ion-slide>
+      <img src="assets/imgs/tutorial-slide-1.jpg" class="slide-image"/>
+      <h2 class="slide-title">Gotowy?</h2>
+      <button ion-button icon-end large clear color="light" (click)="startApp()">
+        Rozpocznij
+        <ion-icon name="arrow-forward"></ion-icon>
+      </button>
+    </ion-slide>
+
+  </ion-slides>
+</ion-content>

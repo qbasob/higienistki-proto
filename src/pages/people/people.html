@@ -7,7 +7,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <ion-refresher (ionRefresh)="doRefresh($event)">
     <ion-refresher-content pullingIcon="arrow-down" pullingText="Przeciągnij w dół aby odświeżyć" refreshingSpinner="crescent"
       refreshingText="Ładowanie...">
@@ -22,8 +22,9 @@
         {{person.name}}
       </button>
       <ion-item-options side="right">
-        <button ion-button color="primary" (click)="details(person)">Podgląd</button>
-        <button ion-button color="secondary" (click)="edit(person)">Edytuj</button>
+        <button ion-button color="light" (click)="details(person)">Podgląd</button>
+        <button ion-button color="light" (click)="accept(person)">Podsumowanie</button>
+        <button ion-button color="light" (click)="edit(person)">Edytuj</button>
         <button ion-button color="danger" (click)="remove(person)">Usuń</button>
       </ion-item-options>
     </ion-item-sliding>

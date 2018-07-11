@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController } from 'ionic-angular';
-import { Office } from '../../../shared/office.model';
 
 @Component({
   selector: 'page-office-popover',
