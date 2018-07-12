@@ -33,13 +33,34 @@
       <ion-label floating>Liczba higienistek/higienistów</ion-label>
       <ion-input type="number"></ion-input>
     </ion-item>
-    <ion-item>
+    <!-- <ion-item>
       <ion-label>Czy kupują produkty Sonicare?</ion-label>
+    </ion-item> -->
+  </ion-list>
+
+  <ion-list radio-group [(ngModel)]="isBuyingSonicare">
+    <ion-list-header>
+       Czy kupują produkty Sonicare?
+    </ion-list-header>
+
+    <ion-item>
+      <ion-label>Nie</ion-label>
+      <ion-radio value="no"></ion-radio>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Tak, na własny użytek</ion-label>
+      <ion-radio value="yes"></ion-radio>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Tak, do odsprzedaży pacjentowi</ion-label>
+      <ion-radio value="yes_sell"></ion-radio>
     </ion-item>
   </ion-list>
 
-  <ion-segment [(ngModel)]="isBuyingSonicare" color="primary">
-    <ion-segment-button value="no">
+  <!-- <ion-segment [(ngModel)]="isBuyingSonicare" color="primary">
+    <ion-segment-button value="">
       Nie
     </ion-segment-button>
     <ion-segment-button value="yes">
@@ -48,7 +69,7 @@
     <ion-segment-button value="yes_sell">
       Do odsprzedaży
     </ion-segment-button>
-  </ion-segment>
+  </ion-segment> -->
 
   <ion-row>
     <ion-col text-center>
