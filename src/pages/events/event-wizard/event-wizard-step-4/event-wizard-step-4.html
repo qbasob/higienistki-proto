@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Zdjęcie wnętrza placówki</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-item-group>
+    <ion-item-divider color="light">Uzyskaj zezwolenie i wykonaj zdjęcia - unikaj fotografowania Pacjentów</ion-item-divider>
+  </ion-item-group>
+  <ion-row>
+    <ion-col text-center>
+      <button ion-button>Zrób zdjęcie poczekalni</button>
+      <img src="assets/imgs/placeholder-image.jpg" class="photo">
+    </ion-col>
+  </ion-row>
+  <ion-list no-lines>
+    <ion-item>
+      <ion-label>Brak możliwości wykonania zdjęcia</ion-label>
+      <ion-toggle [(ngModel)]="noPhoto1"></ion-toggle>
+    </ion-item>
+    <ion-item *ngIf="noPhoto1">
+      <ion-label floating>Wpisz powód niewykonania zdjęcia</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-row>
+    <ion-col text-center>
+      <button ion-button>Zrób zdjęcie gabinetu</button>
+      <img src="assets/imgs/placeholder-image.jpg" class="photo">
+    </ion-col>
+  </ion-row>
+  <ion-list no-lines>
+    <ion-item>
+      <ion-label>Brak możliwości wykonania zdjęcia</ion-label>
+      <ion-toggle [(ngModel)]="noPhoto2"></ion-toggle>
+    </ion-item>
+    <ion-item *ngIf="noPhoto2">
+      <ion-label floating>Wpisz powód niewykonania zdjęcia</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-row>
+    <ion-col text-center>
+      <button ion-button (click)="next()">Dalej</button>
+      <button ion-button color="light" (click)="back()">Wstecz</button>
+      <button ion-button color="light" (click)="cancel()">Anuluj</button>
+    </ion-col>
+  </ion-row>
+</ion-content>

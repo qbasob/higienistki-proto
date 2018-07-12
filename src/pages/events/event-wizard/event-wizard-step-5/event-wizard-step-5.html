@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Charakterystyka gabinetu</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label>Gabinet jest częścią sieci gabinetów</ion-label>
+      <ion-toggle [(ngModel)]="isOfficeNetwork"></ion-toggle>
+    </ion-item>
+    <ion-item *ngIf="isOfficeNetwork">
+      <ion-label floating>Liczba placówek w ramach sieci</ion-label>
+      <ion-input type="number"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Liczba stanowisk/foteli w gabinecie</ion-label>
+      <ion-input type="number"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Liczba lekarzy pracujących gabinecie</ion-label>
+      <ion-input type="number"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Czy w gabinecie są higienistki/higieniści</ion-label>
+      <ion-toggle [(ngModel)]="hasOfficeHigienists"></ion-toggle>
+    </ion-item>
+    <ion-item *ngIf="hasOfficeHigienists">
+      <ion-label floating>Liczba higienistek/higienistów</ion-label>
+      <ion-input type="number"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Czy kupują produkty Sonicare?</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-segment [(ngModel)]="isBuyingSonicare" color="primary">
+    <ion-segment-button value="no">
+      Nie
+    </ion-segment-button>
+    <ion-segment-button value="yes">
+      Na własny użytek
+    </ion-segment-button>
+    <ion-segment-button value="yes_sell">
+      Do odsprzedaży
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-row>
+    <ion-col text-center>
+      <button ion-button (click)="next()">Dalej</button>
+      <button ion-button color="light" (click)="back()">Wstecz</button>
+      <button ion-button color="light" (click)="cancel()">Anuluj</button>
+    </ion-col>
+  </ion-row>
+</ion-content>

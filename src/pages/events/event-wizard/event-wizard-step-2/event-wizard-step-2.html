@@ -9,18 +9,18 @@
 
 <ion-content>
   <ion-item-group>
-    <ion-item-divider color="light">Zrób zdjęcie wejścia do gabinetu</ion-item-divider>
+    <ion-item-divider color="light">Zrób zdjęcie wejścia do gabinetu (z nazwą)</ion-item-divider>
   </ion-item-group>
 
   <ion-row>
     <ion-col text-center>
       <button ion-button>Zrób zdjęcie</button>
-      <img src="assets/imgs/logo.png" class="photo">
+      <img src="assets/imgs/placeholder-image.jpg" class="photo">
     </ion-col>
   </ion-row>
   <ion-row>
     <ion-col text-center>
-      <button ion-button disabled (click)="next()">Dalej [TODO]</button>
+      <button ion-button (click)="next()">Dalej</button>
       <button ion-button color="light" (click)="back()">Wstecz</button>
       <button ion-button color="light" (click)="cancel()">Anuluj</button>
     </ion-col>

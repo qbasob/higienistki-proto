@@ -3,12 +3,12 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title *ngIf="person?.name">Uczestnik {{person?.name}}</ion-title>
-    <ion-title *ngIf="!person?.name">Nowy Uczestnik</ion-title>
+    <ion-title>Rejestracja uczestnika</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
+
   <ion-list>
     <ion-item>
       <ion-label floating>Imię i nazwisko</ion-label>
@@ -94,8 +94,9 @@
 
   <ion-row>
     <ion-col text-center>
-      <button ion-button (click)="save()">Zapisz</button>
-      <button ion-button color="light"(click)="cancel()">Anuluj</button>
+      <button ion-button (click)="next()">Dalej</button>
+      <button ion-button color="light" (click)="back()">Wstecz</button>
+      <button ion-button color="light" (click)="cancel()">Anuluj</button>
     </ion-col>
   </ion-row>
 </ion-content>

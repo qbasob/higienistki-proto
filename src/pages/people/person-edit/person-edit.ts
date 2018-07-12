@@ -15,7 +15,7 @@ export class PersonEditPage {
     public navParams: NavParams,
     private alertCtrl: AlertController
   ) {
-    this.person = <Person>navParams.get('person') || { name: '' };
+    this.person = <Person>navParams.get('person') || { name: '', gender: Gender.Pani };
   }
 
   save() {
