@@ -1,0 +1,137 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Wizyta {{event.name}} {{event.date | date: 'dd.MM.yyyy'}}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentPopover($event, event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      Data wizyty
+      <ion-note item-end>
+        {{ event.date | date: 'dd.MM.yyyy' }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Zdjęcie z zewnątrz
+      <ion-note item-end>
+        <img src="assets/imgs/placeholder-image.jpg" class="photo">
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Zdjęcie poczekalni
+      <ion-note item-end>
+        <img src="assets/imgs/placeholder-image.jpg" class="photo">
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Zdjęcie gabinetu
+      <ion-note item-end>
+        <img src="assets/imgs/placeholder-image.jpg" class="photo">
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Gabinet jest częścią sieci gabinetów
+      <ion-note item-end>
+         {{ event.isOfficeNetwork ? 'Tak' : 'Nie' }}
+      </ion-note>
+    </ion-item>
+    <ion-item *ngIf="event.isOfficeNetwork">
+      Liczba placówek w ramach sieci
+      <ion-note item-end>
+        {{ event.networkOfficesCount }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Liczba stanowisk (foteli) w gabinecie
+      <ion-note item-end>
+        {{ event.chairsCount }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Liczba lekarzy pracujących w gabinecie
+      <ion-note item-end>
+        {{ event.doctorsCount }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Czy w gabinecie są higienistki/higieniści
+      <ion-note item-end>
+        {{ event.hasOfficeHigienists ? 'Tak' : 'Nie' }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Liczba higienistek/higienistów pracujących w gabinecie
+      <ion-note item-end>
+        {{ event.higienistsCount }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Czy kupują produkty Sonicare
+      <ion-note item-end [ngSwitch]="event.isBuyingSonicare">
+        <span *ngSwitchCase="'no'">
+          Nie
+        </span>
+        <span *ngSwitchCase="'yes'">
+          Tak, na własny użytek
+        </span>
+        <span *ngSwitchCase="'yes_sell'">
+          Tak, do odsprzedaży pacjentowi
+        </span>
+      </ion-note>
+    </ion-item>
+    <ion-item [ngSwitch]="event.doQualify">
+      <span *ngSwitchCase="'no'">
+        Brak osób kwalifikujących się do Programu
+      </span>
+      <span *ngSwitchCase="'no_deny'">
+          Brak zainteresowania, odmowa udziału
+      </span>
+      <span *ngSwitchCase="'yes'">
+          Rejestruję Uczestnika/Uczestniczkę programu dla Higienistek/Higienistów
+      </span>
+    </ion-item>
+
+    <ion-item-group *ngIf="event.office as office">
+      <ion-item-divider color="light">Gabinet</ion-item-divider>
+      <ion-item-sliding>
+        <button ion-item (click)="detailsOffice(office)">
+          {{office.name}}
+        </button>
+        <ion-item-options side="right">
+          <button ion-button color="light" (click)="detailsOffice(office)">Podgląd</button>
+          <button ion-button color="light" (click)="editOffice(office)">Edytuj</button>
+          <button ion-button color="danger" (click)="removeOffice(office)">Usuń</button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-item-group>
+
+    <ion-item-group>
+      <ion-item-divider color="light">Uczestnicy</ion-item-divider>
+      <ion-item-sliding *ngFor="let person of event.people">
+        <button ion-item (click)="detailsPerson(person)">
+          {{person.name}}
+        </button>
+        <ion-item-options side="right">
+        <button ion-button color="light" (click)="detailsPerson(person)">Podgląd</button>
+        <button ion-button color="light" (click)="acceptPerson(person)">Podsumowanie</button>
+        <button ion-button color="light" (click)="editPerson(person)">Edytuj</button>
+        <button ion-button color="danger" (click)="removePerson(person)">Usuń</button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-item-group>
+    <ion-item>
+      <button ion-button (click)="editPerson()">
+        Dodaj uczestnika
+      </button>
+    </ion-item>
+  </ion-list>
+</ion-content>

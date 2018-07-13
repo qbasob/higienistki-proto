@@ -20,9 +20,9 @@
   <ion-list no-lines>
     <ion-item>
       <ion-label>Brak możliwości wykonania zdjęcia</ion-label>
-      <ion-toggle [(ngModel)]="noPhoto1"></ion-toggle>
+      <ion-toggle [(ngModel)]="noPhotoInsideWaiting"></ion-toggle>
     </ion-item>
-    <ion-item *ngIf="noPhoto1">
+    <ion-item *ngIf="noPhotoInsideWaiting">
       <ion-label floating>Wpisz powód niewykonania zdjęcia</ion-label>
       <ion-input></ion-input>
     </ion-item>
@@ -37,9 +37,9 @@
   <ion-list no-lines>
     <ion-item>
       <ion-label>Brak możliwości wykonania zdjęcia</ion-label>
-      <ion-toggle [(ngModel)]="noPhoto2"></ion-toggle>
+      <ion-toggle [(ngModel)]="photoInsideOffice"></ion-toggle>
     </ion-item>
-    <ion-item *ngIf="noPhoto2">
+    <ion-item *ngIf="photoInsideOffice">
       <ion-label floating>Wpisz powód niewykonania zdjęcia</ion-label>
       <ion-input></ion-input>
     </ion-item>

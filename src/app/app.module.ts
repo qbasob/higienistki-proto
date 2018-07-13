@@ -4,6 +4,9 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { EventsPage } from '../pages/events/events';
+import { EventEditPage } from '../pages/events/event-edit/event-edit';
+import { EventViewPage } from '../pages/events/event-view/event-view';
+import { EventPopoverPage } from '../pages/events/event-popover/event-popover';
 import { EventWizardPage } from '../pages/events/event-wizard/event-wizard';
 import { EventWizardStep1Page } from '../pages/events/event-wizard/event-wizard-step-1/event-wizard-step-1';
 import { EventWizardStep2Page } from '../pages/events/event-wizard/event-wizard-step-2/event-wizard-step-2';
@@ -13,6 +16,7 @@ import { EventWizardStep5Page } from '../pages/events/event-wizard/event-wizard-
 import { EventWizardStep6Page } from '../pages/events/event-wizard/event-wizard-step-6/event-wizard-step-6';
 import { EventWizardStep7Page } from '../pages/events/event-wizard/event-wizard-step-7/event-wizard-step-7';
 import { EventWizardStep8Page } from '../pages/events/event-wizard/event-wizard-step-8/event-wizard-step-8';
+import { EventWizardStep9Page } from '../pages/events/event-wizard/event-wizard-step-9/event-wizard-step-9';
 import { OfficesPage } from '../pages/offices/offices';
 import { OfficeEditPage } from '../pages/offices/office-edit/office-edit';
 import { OfficeViewPage } from '../pages/offices/office-view/office-view';
@@ -27,12 +31,14 @@ import { SettingsPage } from '../pages/settings/settings';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
-import { EventWizardStep9Page } from '../pages/events/event-wizard/event-wizard-step-9/event-wizard-step-9';
 
 @NgModule({
   declarations: [
     MyApp,
     EventsPage,
+    EventEditPage,
+    EventViewPage,
+    EventPopoverPage,
     EventWizardPage,
     EventWizardStep1Page,
     EventWizardStep2Page,
@@ -63,6 +69,9 @@ import { EventWizardStep9Page } from '../pages/events/event-wizard/event-wizard-
   entryComponents: [
     MyApp,
     EventsPage,
+    EventEditPage,
+    EventViewPage,
+    EventPopoverPage,
     EventWizardPage,
     EventWizardStep1Page,
     EventWizardStep2Page,

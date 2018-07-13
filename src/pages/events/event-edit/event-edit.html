@@ -1,0 +1,161 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title *ngIf="event?.name">Wizyta {{event?.name}}</ion-title>
+    <ion-title *ngIf="!event?.name">Nowa Wizyta</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      Data wizyty
+      <ion-note item-end>
+        {{ event.date | date: 'dd.MM.yyyy' }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Zdjęcie z zewnątrz
+      <ion-note item-end text-center>
+        <img src="assets/imgs/placeholder-image.jpg" class="photo">
+        <button ion-button>Zrób zdjęcie</button>
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Zdjęcie poczekalni
+      <ion-note item-end text-center>
+        <img src="assets/imgs/placeholder-image.jpg" class="photo">
+        <button ion-button>Zrób zdjęcie</button>
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label>Brak możliwości wykonania zdjęcia w poczekalni</ion-label>
+      <ion-toggle [(ngModel)]="event.noPhotoInsideWaiting"></ion-toggle>
+    </ion-item>
+    <ion-item *ngIf="event.noPhotoInsideWaiting">
+      <ion-label floating>Wpisz powód niewykonania zdjęcia w poczekalni</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item>
+      Zdjęcie gabinetu
+      <ion-note item-end text-center>
+        <img src="assets/imgs/placeholder-image.jpg" class="photo">
+        <button ion-button>Zrób zdjęcie</button>
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label>Brak możliwości wykonania zdjęcia w gabinecie</ion-label>
+      <ion-toggle [(ngModel)]="event.photoInsideOffice"></ion-toggle>
+    </ion-item>
+    <ion-item *ngIf="event.photoInsideOffice">
+      <ion-label floating>Wpisz powód niewykonania zdjęcia w gabinecie</ion-label>
+      <ion-input></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Gabinet jest częścią sieci gabinetów</ion-label>
+      <ion-toggle [(ngModel)]="event.isOfficeNetwork"></ion-toggle>
+    </ion-item>
+    <ion-item *ngIf="event.isOfficeNetwork">
+      <ion-label floating>Liczba placówek w ramach sieci</ion-label>
+      <ion-input type="number" [(ngModel)]="event.networkOfficesCount" ></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Liczba stanowisk/foteli w gabinecie</ion-label>
+      <ion-input type="number"  [(ngModel)]="event.chairsCount"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Liczba lekarzy pracujących gabinecie</ion-label>
+      <ion-input type="number"  [(ngModel)]="event.doctorsCount"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Czy w gabinecie są higienistki/higieniści</ion-label>
+      <ion-toggle [(ngModel)]="event.hasOfficeHigienists"></ion-toggle>
+    </ion-item>
+    <ion-item *ngIf="event.hasOfficeHigienists">
+      <ion-label floating>Liczba higienistek/higienistów</ion-label>
+      <ion-input type="number"  [(ngModel)]="event.higienistsCount"></ion-input>
+    </ion-item>
+
+    <ion-item-group radio-group [(ngModel)]="event.isBuyingSonicare">
+      <ion-item-divider color="light">Czy kupują produkty Sonicare?</ion-item-divider>
+
+      <ion-item>
+        <ion-label>Nie</ion-label>
+        <ion-radio value="no"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Tak, na własny użytek</ion-label>
+        <ion-radio value="yes"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Tak, do odsprzedaży pacjentowi</ion-label>
+        <ion-radio value="yes_sell"></ion-radio>
+      </ion-item>
+    </ion-item-group>
+
+    <ion-item-group radio-group [(ngModel)]="event.doQualify">
+      <ion-item-divider color="light">Czy kupują produkty Sonicare?</ion-item-divider>
+
+      <ion-item>
+        <ion-label>Brak osób kwalifikujących się do Programu</ion-label>
+        <ion-radio value="no"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Brak zainteresowania, odmowa udziału</ion-label>
+        <ion-radio value="no_deny"></ion-radio>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Rejestruję Uczestnika/Uczestniczkę programu dla Higienistek/Higienistów</ion-label>
+        <ion-radio value="yes"></ion-radio>
+      </ion-item>
+    </ion-item-group>
+
+    <ion-item-group *ngIf="event.office as office">
+      <ion-item-divider color="light">Gabinet</ion-item-divider>
+      <ion-item-sliding>
+        <button ion-item (click)="detailsOffice(office)">
+          {{office.name}}
+        </button>
+        <ion-item-options side="right">
+          <button ion-button color="light" (click)="detailsOffice(office)">Podgląd</button>
+          <button ion-button color="light" (click)="editOffice(office)">Edytuj</button>
+          <button ion-button color="danger" (click)="removeOffice(office)">Usuń</button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-item-group>
+
+    <ion-item-group>
+      <ion-item-divider color="light">Uczestnicy</ion-item-divider>
+      <ion-item-sliding *ngFor="let person of event.people">
+        <button ion-item (click)="detailsPerson(person)">
+          {{person.name}}
+        </button>
+        <ion-item-options side="right">
+          <button ion-button color="light" (click)="detailsPerson(person)">Podgląd</button>
+          <button ion-button color="light" (click)="acceptPerson(person)">Podsumowanie</button>
+          <button ion-button color="light" (click)="editPerson(person)">Edytuj</button>
+          <button ion-button color="danger" (click)="removePerson(person)">Usuń</button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-item-group>
+    <ion-item>
+      <button ion-button (click)="editPerson()">
+        Dodaj uczestnika
+      </button>
+    </ion-item>
+  </ion-list>
+
+  <ion-row>
+    <ion-col text-center>
+      <button ion-button (click)="save()">Zapisz</button>
+      <button ion-button color="light"(click)="cancel()">Anuluj</button>
+    </ion-col>
+  </ion-row>
+
+</ion-content>
