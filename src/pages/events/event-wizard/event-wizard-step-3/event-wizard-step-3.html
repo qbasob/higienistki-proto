@@ -20,6 +20,11 @@
     </ion-item-divider>
     <ion-item>
       <ion-label floating>Nazwa</ion-label>
+      <ion-note item-end>
+        <button ion-button clear (click)="showHelp('name')">
+          <ion-icon name="help-circle" color="dark"></ion-icon>
+        </button>
+      </ion-note>
       <ion-input type="text" value="{{ office?.name }}"></ion-input>
     </ion-item>
     <ion-item>

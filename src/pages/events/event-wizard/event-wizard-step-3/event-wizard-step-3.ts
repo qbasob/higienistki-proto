@@ -28,6 +28,22 @@ export class EventWizardStep3Page {
     }
   }
 
+  showHelp(fieldName: string) {
+    const helps = {
+      name: {
+        title: 'Nazwa',
+        helpText: 'Nazwa pod jaką występuje gabinet, szyld gabinetu'
+      }
+    }
+
+    const alert = this.alertCtrl.create({
+      title: "Pole: " + helps[fieldName].title,
+      subTitle: helps[fieldName].helpText,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+
   next() {
     this.events.publish('event-wizard-change-tab', 2, 3);
   }
