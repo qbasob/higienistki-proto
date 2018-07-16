@@ -10,29 +10,22 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors, 
 @Component({
   selector: 'person-edit-form',
   templateUrl: 'person-edit-form.html',
-  // magia 1:
-  viewProviders: [
-    { provide: ControlContainer, useExisting: FormGroupDirective }
-  ]
 })
 export class PersonEditFormComponent implements OnInit {
   @Input('personData')
   public person: Person = { name: '', gender: Gender.Pani }; //default value
 
+  @Input('formData')
   private parentForm: FormGroup;
+
   public personFormGroup: FormGroup;
   public Gender = Gender; // do używania w template
 
   constructor(
     private formBuilder: FormBuilder,
-    // magia 2:
-    private parent: FormGroupDirective
   ) { }
 
   ngOnInit() {
-    // magia 3:
-    this.parentForm = this.parent.form;
-
     this.personFormGroup = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(5)]],
       gender: ['', Validators.required],
@@ -54,7 +47,6 @@ export class PersonEditFormComponent implements OnInit {
     });
     this.personFormGroup.patchValue(this.person);
 
-    // magia 4
     this.parentForm.addControl('personFormGroup', this.personFormGroup);
   }
 

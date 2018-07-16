@@ -9,7 +9,7 @@
 
 <ion-content>
   <form novalidate [formGroup]="personForm" (ngSubmit)="next()">
-    <person-edit-form [personData]="person"></person-edit-form>
+    <person-edit-form [personData]="person" [formData]="personForm"></person-edit-form>
 
     <ion-row>
       <ion-col text-center>
