@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { Person, Gender } from '../../../shared/person.model';
-import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'page-person-edit',
   templateUrl: 'person-edit.html'
 })
-export class PersonEditPage {
+export class PersonEditPage implements OnInit {
   public personForm: FormGroup;
   public person: Person;
 
@@ -21,26 +21,7 @@ export class PersonEditPage {
   }
 
   ngOnInit(): void {
-    this.personForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(5)]],
-      gender: ['', Validators.required],
-      email: ['', [Validators.required, this.customEmailValidator]],
-      phone: '',
-      officesNo: '',
-      sonicareUser: '',
-      sonicareRecom: '',
-      wantCodes: '',
-      gotStarter: '',
-      starterNo: '',
-      gotExpositor: '',
-      agreeReg: '',
-      agreeMark1: '',
-      agreeMark2: '',
-      agreeMark3: '',
-      agreeMark4: '',
-      additionalData: ''
-    });
-    this.personForm.patchValue(this.person);
+    this.personForm = this.formBuilder.group({});
   }
 
   save() {
@@ -67,14 +48,5 @@ export class PersonEditPage {
       ]
     });
     confirm.present();
-  }
-
-  // fix, walidator emaila powinien przepuszczać puste pole, naprawione w Angularze 6
-  private customEmailValidator(control: AbstractControl): ValidationErrors {
-    if (!control.value) {
-      return null;
-    }
-
-    return Validators.email(control);
   }
 }

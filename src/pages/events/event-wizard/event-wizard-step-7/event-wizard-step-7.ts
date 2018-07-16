@@ -26,26 +26,7 @@ export class EventWizardStep7Page {
   }
 
   ngOnInit(): void {
-    this.personForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(5)]],
-      gender: ['', Validators.required],
-      email: ['', [Validators.required, this.customEmailValidator]],
-      phone: '',
-      officesNo: '',
-      sonicareUser: '',
-      sonicareRecom: '',
-      wantCodes: '',
-      gotStarter: '',
-      starterNo: '',
-      gotExpositor: '',
-      agreeReg: '',
-      agreeMark1: '',
-      agreeMark2: '',
-      agreeMark3: '',
-      agreeMark4: '',
-      additionalData: ''
-    });
-    this.personForm.patchValue(this.person);
+    this.personForm = this.formBuilder.group({});
   }
 
   next() {
