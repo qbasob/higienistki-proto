@@ -1,11 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Person, Gender } from '../../../../shared/person.model';
-import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors, ControlContainer, FormGroupDirective } from '@angular/forms';
-
-// magia działa dzięki temu:
-// https://stackoverflow.com/questions/49747278/angular-5-nested-form-child-component
-// i temu:
-// https://youtu.be/CD_t3m2WMM8?t=25m23s
+import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'person-edit-form',

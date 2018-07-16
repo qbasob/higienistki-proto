@@ -56,13 +56,4 @@ export class EventWizardStep7Page {
     });
     confirm.present();
   }
-
-  // fix, walidator emaila powinien przepuszczać puste pole, naprawione w Angularze 6
-  private customEmailValidator(control: AbstractControl): ValidationErrors {
-    if (!control.value) {
-      return null;
-    }
-
-    return Validators.email(control);
-  }
 }
