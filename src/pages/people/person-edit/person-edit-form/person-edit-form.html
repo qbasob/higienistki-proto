@@ -1,0 +1,96 @@
+<ion-list [formGroup]="personFormGroup">
+  <ion-item>
+    <ion-label floating>
+      Imię i nazwisko
+    </ion-label>
+    <ion-input type="text" formControlName="name"></ion-input>
+  </ion-item>
+  <span ion-text *ngIf="personFormGroup.get('name').dirty && personFormGroup.get('name').invalid" color="danger" padding-left>
+    <span *ngIf="personFormGroup.get('name').errors.required">
+      To pole jest wymagane
+    </span>
+    <span *ngIf="personFormGroup.get('name').errors.minlength">
+      Minimum {{ personFormGroup.get('name').errors.minlength.requiredLength }} znaków
+    </span>
+  </span>
+  <ion-item>
+    <ion-label floating>Zwrot grzecznościowy</ion-label>
+    <ion-select formControlName="gender">
+      <ion-option value="{{Gender.Pani}}">Pani</ion-option>
+      <ion-option value="{{Gender.Pan}}">Pan</ion-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label floating>Adres E-mail</ion-label>
+    <ion-input type="email" formControlName="email"></ion-input>
+  </ion-item>
+  <span ion-text *ngIf="personFormGroup.get('email').dirty && personFormGroup.get('email').invalid" color="danger" padding-left>
+    <span *ngIf="personFormGroup.get('email').errors.required">
+      To pole jest wymagane
+    </span>
+    <span *ngIf="personFormGroup.get('email').errors.email">
+      Nieprawidłowy adres e-mail
+    </span>
+  </span>
+  <ion-item>
+    <ion-label floating>Telefon komórkowy</ion-label>
+    <ion-input type="text" formControlName="phone"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label floating>Liczba gabinetów</ion-label>
+    <ion-input type="number" formControlName="officesNo"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label [ngSwitch]="person.gender">
+      <span *ngSwitchCase="Gender.Pani">Użytkowniczka</span>
+      <span *ngSwitchCase="Gender.Pan">Użytkownik</span>
+      Sonicare</ion-label>
+    <ion-toggle formControlName="sonicareUser"></ion-toggle>
+  </ion-item>
+  <ion-item>
+    <ion-label [ngSwitch]="person.gender">
+      <span *ngSwitchCase="Gender.Pani">Zainteresowana</span>
+      <span *ngSwitchCase="Gender.Pan">Zainteresowany</span>
+      rekomendowaniem Sonicare</ion-label>
+    <ion-toggle formControlName="sonicareRecom"></ion-toggle>
+  </ion-item>
+  <ion-item>
+    <ion-label [ngSwitch]="person.gender">
+      <span *ngSwitchCase="Gender.Pani">Zainteresowana</span>
+      <span *ngSwitchCase="Gender.Pan">Zainteresowany</span>
+      otrzymaniem kodów rabatowych</ion-label>
+    <ion-toggle formControlName="wantCodes"></ion-toggle>
+  </ion-item>
+  <ion-item>
+    <ion-label>Wręczono pakiet startowy</ion-label>
+    <ion-toggle formControlName="gotStarter"></ion-toggle>
+  </ion-item>
+  <ion-item *ngIf="person.gotStarter">
+    <ion-label floating>Numer pakietu starotowgo</ion-label>
+    <ion-input type="text" formControlName="starterNo"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Wręczono ekspozytor Sonicare</ion-label>
+    <ion-toggle formControlName="gotExpositor"></ion-toggle>
+  </ion-item>
+  <ion-item>
+    <ion-label>Zgłaszam udział w programie</ion-label>
+    <ion-toggle formControlName="agreeReg"></ion-toggle>
+  </ion-item>
+  <ion-item>
+    <ion-label>Zgoda marketingowa 1</ion-label>
+    <ion-toggle formControlName="agreeMark1"></ion-toggle>
+  </ion-item>
+  <ion-item>
+    <ion-label>Zgoda marketingowa 2</ion-label>
+    <ion-toggle formControlName="agreeMark2"></ion-toggle>
+  </ion-item>
+  <ion-item>
+    <ion-label>Zgoda marketingowa 3</ion-label>
+    <ion-toggle formControlName="agreeMark3"></ion-toggle>
+  </ion-item>
+  <ion-item>
+    <ion-label>Zgoda marketingowa 4</ion-label>
+    <ion-toggle formControlName="agreeMark4"></ion-toggle>
+  </ion-item>
+</ion-list>

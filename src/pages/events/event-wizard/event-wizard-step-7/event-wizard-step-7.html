@@ -8,95 +8,15 @@
 </ion-header>
 
 <ion-content>
+  <form novalidate [formGroup]="personForm" (ngSubmit)="next()">
+    <person-edit-form [group]="personForm" [person]="person"></person-edit-form>
 
-  <ion-list>
-    <ion-item>
-      <ion-label floating>Imię i nazwisko</ion-label>
-      <ion-input type="text" [(ngModel)]="person.name"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Zwrot grzecznościowy</ion-label>
-      <ion-select [(ngModel)]="person.gender">
-        <ion-option value="{{Gender.Pani}}">Pani</ion-option>
-        <ion-option value="{{Gender.Pan}}">Pan</ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Adres E-mail</ion-label>
-      <ion-input type="email" [(ngModel)]="person.email"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Telefon komórkowy</ion-label>
-      <ion-input type="text" [(ngModel)]="person.phone"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Liczba gabinetów</ion-label>
-      <ion-input type="number" [(ngModel)]="person.officesNo"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label [ngSwitch]="person.gender">
-        <span *ngSwitchCase="Gender.Pani">Użytkowniczka</span>
-        <span *ngSwitchCase="Gender.Pan">Użytkownik</span>
-        Sonicare</ion-label>
-      <ion-toggle [(ngModel)]="person.sonicareUser"></ion-toggle>
-    </ion-item>
-    <ion-item>
-      <ion-label [ngSwitch]="person.gender">
-        <span *ngSwitchCase="Gender.Pani">Zainteresowana</span>
-        <span *ngSwitchCase="Gender.Pan">Zainteresowany</span>
-        rekomendowaniem Sonicare</ion-label>
-      <ion-toggle [(ngModel)]="person.sonicareRecom"></ion-toggle>
-    </ion-item>
-    <ion-item>
-      <ion-label [ngSwitch]="person.gender">
-        <span *ngSwitchCase="Gender.Pani">Zainteresowana</span>
-        <span *ngSwitchCase="Gender.Pan">Zainteresowany</span>
-        otrzymaniem kodów rabatowych</ion-label>
-      <ion-toggle [(ngModel)]="person.wantCodes"></ion-toggle>
-    </ion-item>
-    <ion-item>
-      <ion-label>Wręczono pakiet startowy</ion-label>
-      <ion-toggle [(ngModel)]="person.gotStarter"></ion-toggle>
-    </ion-item>
-    <ion-item *ngIf="person.gotStarter">
-      <ion-label floating>Numer pakietu starotowgo</ion-label>
-      <ion-input type="text" [(ngModel)]="person.starterNo"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Wręczono ekspozytor Sonicare</ion-label>
-      <ion-toggle [(ngModel)]="person.gotExpositor"></ion-toggle>
-    </ion-item>
-    <ion-item>
-      <ion-label>Zgłaszam udział w programie</ion-label>
-      <ion-toggle [(ngModel)]="person.agreeReg"></ion-toggle>
-    </ion-item>
-    <ion-item>
-      <ion-label>Zgoda marketingowa 1</ion-label>
-      <ion-toggle [(ngModel)]="person.agreeMark1"></ion-toggle>
-    </ion-item>
-    <ion-item>
-      <ion-label>Zgoda marketingowa 2</ion-label>
-      <ion-toggle [(ngModel)]="person.agreeMark2"></ion-toggle>
-    </ion-item>
-    <ion-item>
-      <ion-label>Zgoda marketingowa 3</ion-label>
-      <ion-toggle [(ngModel)]="person.agreeMark3"></ion-toggle>
-    </ion-item>
-    <ion-item>
-      <ion-label>Zgoda marketingowa 4</ion-label>
-      <ion-toggle [(ngModel)]="person.agreeMark4"></ion-toggle>
-    </ion-item>
-    <!-- <ion-item>
-      <ion-label floating>Informacje dodatkowe</ion-label>
-      <ion-textarea [(ngModel)]="person.additionalData"></ion-textarea>
-    </ion-item> -->
-  </ion-list>
-
-  <ion-row>
-    <ion-col text-center>
-      <button ion-button (click)="next()">Dalej</button>
-      <button ion-button color="light" (click)="back()">Wstecz</button>
-      <button ion-button color="light" (click)="cancel()">Anuluj</button>
-    </ion-col>
-  </ion-row>
+    <ion-row>
+      <ion-col text-center>
+        <button ion-button type="submit" [disabled]="!personForm.valid">Dalej</button>
+        <button ion-button type="button" color="light" (click)="back()">Wstecz</button>
+        <button ion-button type="button" color="light" (click)="cancel()">Anuluj</button>
+      </ion-col>
+    </ion-row>
+  </form>
 </ion-content>

@@ -31,6 +31,7 @@ import { SettingsPage } from '../pages/settings/settings';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
+import { PersonEditFormComponent } from '../pages/people/person-edit/person-edit-form/person-edit-form';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,9 @@ import { IonicStorageModule } from '@ionic/storage';
     PersonViewPage,
     PersonPopoverPage,
     PersonViewAcceptPage,
-    SettingsPage
+    SettingsPage,
+
+    PersonEditFormComponent
   ],
   imports: [
     BrowserModule,

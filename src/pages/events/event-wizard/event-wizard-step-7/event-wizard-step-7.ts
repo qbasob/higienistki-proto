@@ -1,19 +1,21 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, App, Events } from 'ionic-angular';
 import { Person, Gender } from '../../../../shared/person.model';
+import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'page-event-wizard-step-7',
   templateUrl: 'event-wizard-step-7.html'
 })
 export class EventWizardStep7Page {
+  public personForm: FormGroup;
   public person: Person;
-  public Gender = Gender; // do używania w template
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private alertCtrl: AlertController,
+    private formBuilder: FormBuilder,
     private appCtrl: App,
     private events: Events
   ) {
@@ -21,6 +23,29 @@ export class EventWizardStep7Page {
       name: '',
       gender: Gender.Pani
     }
+  }
+
+  ngOnInit(): void {
+    this.personForm = this.formBuilder.group({
+      name: ['', [Validators.required, Validators.minLength(5)]],
+      gender: ['', Validators.required],
+      email: ['', [Validators.required, this.customEmailValidator]],
+      phone: '',
+      officesNo: '',
+      sonicareUser: '',
+      sonicareRecom: '',
+      wantCodes: '',
+      gotStarter: '',
+      starterNo: '',
+      gotExpositor: '',
+      agreeReg: '',
+      agreeMark1: '',
+      agreeMark2: '',
+      agreeMark3: '',
+      agreeMark4: '',
+      additionalData: ''
+    });
+    this.personForm.patchValue(this.person);
   }
 
   next() {
@@ -49,5 +74,14 @@ export class EventWizardStep7Page {
       ]
     });
     confirm.present();
+  }
+
+  // fix, walidator emaila powinien przepuszczać puste pole, naprawione w Angularze 6
+  private customEmailValidator(control: AbstractControl): ValidationErrors {
+    if (!control.value) {
+      return null;
+    }
+
+    return Validators.email(control);
   }
 }
