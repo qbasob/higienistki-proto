@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Person, Gender } from '../../../../shared/person.model';
 import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 
@@ -8,10 +8,10 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors }
 })
 export class PersonEditFormComponent implements OnInit {
   @Input('personData')
-  public person: Person = { name: '', gender: Gender.Pani }; //default value
+  public person: Person = { id: null, name: '', gender: Gender.Pani }; //default value
 
-  @Input('formData')
-  private parentForm: FormGroup;
+  @Output()
+  onFormInit = new EventEmitter<FormGroup>();
 
   public personFormGroup: FormGroup;
   public Gender = Gender; // do używania w template
@@ -22,6 +22,7 @@ export class PersonEditFormComponent implements OnInit {
 
   ngOnInit() {
     this.personFormGroup = this.formBuilder.group({
+      id: '',
       name: ['', [Validators.required, Validators.minLength(5)]],
       gender: ['', Validators.required],
       email: ['', [Validators.required, this.customEmailValidator]],
@@ -42,7 +43,7 @@ export class PersonEditFormComponent implements OnInit {
     });
     this.personFormGroup.patchValue(this.person);
 
-    this.parentForm.addControl('personFormGroup', this.personFormGroup);
+    this.onFormInit.emit(this.personFormGroup);
   }
 
   // fix, walidator emaila powinien przepuszczać puste pole, naprawione w Angularze 6

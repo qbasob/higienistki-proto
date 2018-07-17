@@ -9,8 +9,7 @@
 
 <ion-content>
   <form novalidate [formGroup]="personForm" (ngSubmit)="next()">
-    <person-edit-form [personData]="person" [formData]="personForm"></person-edit-form>
-
+    <person-edit-form [personData]="person" (onFormInit)="patchForm($event)"></person-edit-form>
     <ion-row>
       <ion-col text-center>
         <button ion-button type="submit" [disabled]="!personForm.valid">Dalej</button>

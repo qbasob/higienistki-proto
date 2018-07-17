@@ -29,6 +29,11 @@ export class EventWizardStep7Page {
     this.personForm = this.formBuilder.group({});
   }
 
+  patchForm(formGroup: FormGroup) {
+    this.personForm = formGroup;
+  }
+
+
   next() {
     this.events.publish('event-wizard-change-tab', 6, 7);
   }

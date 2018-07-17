@@ -24,6 +24,10 @@ export class PersonEditPage implements OnInit {
     this.personForm = this.formBuilder.group({});
   }
 
+  patchForm(formGroup: FormGroup) {
+    this.personForm = formGroup;
+  }
+
   save() {
     if (this.personForm.valid) {
       this.navCtrl.pop();
