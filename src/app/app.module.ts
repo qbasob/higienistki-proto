@@ -32,6 +32,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
 import { PersonEditFormComponent } from '../pages/people/person-edit/person-edit-form/person-edit-form';
+import { PeopleService } from '../providers/people-service/people-service';
 
 @NgModule({
   declarations: [
@@ -99,7 +100,8 @@ import { PersonEditFormComponent } from '../pages/people/person-edit/person-edit
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    PeopleService
   ]
 })
 export class AppModule {}
