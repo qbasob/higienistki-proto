@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { Person, Gender } from '../../../shared/person.model';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { PeopleService } from '../../../providers/people-service/people-service';
+import 'rxjs/add/operator/finally';
+
 
 @Component({
   selector: 'page-person-edit',
@@ -10,14 +13,18 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 export class PersonEditPage implements OnInit {
   public personForm: FormGroup;
   public person: Person;
+  public popCb: Function;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private alertCtrl: AlertController,
-    private formBuilder: FormBuilder
+    private loadingCtrl: LoadingController,
+    private formBuilder: FormBuilder,
+    private peopleService: PeopleService
   ) {
-    this.person = <Person>navParams.get('person') || { name: '', gender: Gender.Pani };
+    this.person = <Person>navParams.get('person') || { id: null, name: '', gender: Gender.Pani };
+    this.popCb = <Function>navParams.get('cb');
   }
 
   ngOnInit(): void {
@@ -30,7 +37,20 @@ export class PersonEditPage implements OnInit {
 
   save() {
     if (this.personForm.valid) {
-      this.navCtrl.pop();
+      let loading = this.loadingCtrl.create({
+        content: 'Zapisywanie...'
+      });
+      loading.present();
+
+      this.person = this.personForm.value;
+      this.peopleService.putPersonOnline(this.person)
+        .finally(() => {
+          loading.dismiss();
+        })
+        .subscribe(() => {
+          this.popCb(this.person);
+          this.navCtrl.pop();
+        });
     }
   }
 

@@ -19,6 +19,7 @@ export class EventWizardStep8Page {
     private events: Events
   ) {
     this.person = {
+      id: null,
       name: faker.name.firstName() + " " + faker.name.lastName(),
       gender: faker.random.arrayElement([Gender.Pani, Gender.Pan]),
       email: faker.internet.email(),

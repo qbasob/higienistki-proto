@@ -33,6 +33,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
 import { PersonEditFormComponent } from '../pages/people/person-edit/person-edit-form/person-edit-form';
 import { PeopleService } from '../providers/people-service/people-service';
+import { HttpClientModule } from '../../node_modules/@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,8 @@ import { PeopleService } from '../providers/people-service/people-service';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    HttpClientModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

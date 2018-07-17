@@ -20,6 +20,7 @@ export class EventWizardStep7Page {
     private events: Events
   ) {
     this.person = {
+      id: null,
       name: '',
       gender: Gender.Pani
     }

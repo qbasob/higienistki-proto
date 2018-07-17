@@ -17,11 +17,16 @@ export class PeopleService {
     console.log('Hello PeopleService Provider');
   }
 
-  getPeopleOnline(filter: string): Observable<Array<Person>> {
+  getPeopleOnline(filter?: string): Observable<Array<Person>> {
     let urlFilter = '';
     if (filter) {
       urlFilter = `?q=${filter}`;
     }
-    return this.http.get<Array<Person>>(`${ENV.endpoint}/products${urlFilter}`);
+    return this.http.get<Array<Person>>(`${ENV.endpoint}/people${urlFilter}`);
+  }
+
+  putPersonOnline(person: Person): Observable<Array<Person>> {
+    const personId = person.id;
+    return this.http.put<Array<Person>>(`${ENV.endpoint}/people/${personId}`, person);
   }
 }

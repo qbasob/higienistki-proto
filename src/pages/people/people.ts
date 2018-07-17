@@ -1,46 +1,60 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
-import { Person, Gender } from '../../shared/person.model';
-import * as faker from 'faker';
+import { NavController, NavParams, AlertController, LoadingController, Loading, Refresher } from 'ionic-angular';
+import { Person } from '../../shared/person.model';
 import { PersonViewPage } from './person-view/person-view';
 import { PersonEditPage } from './person-edit/person-edit';
 import { PersonViewAcceptPage } from './person-view-accept/person-view-accept';
+import { PeopleService } from '../../providers/people-service/people-service';
+import 'rxjs/add/operator/finally';
 
 @Component({
   selector: 'page-people',
   templateUrl: 'people.html'
 })
 export class PeoplePage {
-  public people: Array<Person>;
+  protected people: Array<Person>;
+  protected filter: string;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
+    private peopleService: PeopleService
   ) {
-    this.people = [];
-    for (let i = 1; i < 11; i++) {
-      this.people.push({
-        name: faker.name.firstName() + " " + faker.name.lastName(),
-        gender: faker.random.arrayElement([Gender.Pani, Gender.Pan]),
-        email: faker.internet.email(),
-        phone: faker.phone.phoneNumber(),
-        officesNo: faker.random.number(5),
-        sonicareUser: faker.random.boolean(),
-        sonicareRecom: faker.random.boolean(),
-        wantCodes: faker.random.boolean(),
-        gotStarter: faker.random.boolean(),
-        starterNo: faker.random.number({min: 10000, max: 99999}).toString(),
-        gotExpositor: faker.random.boolean(),
-        agreeReg: true,
-        agreeMark1: faker.random.boolean(),
-        agreeMark2: faker.random.boolean(),
-        agreeMark3: faker.random.boolean(),
-        agreeMark4: faker.random.boolean(),
-        additionalData: faker.random.words(20)
-      });
-    }
+      this.getPeopleOnline();
   }
+
+  // dane
+
+  getPeopleOnline(refresher?: Refresher) {
+    let loading: Loading;
+    if (!refresher) {
+      loading = this.loadingCtrl.create({
+        content: 'Ładowanie...'
+      });
+      loading.present();
+    }
+
+    this.peopleService.getPeopleOnline(this.filter)
+      .finally(() => {
+        if (refresher) {
+          refresher.complete();
+        } else {
+          loading.dismiss();
+        }
+      })
+      .subscribe((people: Array<Person>) => {
+        this.people = people;
+      })
+  }
+
+  updatePerson(updatedPerson: Person) {
+    const foundIndex = this.people.findIndex(oldPerson =>oldPerson.id === updatedPerson.id);
+    this.people[foundIndex] = updatedPerson;
+  }
+
+  // nawigacja
 
   details(person) {
     this.navCtrl.push(PersonViewPage, {
@@ -56,7 +70,8 @@ export class PeoplePage {
 
   edit(person) {
     this.navCtrl.push(PersonEditPage, {
-      person
+      person,
+      cb: this.updatePerson.bind(this)
     });
   }
 
@@ -78,11 +93,6 @@ export class PeoplePage {
   }
 
   doRefresh(refresher) {
-    console.log('Begin async operation', refresher);
-
-    setTimeout(() => {
-      console.log('Async operation has ended');
-      refresher.complete();
-    }, 2000);
+    this.getPeopleOnline(refresher);
   }
 }
