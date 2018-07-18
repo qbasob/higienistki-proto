@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandler, Injectable } from '@angular/core';
 import { ToastController } from 'ionic-angular';
-import { Events } from 'ionic-angular/umd';
+import { Events } from 'ionic-angular';
 // import Rollbar from 'rollbar';
 
 /*
@@ -52,6 +52,12 @@ export class AppErrorHandler implements ErrorHandler {
       // this.rollbar.error(error);
       // and then publish error:
       console.error('AppErrorHandler', error);
+      const toast = this.toastCtrl.create({
+        message: error.message,
+        duration: 3000,
+        cssClass: `toast-warning`
+      });
+      toast.present();
       return this.events.publish('UNHANDLED_ERROR', error);
     }
   }

@@ -20,6 +20,12 @@
     display:none;
 }
 
+.toast-warning {
+  > div{
+       background-color: color($colors, danger, base)!important;
+   }
+}
+
 .alert-md .alert-button.danger-button {
     color: map-get($colors, danger);
 }
