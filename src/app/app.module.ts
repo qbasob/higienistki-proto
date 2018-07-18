@@ -34,6 +34,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { PersonEditFormComponent } from '../pages/people/person-edit/person-edit-form/person-edit-form';
 import { PeopleService } from '../providers/people-service/people-service';
 import { HttpClientModule } from '../../node_modules/@angular/common/http';
+import { AppErrorHandler } from '../providers/app-error-handler/app-error-handler';
 
 @NgModule({
   declarations: [
@@ -102,8 +103,10 @@ import { HttpClientModule } from '../../node_modules/@angular/common/http';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    PeopleService
+    {
+      provide: ErrorHandler,
+      useClass: AppErrorHandler
+    },
   ]
 })
 export class AppModule {}
