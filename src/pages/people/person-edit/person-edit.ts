@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import { Person, Gender } from '../../../shared/person.model';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { PeopleService } from '../../../providers/people-service/people-service';
+import { PeopleStore } from '../../../providers/people-store/people-store';
 import 'rxjs/add/operator/finally';
 
 
@@ -13,7 +13,6 @@ import 'rxjs/add/operator/finally';
 export class PersonEditPage implements OnInit {
   public personForm: FormGroup;
   public person: Person;
-  public popCb: Function;
 
   constructor(
     public navCtrl: NavController,
@@ -21,10 +20,9 @@ export class PersonEditPage implements OnInit {
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private formBuilder: FormBuilder,
-    private peopleService: PeopleService
+    private peopleStore: PeopleStore
   ) {
     this.person = <Person>navParams.get('person') || { id: null, name: '', gender: Gender.Pani };
-    this.popCb = <Function>navParams.get('cb');
   }
 
   ngOnInit(): void {
@@ -43,14 +41,17 @@ export class PersonEditPage implements OnInit {
       loading.present();
 
       this.person = this.personForm.value;
-      this.peopleService.putPersonOnline(this.person)
+      /*this.peopleService.putPersonOnline(this.person)
         .finally(() => {
           loading.dismiss();
         })
         .subscribe(() => {
           this.popCb(this.person);
           this.navCtrl.pop();
-        });
+        });*/
+      this.peopleStore.editPersonOffline(this.person);
+      loading.dismiss();
+      this.navCtrl.pop();
     }
   }
 

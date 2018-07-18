@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { IonicApp, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { EventsPage } from '../pages/events/events';
@@ -32,9 +32,10 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
 import { PersonEditFormComponent } from '../pages/people/person-edit/person-edit-form/person-edit-form';
-import { PeopleService } from '../providers/people-service/people-service';
 import { HttpClientModule } from '../../node_modules/@angular/common/http';
 import { AppErrorHandler } from '../providers/app-error-handler/app-error-handler';
+import { PeopleStore } from '../providers/people-store/people-store';
+import { PeopleService } from '../providers/people-service/people-service';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,6 @@ import { AppErrorHandler } from '../providers/app-error-handler/app-error-handle
     PersonPopoverPage,
     PersonViewAcceptPage,
     SettingsPage,
-
     PersonEditFormComponent
   ],
   imports: [
@@ -107,6 +107,8 @@ import { AppErrorHandler } from '../providers/app-error-handler/app-error-handle
       provide: ErrorHandler,
       useClass: AppErrorHandler
     },
+    PeopleStore,
+    PeopleService
   ]
 })
 export class AppModule {}

@@ -1,18 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController, Loading, Refresher } from 'ionic-angular';
 import { Person } from '../../shared/person.model';
 import { PersonViewPage } from './person-view/person-view';
 import { PersonEditPage } from './person-edit/person-edit';
 import { PersonViewAcceptPage } from './person-view-accept/person-view-accept';
-import { PeopleService } from '../../providers/people-service/people-service';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/finally';
+import 'rxjs/add/operator/do';
+import { PeopleStore } from '../../providers/people-store/people-store';
+
 
 @Component({
   selector: 'page-people',
   templateUrl: 'people.html'
 })
 export class PeoplePage {
-  protected people: Array<Person>;
+  protected people: Observable<Array<Person>>;
   protected filter: string;
 
   constructor(
@@ -20,9 +23,9 @@ export class PeoplePage {
     public navParams: NavParams,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
-    private peopleService: PeopleService
+    private peopleStore: PeopleStore
   ) {
-      this.getPeopleOnline();
+    this.getPeopleOnline();
   }
 
   // dane
@@ -35,23 +38,17 @@ export class PeoplePage {
       });
       loading.present();
     }
-
-    this.peopleService.getPeopleOnline(this.filter)
-      .finally(() => {
-        if (refresher) {
-          refresher.complete();
-        } else {
-          loading.dismiss();
+    this.people = this.peopleStore.getFilteredPeople(this.filter)
+      .do(
+        () => {
+          console.log("next do");
+          this._viewCleanup(refresher, loading);
+        },
+        () => {
+          console.log("err do");
+          this._viewCleanup(refresher, loading);
         }
-      })
-      .subscribe((people: Array<Person>) => {
-        this.people = people;
-      })
-  }
-
-  updatePerson(updatedPerson: Person) {
-    const foundIndex = this.people.findIndex(oldPerson =>oldPerson.id === updatedPerson.id);
-    this.people[foundIndex] = updatedPerson;
+      )
   }
 
   // nawigacja
@@ -70,8 +67,7 @@ export class PeoplePage {
 
   edit(person) {
     this.navCtrl.push(PersonEditPage, {
-      person,
-      cb: this.updatePerson.bind(this)
+      person
     });
   }
 
@@ -94,5 +90,15 @@ export class PeoplePage {
 
   doRefresh(refresher) {
     this.getPeopleOnline(refresher);
+  }
+
+  // helpery
+
+  private _viewCleanup(refresher: Refresher, loading: Loading) {
+    if (refresher) {
+      refresher.complete();
+    } else {
+      loading.dismiss();
+    }
   }
 }

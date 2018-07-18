@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from '../../../node_modules/rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 import { ENV } from '@app/env';
 import { Person } from '../../shared/person.model';
 
