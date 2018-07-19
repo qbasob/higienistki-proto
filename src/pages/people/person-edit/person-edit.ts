@@ -41,17 +41,9 @@ export class PersonEditPage implements OnInit {
       loading.present();
 
       this.person = this.personForm.value;
-      /*this.peopleService.putPersonOnline(this.person)
-        .finally(() => {
-          loading.dismiss();
-        })
-        .subscribe(() => {
-          this.popCb(this.person);
-          this.navCtrl.pop();
-        });*/
-      this.peopleStore.editPersonOffline(this.person);
+      this.peopleStore.editPersonLocal(this.person);
       loading.dismiss();
-      this.navCtrl.pop();
+      this.navCtrl.popToRoot();
     }
   }
 
@@ -67,7 +59,7 @@ export class PersonEditPage implements OnInit {
           text: 'Tak',
           cssClass: 'danger-button',
           handler: () => {
-            this.navCtrl.pop();
+            this.navCtrl.popToRoot();
           }
         }
       ]

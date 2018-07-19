@@ -57,7 +57,10 @@ export class PersonViewPage {
         },
         {
           text: 'Usuń',
-          cssClass: 'danger-button'
+          cssClass: 'danger-button',
+          handler: () => {
+            this.navCtrl.popToRoot();
+          }
         }
       ]
     });

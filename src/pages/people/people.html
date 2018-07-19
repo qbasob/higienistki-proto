@@ -17,7 +17,7 @@
   <ion-searchbar placeholder="Szukaj" [(ngModel)]="filter" (ionInput)="getPeopleOnline()" debounce="500"></ion-searchbar>
 
   <ion-list>
-    <ion-item-sliding *ngFor="let person of people | async">
+    <ion-item-sliding *ngFor="let person of people$ | async">
       <button ion-item (click)="details(person)">
         {{ person.name }}
       </button>

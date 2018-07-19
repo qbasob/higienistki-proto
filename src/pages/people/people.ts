@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController, Loading, Refresher } from 'ionic-angular';
 import { Person } from '../../shared/person.model';
 import { PersonViewPage } from './person-view/person-view';
@@ -7,6 +7,7 @@ import { PersonViewAcceptPage } from './person-view-accept/person-view-accept';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/finally';
 import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/catch';
 import { PeopleStore } from '../../providers/people-store/people-store';
 
 
@@ -15,8 +16,9 @@ import { PeopleStore } from '../../providers/people-store/people-store';
   templateUrl: 'people.html'
 })
 export class PeoplePage {
-  protected people: Observable<Array<Person>>;
+  protected people$: Observable<Array<Person>>;
   protected filter: string;
+  private isLoading: boolean;
 
   constructor(
     public navCtrl: NavController,
@@ -30,25 +32,25 @@ export class PeoplePage {
 
   // dane
 
-  getPeopleOnline(refresher?: Refresher) {
+  getPeopleOnline() {
     let loading: Loading;
-    if (!refresher) {
+    if (!this.isLoading) {
       loading = this.loadingCtrl.create({
         content: 'Ładowanie...'
       });
+      this.isLoading = true;
       loading.present();
     }
-    this.people = this.peopleStore.getFilteredPeople(this.filter)
+
+    this.people$ = this.peopleStore.getFilteredPeople(this.filter)
       .do(
         () => {
-          console.log("next do");
-          this._viewCleanup(refresher, loading);
+          this._viewCleanup(loading);
         },
         () => {
-          console.log("err do");
-          this._viewCleanup(refresher, loading);
+          this._viewCleanup(loading);
         }
-      )
+      );
   }
 
   // nawigacja
@@ -89,15 +91,20 @@ export class PeoplePage {
   }
 
   doRefresh(refresher) {
-    this.getPeopleOnline(refresher);
+    this.peopleStore.refreshPeople()
+      .finally(
+        () => {
+          refresher.complete();
+        }
+      )
+      .subscribe();
   }
 
   // helpery
 
-  private _viewCleanup(refresher: Refresher, loading: Loading) {
-    if (refresher) {
-      refresher.complete();
-    } else {
+  private _viewCleanup( loading?: Loading) {
+    if (loading && this.isLoading) {
+      this.isLoading = false;
       loading.dismiss();
     }
   }
