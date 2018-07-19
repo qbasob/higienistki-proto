@@ -41,7 +41,7 @@ export class PeopleStore {
 
   // metody prywatne, pomocnicze, trzeba wymyślić logikę całego tego store (kiedy wysyłac/pobierać online, ogarnięcie konfliktów itp.)
 
-  private initDataStore() {
+  private initDataStore(): void {
     // bierzemy dane lokalne
     this.getAllFromStorage()
       // jeżeli są to emitujemy
@@ -55,7 +55,7 @@ export class PeopleStore {
           // emitujemy i zapisujemy lokalnie
           .subscribe((data: Array<Person>) => {
             this.dataStore.people = data;
-            this.saveToStorage(this.dataStore.people);
+            this.saveAllToStorage(this.dataStore.people);
             this._people.next(this.dataStore.people.concat());
           });
       });
@@ -66,8 +66,30 @@ export class PeopleStore {
     return this.http.get<Array<Person>>(this.apiUrl);
   }
 
-  // ładuje jedną osobę po id z serwera
-  /* private getOneFromServer(id: number) {
+  private sendToServer(person: Person): Observable<Person> {
+    if (person.id) {
+      return this.http.put<Person>(`${this.apiUrl}/${person.id}`, person);
+    } else {
+      return this.http.post<Person>(this.apiUrl, person);
+    }
+  }
+
+  // zapis wszystkich uczestników do storage
+  private saveAllToStorage(people: Array<Person>): Promise<boolean> {
+    return this.storage.set('people', people)
+      .then( _ => true )
+      .catch( _ => false );
+  }
+
+  // ładuje wszystkie osoby ze storage
+  private getAllFromStorage(): Promise<Array<Person>> {
+    return this.storage.get('people');
+  }
+
+  // TODO:
+  // private sendToServer(person: Person): void; // zapisuje osobę na serwerze
+  // private getOneFromStorage(id: number): Person; // pobiera  jedną osobę po id ze storage
+  /* private getOneFromServer(id: number) {  // ładuje jedną osobę po id z serwera
     this.http.get(`${this.apiUrl}/${id}`).subscribe((data: Person) => {
       let notFound = true;
 
@@ -87,21 +109,6 @@ export class PeopleStore {
     });
   } */
 
-  // zapis wszystkich uczestników do storage
-  private saveToStorage(people: Array<Person>): Promise<boolean> {
-    return this.storage.set('people', people)
-      .then( _ => true )
-      .catch( _ => false );
-  }
-
-  // ładuje wszystkie osoby ze storage
-  private getAllFromStorage(): Promise<Array<Person>> {
-    return this.storage.get('people');
-  }
-
-  // TODO:
-  // private sendToServer(person: Person): void; // zapisuje osobę na serwerze
-  // private getOneFromStorage(id: number): Person; // pobiera osobę ze storage
 
   // metody publiczne:
 
@@ -125,13 +132,13 @@ export class PeopleStore {
       // emitujemy i zapisujemy lokalnie
       .do((data: Array<Person>) => {
         this.dataStore.people = data;
-        this.saveToStorage(this.dataStore.people);
+        this.saveAllToStorage(this.dataStore.people);
         this._people.next(this.dataStore.people.concat());
       });
   }
 
   // edytuje/dodaje lokalnie osobę, emituje zmianę
-  editAddPersonLocal(person: Person) {
+  editAddPersonLocal(person: Person): void {
     // edycja
     if (person.id !== null) {
       this.dataStore.people.forEach((t, i) => {
@@ -144,10 +151,8 @@ export class PeopleStore {
     else {
       this.dataStore.people.push(person);
     }
-    this.saveToStorage(this.dataStore.people)
-      .then(res => {
-        console.log("saveToStorage result:", true);
-      });
+
+    this.saveAllToStorage(this.dataStore.people);
     // Push a new copy of our people array to all Subscribers, to avoid mutations from subscriber
     // Object.assign({}, dataStore) will not work, bacause new object will still have reference to people array
     this._people.next(this.dataStore.people.concat());
@@ -161,6 +166,6 @@ export class PeopleStore {
       }
     });
     this._people.next(this.dataStore.people.concat());
-    return this.saveToStorage(this.dataStore.people);
+    return this.saveAllToStorage(this.dataStore.people);
   }
 }
