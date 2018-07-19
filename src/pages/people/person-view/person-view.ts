@@ -3,6 +3,7 @@ import { NavController, NavParams, PopoverController, AlertController } from 'io
 import { Person } from '../../../shared/person.model';
 import { PersonPopoverPage } from '../person-popover/person-popover';
 import { PersonEditPage } from '../person-edit/person-edit';
+import { PeopleStore } from '../../../providers/people-store/people-store';
 
 @Component({
   selector: 'page-person-view',
@@ -15,7 +16,8 @@ export class PersonViewPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private popoverCtrl: PopoverController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private peopleStore: PeopleStore
   ) {
     this.person = navParams.get('person');
   }
@@ -59,6 +61,7 @@ export class PersonViewPage {
           text: 'Usuń',
           cssClass: 'danger-button',
           handler: () => {
+            this.peopleStore.removePersonLocal(person);
             this.navCtrl.popToRoot();
           }
         }

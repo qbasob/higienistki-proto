@@ -83,7 +83,10 @@ export class PeoplePage {
         },
         {
           text: 'Usuń',
-          cssClass: 'danger-button'
+          cssClass: 'danger-button',
+          handler: () => {
+            this.peopleStore.removePersonLocal(person);
+          }
         }
       ]
     });

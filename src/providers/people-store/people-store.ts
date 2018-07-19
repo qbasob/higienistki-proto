@@ -130,12 +130,20 @@ export class PeopleStore {
       });
   }
 
-  editPersonLocal(person: Person) {
-    this.dataStore.people.forEach((t, i) => {
-      if (t.id === person.id) {
-        this.dataStore.people[i] = person;
-      }
-    });
+  // edytuje/dodaje lokalnie osobę, emituje zmianę
+  editAddPersonLocal(person: Person) {
+    // edycja
+    if (person.id !== null) {
+      this.dataStore.people.forEach((t, i) => {
+        if (t.id === person.id) {
+          this.dataStore.people[i] = person;
+        }
+      });
+    }
+    // dodawanie
+    else {
+      this.dataStore.people.push(person);
+    }
     this.saveToStorage(this.dataStore.people)
       .then(res => {
         console.log("saveToStorage result:", true);
@@ -145,7 +153,14 @@ export class PeopleStore {
     this._people.next(this.dataStore.people.concat());
   }
 
-  // TODO:
-  // public addPersonLocal(person: Person): void; // dodaje osobę w _people, emituję zmianę
-  // public removePersonLocal(person: Person): void; // usuwa osobę w _people, emituję zmianę
+  // usuwa lokalnie osobę, emituję zmianę
+  public removePersonLocal(person: Person): Promise<boolean> {
+    this.dataStore.people.forEach((t, i) => {
+      if (t.id === person.id) {
+        this.dataStore.people.splice(i, 1);
+      }
+    });
+    this._people.next(this.dataStore.people.concat());
+    return this.saveToStorage(this.dataStore.people);
+  }
 }
