@@ -92,30 +92,6 @@ export class PeopleStore {
     return this.storage.get('people');
   }
 
-  // TODO:
-  // private _sendToServer(person: Person): void; // zapisuje osobę na serwerze
-  // private getOneFromStorage(id: number): Person; // pobiera  jedną osobę po id ze storage
-  /* private getOneFromServer(id: number) {  // ładuje jedną osobę po id z serwera
-    this.http.get(`${this.apiUrl}/${id}`).subscribe((data: Person) => {
-      let notFound = true;
-
-      this.dataStore.people.forEach((item, index) => {
-        if (item.id === data.id) {
-          this.dataStore.people[index] = data;
-          notFound = false;
-        }
-      });
-
-      if (notFound) {
-        this.dataStore.people.push(data);
-      }
-      // Push a new copy of our people array to all Subscribers, to avoid mutations from subscriber
-      // Object.assign({}, dataStore) will not work, bacause new object will still have reference to people array
-      this._people.next(this.dataStore.people.concat());
-    });
-  } */
-
-
   // metody publiczne:
 
   public getFilteredPeople(filter: string): Observable<Array<Person>> {
@@ -133,7 +109,6 @@ export class PeopleStore {
 
   public refreshPeople(): Observable<Array<Person>>  {
     // bierzemy wszystkich z serwera
-    // return Observable.throw(new Error('ojoj'));
     return this._getAllFromServer()
       // emitujemy i zapisujemy lokalnie
       .do((data: Array<Person>) => {
