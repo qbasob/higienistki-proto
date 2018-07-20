@@ -29,3 +29,14 @@
 .alert-md .alert-button.danger-button {
     color: map-get($colors, danger);
 }
+
+.offline-bar {
+    opacity: 0.9;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: color($colors, danger, base);
+    color: #fff;
+    text-align: center;
+}

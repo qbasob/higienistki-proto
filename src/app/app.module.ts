@@ -1,8 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicModule } from 'ionic-angular';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { IonicStorageModule } from '@ionic/storage';
+import { HttpClientModule } from '../../node_modules/@angular/common/http';
 import { MyApp } from './app.component';
+
 import { EventsPage } from '../pages/events/events';
 import { EventEditPage } from '../pages/events/event-edit/event-edit';
 import { EventViewPage } from '../pages/events/event-view/event-view';
@@ -23,16 +28,12 @@ import { OfficeViewPage } from '../pages/offices/office-view/office-view';
 import { OfficePopoverPage } from '../pages/offices/office-popover/office-popover';
 import { PeoplePage } from '../pages/people/people';
 import { PersonEditPage } from '../pages/people/person-edit/person-edit';
+import { PersonEditFormComponent } from '../pages/people/person-edit/person-edit-form/person-edit-form';
 import { PersonViewPage } from '../pages/people/person-view/person-view';
 import { PersonPopoverPage } from '../pages/people/person-popover/person-popover';
 import { PersonViewAcceptPage } from '../pages/people/person-view-accept/person-view-accept';
 import { SettingsPage } from '../pages/settings/settings';
 
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { IonicStorageModule } from '@ionic/storage';
-import { PersonEditFormComponent } from '../pages/people/person-edit/person-edit-form/person-edit-form';
-import { HttpClientModule } from '../../node_modules/@angular/common/http';
 import { AppErrorHandler } from '../providers/app-error-handler/app-error-handler';
 import { PeopleStore } from '../providers/people-store/people-store';
 import { PeopleService } from '../providers/people-service/people-service';
@@ -70,7 +71,8 @@ import { PeopleService } from '../providers/people-service/people-service';
     BrowserModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

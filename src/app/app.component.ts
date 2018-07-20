@@ -8,12 +8,30 @@ import { EventsPage } from '../pages/events/events';
 import { OfficesPage } from '../pages/offices/offices';
 import { SettingsPage } from '../pages/settings/settings';
 import { PeoplePage } from '../pages/people/people';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/fromEvent'
+import { style, state, animate, transition, trigger } from '@angular/core';
+
 
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.html',
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [   // :enter is alias to 'void => *'
+        style({ opacity: 0 }),
+        animate(500, style({ opacity: 1 }))
+      ]),
+      transition(':leave', [   // :leave is alias to '* => void'
+        animate(500, style({ opacity: 0 }))
+      ])
+    ])
+  ]
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
+  public isOnline: boolean;
+  private online$: Observable<Event>;
+  private offline$: Observable<Event>;
 
   rootPage: any = EventsPage;
 
@@ -25,7 +43,16 @@ export class MyApp {
     public splashScreen: SplashScreen,
     private storage: Storage,
   ) {
-    // this.initializeApp();
+    this.isOnline = navigator.onLine;
+    this.online$ = Observable.fromEvent(window, 'online');
+    this.offline$ = Observable.fromEvent(window, 'offline');
+
+    this.online$.subscribe(e => {
+      this.isOnline = true;
+    });
+    this.offline$.subscribe(e => {
+      this.isOnline = false;
+    });
 
     this.storage.get('hasSeenTutorial')
       .then((hasSeenTutorial) => {
