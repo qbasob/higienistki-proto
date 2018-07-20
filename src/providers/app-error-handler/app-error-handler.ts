@@ -30,6 +30,7 @@ export class AppErrorHandler implements ErrorHandler {
           cssClass: `toast-warning`
         });
         toast.present();
+        return;
       }
       // Send the error to the server
       // this.rollbar.error(error);
@@ -40,7 +41,7 @@ export class AppErrorHandler implements ErrorHandler {
         return this.events.publish('TOKEN_ERROR', error);
       }
       const toast = this.toastCtrl.create({
-        message: error.message,
+        message: 'Błąd serwera: ' + ( error.error.message || error.message ),
         duration: 3000,
         cssClass: `toast-warning`
       });

@@ -41,7 +41,7 @@ export class PersonEditPage implements OnInit {
       loading.present();
 
       this.person = this.personForm.value;
-      this.peopleStore.editAddPersonLocal(this.person);
+      this.peopleStore.editAddPerson(this.person);
       loading.dismiss();
       this.navCtrl.popToRoot();
     }
