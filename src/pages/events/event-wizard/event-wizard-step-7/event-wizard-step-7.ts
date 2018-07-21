@@ -22,7 +22,8 @@ export class EventWizardStep7Page {
     this.person = {
       id: null,
       name: '',
-      gender: Gender.Pani
+      gender: Gender.Pani,
+      needSync: false
     }
   }
 
