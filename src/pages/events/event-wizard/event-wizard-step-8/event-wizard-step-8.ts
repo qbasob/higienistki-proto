@@ -36,7 +36,8 @@ export class EventWizardStep8Page {
       agreeMark2: faker.random.boolean(),
       agreeMark3: faker.random.boolean(),
       agreeMark4: faker.random.boolean(),
-      additionalData: faker.random.words(20)
+      additionalData: faker.random.words(20),
+      needSync: false
     }
   }
 
