@@ -28,7 +28,7 @@ export class PersonEditPage implements OnInit {
       this.person = <Person>navParams.get('person');
     } else {
       this._isAdd = true;
-      this.person = { id: null, name: '', gender: Gender.Pani, isNew: true };
+      this.person = { id: null, name: '', gender: Gender.Pani };
     }
   }
 

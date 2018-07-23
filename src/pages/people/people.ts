@@ -16,9 +16,9 @@ import { PeopleStore } from '../../providers/people-store/people-store';
   templateUrl: 'people.html'
 })
 export class PeoplePage {
-  protected people$: Observable<Array<Person>>;
-  protected filter: string;
-  private isLoading: boolean;
+  public people$: Observable<Array<Person>>;
+  public filter: string;
+  private _isLoading: boolean;
 
   constructor(
     public navCtrl: NavController,
@@ -27,18 +27,18 @@ export class PeoplePage {
     private loadingCtrl: LoadingController,
     private peopleStore: PeopleStore
   ) {
-    this.getPeopleOnline();
+    this.populatePeople();
   }
 
   // dane
 
-  getPeopleOnline() {
+  populatePeople(): void {
     let loading: Loading;
-    if (!this.isLoading) {
+    if (!this._isLoading) {
       loading = this.loadingCtrl.create({
         content: 'Ładowanie...'
       });
-      this.isLoading = true;
+      this._isLoading = true;
       loading.present();
     }
 
@@ -85,7 +85,8 @@ export class PeoplePage {
           text: 'Usuń',
           cssClass: 'danger-button',
           handler: () => {
-            this.peopleStore.removePerson(person);
+            this.peopleStore.removePerson(person)
+              .subscribe();
           }
         }
       ]
@@ -106,8 +107,8 @@ export class PeoplePage {
   // helpery
 
   private _viewCleanup( loading?: Loading) {
-    if (loading && this.isLoading) {
-      this.isLoading = false;
+    if (loading && this._isLoading) {
+      this._isLoading = false;
       loading.dismiss();
     }
   }

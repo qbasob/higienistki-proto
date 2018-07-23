@@ -18,13 +18,16 @@
 
   <ion-list>
     <ion-item-sliding *ngFor="let person of people$ | async">
-      <button ion-item (click)="details(person)">
+      <button ion-item (click)="details(person)" [disabled]="person.isRemoved">
         {{ person.name }}
-        <ion-note item-end *ngIf="person.needSync">
+        <ion-note item-end *ngIf="person.needSync && !person.isRemoved">
           <ion-icon name="alert" color="danger"></ion-icon>
         </ion-note>
+        <ion-note item-end *ngIf="person.isRemoved">
+          <ion-icon name="remove-circle" color="danger"></ion-icon>
+        </ion-note>
       </button>
-      <ion-item-options side="right">
+      <ion-item-options side="right" *ngIf="!person.isRemoved">
         <button ion-button color="light" (click)="details(person)">Podgląd</button>
         <button ion-button color="light" (click)="accept(person)">Podsumowanie</button>
         <button ion-button color="light" (click)="edit(person)">Edytuj</button>

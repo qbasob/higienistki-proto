@@ -25,4 +25,5 @@ export class Person {
     serverLastEditedDate?: number;
     needSync?: boolean;
     isNew?: boolean;
+    isRemoved?: boolean;
 }

@@ -61,8 +61,11 @@ export class PersonViewPage {
           text: 'Usuń',
           cssClass: 'danger-button',
           handler: () => {
-            this.peopleStore.removePerson(person);
-            this.navCtrl.popToRoot();
+            this.peopleStore.removePerson(person)
+              .finally(() => {
+                this.navCtrl.popToRoot();
+              })
+              .subscribe();
           }
         }
       ]

@@ -9,6 +9,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/observable/of';
 
 /**
  * Observable Data Service, "PeopleStore"
@@ -78,20 +79,17 @@ export class PeopleStore {
     return this.http.get<Array<Person>>(this._apiUrl);
   }
 
-  private _sendToServer(person: Person): Observable<Person> {
-    // edycja
-    if (!person.isNew) {
-      return this.http.patch<Person>(`${this._apiUrl}/${person.id}`, person);
-    }
-    // dodawanie
-    else {
-      // może się zdarzyć że mamy uczestnika z lokalnym id
-      // musimy ten id usunąć przed wysłaniem danych, aby serwer stworzył swój własny id
-      const clonePerson = Object.assign({}, person);
-      delete clonePerson.id;
+  private _addToServer(person: Person): Observable<Person> {
+    // może się zdarzyć że mamy uczestnika z lokalnym id
+    // musimy ten id usunąć przed wysłaniem danych, aby serwer stworzył swój własny id
+    const clonePerson = Object.assign({}, person);
+    delete clonePerson.id;
 
-      return this.http.post<Person>(this._apiUrl, clonePerson);
-    }
+    return this.http.post<Person>(this._apiUrl, clonePerson);
+  }
+
+  private _editOnServer(person: Person): Observable<Person> {
+    return this.http.patch<Person>(`${this._apiUrl}/${person.id}`, person);
   }
 
   private _removeFromServer(person: Person): Observable<Person> {
@@ -144,7 +142,7 @@ export class PeopleStore {
 
   // edytuje osobę, emituje zmianę
   public editPerson(person: Person): Observable<Person> {
-    return this._sendToServer(person)
+    return this._editOnServer(person)
       // jeżeli błąd serwera
       .catch<Person, never>((err) => {
         // ustawiamy flagę needSync na uczestniku
@@ -184,11 +182,12 @@ export class PeopleStore {
 
   // dodaje osobę, emituje zmianę
   public addPerson(person: Person): Observable<Person> {
-    return this._sendToServer(person)
+    return this._addToServer(person)
       // jeżeli błąd serwera
       .catch<Person, never>((err) => {
-        // ustawiamy flagę needSync na uczestniku
+        // ustawiamy flagę needSync i isNew na uczestniku
         person.needSync = true;
+        person.isNew = true;
         // dodajemy tymczasowy identyfikator, aktualny timestamp skonkatenowany z ilością uczestników; wystarczająco unikalny
         person.id = +('' + Date.now() + this._dataStore.people.length);
         // dodajemy aktualnego uczestnika z needSync i tymczasowym id do store
@@ -216,34 +215,53 @@ export class PeopleStore {
   }
 
   // usuwa osobę, emituję zmianę
-  public removePerson(person: Person): void {
-    this._dataStore.people.forEach((t, i) => {
-      if (t.id === person.id) {
-        this._dataStore.people.splice(i, 1);
-      }
-    });
+  public removePerson(person: Person): Observable<Person> {
+    // jeżeli osoba jest lokalna, to usuwamy ją bez łączenia z serwerem
+    if (person.isNew) {
+      this._dataStore.people.forEach((arrayPerson, index) => {
+        // szukamy po lokalnym id i ususwamy
+        if (arrayPerson.id === person.id) {
+          this._dataStore.people.splice(index, 1);
+        }
+      });
+      this._saveAllToStorage(this._dataStore.people);
+      this._people$.next(this._dataStore.people.concat());
 
-    this._saveAllToStorage(this._dataStore.people);
-    this._people$.next(this._dataStore.people.concat());
+      return Observable.of(person);
+    }
 
-    // TODO:
-    // UWAGA!!!!
-    // ogarnąć usuwanie usera, po usunięciu nie może dostać flagi bo go już nie ma
-    /*
-    this._removeFromServer(person)
-      // jeżeli błąd serwera to ustawiamy flagę needSync na uczestniku
-      .catch((err) => {
+    return this._removeFromServer(person)
+      // jeżeli błąd serwera
+      .catch<Person, never>((err) => {
+        // ustawiamy flagę needSync i isRemoved na uczestniku
         person.needSync = true;
+        person.isRemoved = true;
+        // lokalnie aktualizujemy dane uczestnika
+        this._dataStore.people.forEach((arrayPerson, index) => {
+          if (arrayPerson.id === person.id) {
+            this._dataStore.people[index] = person;
+          }
+        });
+
+        // rethrow obsługiwany w AppErrorHandler
         throw err;
       })
-      // tak czy siak emitujemy nowe dane
+      // zarówno w przypadku błędu serwera jak i powodzenia emitujemy nowe dane
       .finally(() => {
         // Push a new copy of our people array to all Subscribers, to avoid mutations from subscriber
         // Object.assign({}, dataStore) will not work, bacause new object will still have reference to people array
         this._saveAllToStorage(this._dataStore.people);
         this._people$.next(this._dataStore.people.concat());
       })
-      .subscribe();
-    */
+      // jeżeli sukces serwera
+      .do((serverPerson: Person) => {
+        // usuwamy całkowicie rekord
+        this._dataStore.people.forEach((arrayPerson, index) => {
+          // szukamy po lokalnym id i ususwamy
+          if (arrayPerson.id === person.id) {
+            this._dataStore.people.splice(index, 1);
+          }
+        });
+      })
   }
 }
