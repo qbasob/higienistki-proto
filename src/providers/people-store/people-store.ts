@@ -73,7 +73,7 @@ export class PeopleStore {
     if (this._dataStore.people) {
       const doNeedSync = this._dataStore.people.map(person => person.needSync).filter(needSync => needSync);
       if (doNeedSync.length > 0) {
-        return Observable.throw("Istnieją niezsynchronizowane osoby. Nie można pobrać danych z serwera.");
+        return Observable.throw("Nie można pobrać danych z serwera, dopóki istnieją lokalne dane niezsynchronizowane z serwerem.");
       }
     }
     return this.http.get<Array<Person>>(this._apiUrl);
@@ -85,7 +85,7 @@ export class PeopleStore {
     const clonePerson = Object.assign({}, person);
     delete clonePerson.id;
 
-    // usuwamy też inne flagi
+    // usuwamy też lokalne, tymczasowe flagi
     delete clonePerson.needSync;
     delete clonePerson.isNew;
 
@@ -94,7 +94,7 @@ export class PeopleStore {
 
   private _editOnServer(person: Person): Observable<Person> {
     const clonePerson = Object.assign({}, person);
-    // usuwamy flagi
+    // usuwamy lokalne, tymczasowe flagi
     delete clonePerson.needSync;
     delete clonePerson.isNew;
 
@@ -175,10 +175,6 @@ export class PeopleStore {
       })
       // jeżeli sukces serwera
       .do((serverPerson: Person) => {
-        // usuwamy isNew i needSync
-        delete serverPerson.isNew;
-        delete serverPerson.needSync;
-
         // edytujemy uczestnika zwróconego z serwera, z id serwerowym, w store
         this._dataStore.people.forEach((arrayPerson, index) => {
           // w store może nadal mieć lokalne id, więc szukamy po starym id i podmieniamy
@@ -214,10 +210,6 @@ export class PeopleStore {
       })
       // jeżeli sukces serwera
       .do((serverPerson: Person) => {
-        // usuwamy isNew i needSync
-        delete serverPerson.isNew;
-        delete serverPerson.needSync;
-
         // dodajemy uczestnika zwróconego z serwera, z id serwerowym, do store
         this._dataStore.people.push(serverPerson);
       })
