@@ -24,4 +24,5 @@ export class Person {
     additionalData?: string;
     serverLastEditedDate?: number;
     needSync?: boolean;
+    isNew?: boolean;
 }

@@ -13,6 +13,7 @@ import 'rxjs/add/operator/finally';
 export class PersonEditPage implements OnInit {
   public personForm: FormGroup;
   public person: Person;
+  private _isAdd: boolean;
 
   constructor(
     public navCtrl: NavController,
@@ -22,7 +23,13 @@ export class PersonEditPage implements OnInit {
     private formBuilder: FormBuilder,
     private peopleStore: PeopleStore
   ) {
-    this.person = <Person>navParams.get('person') || { id: null, name: '', gender: Gender.Pani };
+    if (navParams.get('person')) {
+      this._isAdd = false;
+      this.person = <Person>navParams.get('person');
+    } else {
+      this._isAdd = true;
+      this.person = { id: null, name: '', gender: Gender.Pani, isNew: true };
+    }
   }
 
   ngOnInit(): void {
@@ -40,10 +47,24 @@ export class PersonEditPage implements OnInit {
       });
       loading.present();
 
-      this.person = this.personForm.value;
-      this.peopleStore.editAddPerson(this.person);
-      loading.dismiss();
-      this.navCtrl.popToRoot();
+      // this.person = this.personForm.value;
+      const personData = Object.assign(this.person, this.personForm.value);
+
+      if (this._isAdd) {
+        this.peopleStore.addPerson(personData)
+          .finally(() => {
+            loading.dismiss();
+            this.navCtrl.popToRoot();
+          })
+          .subscribe()
+      } else {
+        this.peopleStore.editPerson(personData)
+          .finally(() => {
+            loading.dismiss();
+            this.navCtrl.popToRoot();
+          })
+          .subscribe()
+      }
     }
   }
 

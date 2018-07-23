@@ -79,10 +79,18 @@ export class PeopleStore {
   }
 
   private _sendToServer(person: Person): Observable<Person> {
-    if (person.id) {
+    // edycja
+    if (!person.isNew) {
       return this.http.patch<Person>(`${this._apiUrl}/${person.id}`, person);
-    } else {
-      return this.http.post<Person>(this._apiUrl, person);
+    }
+    // dodawanie
+    else {
+      // może się zdarzyć że mamy uczestnika z lokalnym id
+      // musimy ten id usunąć przed wysłaniem danych, aby serwer stworzył swój własny id
+      const clonePerson = Object.assign({}, person);
+      delete clonePerson.id;
+
+      return this.http.post<Person>(this._apiUrl, clonePerson);
     }
   }
 
@@ -134,35 +142,77 @@ export class PeopleStore {
       });
   }
 
-  // edytuje/dodaje lokalnie osobę, emituje zmianę
-  public editAddPerson(person: Person): void {
-    // edycja
-    if (person.id !== null) {
-      this._dataStore.people.forEach((t, i) => {
-        if (t.id === person.id) {
-          this._dataStore.people[i] = person;
-        }
-      });
-    }
-    // dodawanie
-    else {
-      this._dataStore.people.push(person);
-    }
-
-    this._sendToServer(person)
-      // jeżeli błąd serwera to ustawiamy flagę needSync na uczestniku
-      .catch((err) => {
+  // edytuje osobę, emituje zmianę
+  public editPerson(person: Person): Observable<Person> {
+    return this._sendToServer(person)
+      // jeżeli błąd serwera
+      .catch<Person, never>((err) => {
+        // ustawiamy flagę needSync na uczestniku
         person.needSync = true;
+        // lokalnie aktualizujemy dane uczestnika
+        this._dataStore.people.forEach((arrayPerson, index) => {
+          if (arrayPerson.id === person.id) {
+            this._dataStore.people[index] = person;
+          }
+        });
+
+        // rethrow obsługiwany w AppErrorHandler
         throw err;
       })
-      // tak czy siak emitujemy nowe dane
+      // zarówno w przypadku błędu serwera jak i powodzenia emitujemy nowe dane
       .finally(() => {
         // Push a new copy of our people array to all Subscribers, to avoid mutations from subscriber
         // Object.assign({}, dataStore) will not work, bacause new object will still have reference to people array
         this._saveAllToStorage(this._dataStore.people);
         this._people$.next(this._dataStore.people.concat());
       })
-      .subscribe();
+      // jeżeli sukces serwera
+      .do((serverPerson: Person) => {
+        // usuwamy isNew i needSync
+        delete serverPerson.isNew;
+        delete serverPerson.needSync;
+
+        // edytujemy uczestnika zwróconego z serwera, z id serwerowym, w store
+        this._dataStore.people.forEach((arrayPerson, index) => {
+          // w store może nadal mieć lokalne id, więc szukamy po starym id i podmieniamy
+          if (arrayPerson.id === person.id) {
+            this._dataStore.people[index] = serverPerson;
+          }
+        });
+      })
+  }
+
+  // dodaje osobę, emituje zmianę
+  public addPerson(person: Person): Observable<Person> {
+    return this._sendToServer(person)
+      // jeżeli błąd serwera
+      .catch<Person, never>((err) => {
+        // ustawiamy flagę needSync na uczestniku
+        person.needSync = true;
+        // dodajemy tymczasowy identyfikator, aktualny timestamp skonkatenowany z ilością uczestników; wystarczająco unikalny
+        person.id = +('' + Date.now() + this._dataStore.people.length);
+        // dodajemy aktualnego uczestnika z needSync i tymczasowym id do store
+        this._dataStore.people.push(person);
+
+        // rethrow obsługiwany w AppErrorHandler
+        throw err;
+      })
+      // zarówno w przypadku błędu serwera jak i powodzenia emitujemy nowe dane
+      .finally(() => {
+        // Push a new copy of our people array to all Subscribers, to avoid mutations from subscriber
+        // Object.assign({}, dataStore) will not work, bacause new object will still have reference to people array
+        this._saveAllToStorage(this._dataStore.people);
+        this._people$.next(this._dataStore.people.concat());
+      })
+      // jeżeli sukces serwera
+      .do((serverPerson: Person) => {
+        // usuwamy isNew i needSync
+        delete serverPerson.isNew;
+        delete serverPerson.needSync;
+
+        // dodajemy uczestnika zwróconego z serwera, z id serwerowym, do store
+        this._dataStore.people.push(serverPerson);
+      })
   }
 
   // usuwa osobę, emituję zmianę
