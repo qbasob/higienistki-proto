@@ -99,6 +99,11 @@ export class PeopleStore {
     delete clonePerson.needSync;
     delete clonePerson.isNew;
 
+    // jeżeli rekord istniał tylko lokalnie, to musimy go utworzyć na serwerze
+    if (person.isNew) {
+      return this.http.post<Person>(this._apiUrl, clonePerson);
+    }
+    // w p.p. normalny edit
     return this.http.patch<Person>(`${this._apiUrl}/${person.id}`, clonePerson);
   }
 
