@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/observable/throw';
+import 'rxjs/add/observable/fromPromise';
 
 /**
  * Observable Data Service, "PeopleStore"
@@ -44,21 +45,26 @@ export class PeopleStore {
   private _initDataStore(): void {
     // bierzemy dane lokalne
     this._getAllFromStorage()
-      // jeżeli są to emitujemy
-      .then((data: Array<Person>) => {
-        this._dataStore.people = data;
-        this._people$.next(this._dataStore.people.concat());
-      })
-      // jeżeli nie ma to bierzemy z serwera
-      .catch(() => {
-        this._getAllFromServer()
-          // emitujemy i zapisujemy lokalnie
-          .subscribe((data: Array<Person>) => {
+      .subscribe(
+        (data: Array<Person>) => {
+          // jeżeli są to emitujemy
+          if (data) {
             this._dataStore.people = data;
-            this._saveAllToStorage(this._dataStore.people);
             this._people$.next(this._dataStore.people.concat());
-          });
-      });
+          }
+          // jeżeli nie ma to bierzemy z serwera
+          else {
+            this._getAllFromServer()
+              // emitujemy i zapisujemy lokalnie
+              .subscribe((data: Array<Person>) => {
+                this._dataStore.people = data;
+                this._saveAllToStorage(this._dataStore.people);
+                this._people$.next(this._dataStore.people.concat());
+              });
+          }
+        }
+
+      );
   }
 
   // ładuje wszystkie osoby z serwera
@@ -76,20 +82,30 @@ export class PeopleStore {
     if (person.id) {
       return this.http.patch<Person>(`${this._apiUrl}/${person.id}`, person);
     } else {
-      return this.http.put<Person>(this._apiUrl, person);
+      return this.http.post<Person>(this._apiUrl, person);
     }
   }
 
+  private _removeFromServer(person: Person): Observable<Person> {
+    return this.http.delete<Person>(`${this._apiUrl}/${person.id}`);
+  }
+
   // zapis wszystkich uczestników do storage
-  private _saveAllToStorage(people: Array<Person>): Promise<boolean> {
-    return this.storage.set('people', people)
-      .then( _ => true )
-      .catch( _ => false );
+  private _saveAllToStorage(people: Array<Person>): Observable<Array<Person>> {
+    return Observable.fromPromise(this.storage.set('people', people)
+      .then((data) => {
+        return data;
+      })
+    );
   }
 
   // ładuje wszystkie osoby ze storage
-  private _getAllFromStorage(): Promise<Array<Person>> {
-    return this.storage.get('people');
+  private _getAllFromStorage(): Observable<Array<Person>> {
+    return Observable.fromPromise(this.storage.get('people')
+      .then((data) => {
+        return data;
+      })
+    );
   }
 
   // metody publiczne:
@@ -119,7 +135,7 @@ export class PeopleStore {
   }
 
   // edytuje/dodaje lokalnie osobę, emituje zmianę
-  editAddPerson(person: Person): void {
+  public editAddPerson(person: Person): void {
     // edycja
     if (person.id !== null) {
       this._dataStore.people.forEach((t, i) => {
@@ -134,7 +150,7 @@ export class PeopleStore {
     }
 
     this._sendToServer(person)
-      // jeżeli błąd serwera to ustawiamy flagę needSync uczestniku
+      // jeżeli błąd serwera to ustawiamy flagę needSync na uczestniku
       .catch((err) => {
         person.needSync = true;
         throw err;
@@ -149,14 +165,35 @@ export class PeopleStore {
       .subscribe();
   }
 
-  // usuwa lokalnie osobę, emituję zmianę
-  public removePersonLocal(person: Person): Promise<boolean> {
+  // usuwa osobę, emituję zmianę
+  public removePerson(person: Person): void {
     this._dataStore.people.forEach((t, i) => {
       if (t.id === person.id) {
         this._dataStore.people.splice(i, 1);
       }
     });
+
+    this._saveAllToStorage(this._dataStore.people);
     this._people$.next(this._dataStore.people.concat());
-    return this._saveAllToStorage(this._dataStore.people);
+
+    // TODO:
+    // UWAGA!!!!
+    // ogarnąć usuwanie usera, po usunięciu nie może dostać flagi bo go już nie ma
+    /*
+    this._removeFromServer(person)
+      // jeżeli błąd serwera to ustawiamy flagę needSync na uczestniku
+      .catch((err) => {
+        person.needSync = true;
+        throw err;
+      })
+      // tak czy siak emitujemy nowe dane
+      .finally(() => {
+        // Push a new copy of our people array to all Subscribers, to avoid mutations from subscriber
+        // Object.assign({}, dataStore) will not work, bacause new object will still have reference to people array
+        this._saveAllToStorage(this._dataStore.people);
+        this._people$.next(this._dataStore.people.concat());
+      })
+      .subscribe();
+    */
   }
 }

@@ -23,5 +23,5 @@ export class Person {
     agreeMark4?: boolean;
     additionalData?: string;
     serverLastEditedDate?: number;
-    needSync: boolean;
+    needSync?: boolean;
 }

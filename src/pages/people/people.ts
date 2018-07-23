@@ -85,7 +85,7 @@ export class PeoplePage {
           text: 'Usuń',
           cssClass: 'danger-button',
           handler: () => {
-            this.peopleStore.removePersonLocal(person);
+            this.peopleStore.removePerson(person);
           }
         }
       ]
