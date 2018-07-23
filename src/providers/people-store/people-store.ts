@@ -10,6 +10,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/forkJoin';
 
 /**
  * Observable Data Service, "PeopleStore"
@@ -264,5 +265,27 @@ export class PeopleStore {
           }
         });
       })
+  }
+
+  // znajduje wszystkie rekordy z flagą needSync i wysyła je na serwer
+  // jeżeli ma flagę isRemoved - usuwa
+  // w p.p. edytuje
+
+  // !!! DO PRZETESTOWANIA, teoretycznie działa !!!
+  public syncIfNeeded(): Observable<Array<any>> {
+    const serverSyncObservables: Array<Observable<Person>> = [];
+
+    this._dataStore.people.forEach((arrayPerson, index) => {
+      if (arrayPerson.needSync === true) {
+        if (arrayPerson.isRemoved) {
+          serverSyncObservables.push(this.removePerson(arrayPerson));
+        }
+        else {
+          serverSyncObservables.push(this.editPerson(arrayPerson));
+        }
+      }
+    });
+
+    return Observable.forkJoin(serverSyncObservables);
   }
 }
