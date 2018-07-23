@@ -85,11 +85,20 @@ export class PeopleStore {
     const clonePerson = Object.assign({}, person);
     delete clonePerson.id;
 
+    // usuwamy też inne flagi
+    delete clonePerson.needSync;
+    delete clonePerson.isNew;
+
     return this.http.post<Person>(this._apiUrl, clonePerson);
   }
 
   private _editOnServer(person: Person): Observable<Person> {
-    return this.http.patch<Person>(`${this._apiUrl}/${person.id}`, person);
+    const clonePerson = Object.assign({}, person);
+    // usuwamy flagi
+    delete clonePerson.needSync;
+    delete clonePerson.isNew;
+
+    return this.http.patch<Person>(`${this._apiUrl}/${person.id}`, clonePerson);
   }
 
   private _removeFromServer(person: Person): Observable<Person> {

@@ -27,10 +27,10 @@
           <ion-icon name="remove-circle" color="danger"></ion-icon>
         </ion-note>
       </button>
-      <ion-item-options side="right" *ngIf="!person.isRemoved">
-        <button ion-button color="light" (click)="details(person)">Podgląd</button>
-        <button ion-button color="light" (click)="accept(person)">Podsumowanie</button>
-        <button ion-button color="light" (click)="edit(person)">Edytuj</button>
+      <ion-item-options side="right">
+        <button ion-button color="light" (click)="details(person)"  *ngIf="!person.isRemoved">Podgląd</button>
+        <button ion-button color="light" (click)="accept(person)"  *ngIf="!person.isRemoved">Podsumowanie</button>
+        <button ion-button color="light" (click)="edit(person)"  *ngIf="!person.isRemoved">Edytuj</button>
         <button ion-button color="danger" (click)="remove(person)">Usuń</button>
       </ion-item-options>
     </ion-item-sliding>
