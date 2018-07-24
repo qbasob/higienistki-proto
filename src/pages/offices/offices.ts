@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
+import { NavController, NavParams, AlertController, LoadingController, Loading, ItemSliding } from 'ionic-angular';
 import { OfficeViewPage } from './office-view/office-view';
 import { Office } from '../../shared/office.model';
 import { OfficeEditPage } from './office-edit/office-edit';
@@ -16,6 +16,7 @@ import { OfficesStore } from '../../providers/offices-store/offices-store';
 export class OfficesPage {
   offices$: Observable<Array<Office>>;
   public filter: string;
+  private _loading: Loading; // jeden wspólny loading, dla ułatwienia
   private _isLoading: boolean;
 
   constructor(
@@ -31,22 +32,18 @@ export class OfficesPage {
   // dane
 
   populateOffices(): void {
-    let loading: Loading;
-    if (!this._isLoading) {
-      loading = this.loadingCtrl.create({
-        content: 'Ładowanie...'
-      });
-      this._isLoading = true;
-      loading.present();
-    }
+    this._loading = this.loadingCtrl.create({
+      content: 'Ładowanie...'
+    });
+    this._showLoading();
 
     this.offices$ = this.officesStore.getFilteredRecords(this.filter)
       .do(
         () => {
-          this._viewCleanup(loading);
+          this._hideLoading();
         },
         () => {
-          this._viewCleanup(loading);
+          this._hideLoading();
         }
       );
   }
@@ -65,9 +62,13 @@ export class OfficesPage {
     });
   }
 
-  remove(office) {
+  remove(office: Office, slidingItem: ItemSliding) {
+    this._loading = this.loadingCtrl.create({
+      content: 'Usuwanie...'
+    });
+
     const confirm = this.alertCtrl.create({
-      title: 'Usuwanie gabinet',
+      title: 'Usuwanie gabinetu',
       message: `Czy na pewno usunąć gabinet ${office.name}?`,
       buttons: [
         {
@@ -77,7 +78,18 @@ export class OfficesPage {
           text: 'Usuń',
           cssClass: 'danger-button',
           handler: () => {
+            this._showLoading();
             this.officesStore.removeRecord(office)
+              .do(
+                () => {
+                  this._hideLoading();
+                  slidingItem.close(); // po delete chowamy sliding, bo chowają się akcje, a slider się nie zwęża
+                },
+                () => {
+                  this._hideLoading();
+                  slidingItem.close(); // po delete chowamy sliding, bo chowają się akcje, a slider się nie zwęża
+                }
+              )
               .subscribe();
           }
         }
@@ -98,10 +110,16 @@ export class OfficesPage {
 
   // helpery
 
-  private _viewCleanup(loading?: Loading) {
-    if (loading && this._isLoading) {
+  private _showLoading() {
+    if (this._loading && !this._isLoading) {
+      this._isLoading = true;
+      this._loading.present();
+    }
+  }
+  private _hideLoading() {
+    if (this._loading && this._isLoading) {
       this._isLoading = false;
-      loading.dismiss();
+      this._loading.dismiss();
     }
   }
 }

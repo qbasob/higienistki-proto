@@ -57,7 +57,10 @@ export class PersonEditPage implements OnInit {
             loading.dismiss();
             this.navCtrl.popToRoot();
           })
-          .subscribe()
+          .subscribe((data) => {
+            console.log("Add person subscribe result:", data);
+            // i tu będzie można wykonać callback ze zwrócnymi danymi do widoku np. w events
+          })
       } else {
         this.peopleStore.editRecord(personData)
           .finally(() => {

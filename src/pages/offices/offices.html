@@ -25,7 +25,7 @@
   </ion-searchbar>
 
   <ion-list>
-    <ion-item-sliding *ngFor="let office of offices$ | async">
+    <ion-item-sliding *ngFor="let office of offices$ | async" #slidingItem>
       <button ion-item (click)="details(office)"  [disabled]="office.isRemoved">
         {{office.name}}
         <ion-note item-end *ngIf="office.needSync && !office.isRemoved">
@@ -38,7 +38,7 @@
       <ion-item-options side="right">
         <button ion-button color="light" (click)="details(office)" *ngIf="!office.isRemoved">Podgląd</button>
         <button ion-button color="light" (click)="edit(office)" *ngIf="!office.isRemoved">Edytuj</button>
-        <button ion-button color="danger" (click)="remove(office)">Usuń</button>
+        <button ion-button color="danger" (click)="remove(office, slidingItem)">Usuń</button>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>

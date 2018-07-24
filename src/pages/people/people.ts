@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
+import { NavController, NavParams, AlertController, LoadingController, Loading, ItemSliding } from 'ionic-angular';
 import { Person } from '../../shared/person.model';
 import { PersonViewPage } from './person-view/person-view';
 import { PersonEditPage } from './person-edit/person-edit';
@@ -18,6 +18,7 @@ import { PeopleStore } from '../../providers/people-store/people-store';
 export class PeoplePage {
   public people$: Observable<Array<Person>>;
   public filter: string;
+  private _loading: Loading; // jeden wspólny loading, dla ułatwienia
   private _isLoading: boolean;
 
   constructor(
@@ -33,22 +34,18 @@ export class PeoplePage {
   // dane
 
   populatePeople(): void {
-    let loading: Loading;
-    if (!this._isLoading) {
-      loading = this.loadingCtrl.create({
-        content: 'Ładowanie...'
-      });
-      this._isLoading = true;
-      loading.present();
-    }
+    this._loading = this.loadingCtrl.create({
+      content: 'Ładowanie...'
+    });
+    this._showLoading();
 
     this.people$ = this.peopleStore.getFilteredRecords(this.filter)
       .do(
         () => {
-          this._viewCleanup(loading);
+          this._hideLoading();
         },
         () => {
-          this._viewCleanup(loading);
+          this._hideLoading();
         }
       );
   }
@@ -73,7 +70,11 @@ export class PeoplePage {
     });
   }
 
-  remove(person) {
+  remove(person: Person, slidingItem: ItemSliding) {
+    this._loading = this.loadingCtrl.create({
+      content: 'Usuwanie...'
+    });
+
     const confirm = this.alertCtrl.create({
       title: 'Usuwanie uczestnika',
       message: `Czy na pewno usunąć uczestnika ${person.name}?`,
@@ -85,7 +86,18 @@ export class PeoplePage {
           text: 'Usuń',
           cssClass: 'danger-button',
           handler: () => {
+            this._showLoading();
             this.peopleStore.removeRecord(person)
+              .do(
+                () => {
+                  this._hideLoading();
+                  slidingItem.close(); // po delete chowamy sliding, bo chowają się akcje, a slider się nie zwęża
+                },
+                () => {
+                  this._hideLoading();
+                  slidingItem.close(); // po delete chowamy sliding, bo chowają się akcje, a slider się nie zwęża
+                }
+              )
               .subscribe();
           }
         }
@@ -106,10 +118,16 @@ export class PeoplePage {
 
   // helpery
 
-  private _viewCleanup( loading?: Loading) {
-    if (loading && this._isLoading) {
+  private _showLoading() {
+    if (this._loading && !this._isLoading) {
+      this._isLoading = true;
+      this._loading.present();
+    }
+  }
+  private _hideLoading() {
+    if (this._loading && this._isLoading) {
       this._isLoading = false;
-      loading.dismiss();
+      this._loading.dismiss();
     }
   }
 }
