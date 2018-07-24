@@ -5,9 +5,12 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/empty';
 import 'rxjs/add/observable/forkJoin';
 import { LocalModel } from '../../shared/local.model';
 
@@ -58,11 +61,6 @@ export abstract class AbstractStore<T extends LocalModel> {
             this._getAllFromServer()
               // emitujemy i zapisujemy lokalnie
               .subscribe((data: Array<T>) => {
-                data.forEach((serverRecord) => {
-                  if (!serverRecord.localId) {
-                    serverRecord.localId = this._generateObjectId();
-                  }
-                });
                 this._dataStore = data;
                 this._saveAllToStorage(this._dataStore);
                 this._records$.next(this._dataStore.concat());
@@ -81,7 +79,17 @@ export abstract class AbstractStore<T extends LocalModel> {
         return Observable.throw("Nie można pobrać danych z serwera, dopóki istnieją lokalne dane niezsynchronizowane z serwerem.");
       }
     }
-    return this.http.get<Array<T>>(this._apiUrl);
+    return this.http.get<Array<T>>(this._apiUrl)
+      // dane pobierane z serwera mogą nie mieć localId (np. jeżeli nigdy nie były edytowane lokalnie)
+      // w takiej sytuacji musimy go przypisać
+      .map((serverRecords: T[]) => {
+        serverRecords.forEach((serverRecord) => {
+          if (!serverRecord.localId) {
+            serverRecord.localId = this._generateObjectId();
+          }
+        });
+        return serverRecords;
+      })
   }
 
   private _addToServer(record: T): Observable<T> {
@@ -114,8 +122,8 @@ export abstract class AbstractStore<T extends LocalModel> {
   // zapis wszystkich rekordów do storage
   private _saveAllToStorage(records: Array<T>): Observable<Array<T>> {
     return Observable.fromPromise(this.storage.set(this._storageKey, records)
-      .then((data) => {
-        return data;
+      .then((savedRecords) => {
+        return savedRecords;
       })
     );
   }
@@ -156,39 +164,43 @@ export abstract class AbstractStore<T extends LocalModel> {
   }
 
   // edytuje rekord, emituje zmianę
+  // zawsze zwraca Observable<T>, obojętnie czy powiedzie się zapis online
+  // w ten sposób w komponencie na subscribe dostaniemy dane rekordu, które będzie można odesłać
+  // np. do event wizarda/ event edita, czyli powiedzmy:
+  // event edit -> add person -> (save, callback) -> add person c.d. -> nowy person na liście
   public editRecord(record: T): Observable<T> {
     return this._editOnServer(record)
-      // jeżeli błąd serwera
       .catch<T, never>((err) => {
-        // ustawiamy flagę needSync na rekordzie
+        // jeżeli błąd serwera, ustawiamy flagę rekordowi
         record.needSync = true;
-        // lokalnie aktualizujemy dane rekordu
-        this._dataStore.forEach((arrayRecord, index) => {
-          if (arrayRecord.localId === record.localId) {
-            this._dataStore[index] = record;
-          }
-        });
 
-        // rethrow obsługiwany w AppErrorHandler
-        throw err;
+        // jeżeli błąd serwera to kontynuujemy, zapisze się lokalnie i oznaczy do synchronziacji
+        // w takiej sytuacji przekazujemy do switchMap rekord który chcieliśmy wysłać
+        return Observable.of(record);
       })
-      // zarówno w przypadku błędu serwera jak i powodzenia emitujemy nowe dane
-      .finally(() => {
-        // Push a new copy of our records array to all Subscribers, to avoid mutations from subscriber
-        // Object.assign({}, dataStore) will not work, bacause new object will still have reference to records array
-        this._saveAllToStorage(this._dataStore);
-        this._records$.next(this._dataStore.concat());
-      })
-      // jeżeli sukces serwera
-      .do((serverRecord: T) => {
-        // edytujemy rekord zwrócony z serwera, z id serwerowym, w store
+      .switchMap((serverRecord: T) => {
+        // jeżeli dane zapisane na serwerze (lub błąd serwera), to edytujemy rekord w store
         this._dataStore.forEach((arrayRecord, index) => {
           // szukamy po lokalnym id i podmieniamy
-          if (arrayRecord.localId === record.localId) {
+          if (arrayRecord.localId === serverRecord.localId) {
             this._dataStore[index] = serverRecord;
           }
         });
-      })
+        this._records$.next(this._dataStore.concat());
+
+        // na koniec zapisujemy zawarto sc store (wszystkie rekordy) do storage
+        return this._saveAllToStorage(this._dataStore)
+          // _saveAllToStorage zwraca po poprawnym zapisie cały array rekordów
+          // my chcemy zwrócić tylko ten przed chwilą edytowany, więc zwracamy wcześniejszy serverRecord
+          .map(_ => serverRecord);
+
+          // my chcemy zwrócić tylko ten przed chwilą edytowany, więc go wyciągamy
+          /*.map((storageRecords: Array<T>) => {
+            return storageRecords
+              .filter((storageRecord: T) => storageRecord.localId = serverRecord.localId)
+              .reduce((storageRecord: T) => storageRecord);
+          })*/
+      });
   }
 
   // dodaje rekord, emituje zmianę

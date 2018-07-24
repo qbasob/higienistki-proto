@@ -4,6 +4,7 @@ import { Person, Gender } from '../../../shared/person.model';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { PeopleStore } from '../../../providers/people-store/people-store';
 import 'rxjs/add/operator/finally';
+import 'rxjs/add/operator/catch';
 
 
 @Component({
@@ -63,7 +64,10 @@ export class PersonEditPage implements OnInit {
             loading.dismiss();
             this.navCtrl.popToRoot();
           })
-          .subscribe()
+          .subscribe((data) => {
+            console.log("Edit person subscribe result:", data);
+            // i tu będzie można wykonać callback ze zwrócnymi danymi do widoku np. w events
+          })
       }
     }
   }

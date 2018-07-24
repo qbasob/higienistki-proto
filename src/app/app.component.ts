@@ -12,7 +12,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent'
 import { style, state, animate, transition, trigger } from '@angular/core';
 import { PeopleStore } from '../providers/people-store/people-store';
-
+import { OfficesStore } from '../providers/offices-store/offices-store';
 
 @Component({
   templateUrl: 'app.html',
@@ -43,7 +43,8 @@ export class MyApp {
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     private storage: Storage,
-    private peopleStore: PeopleStore
+    private peopleStore: PeopleStore,
+    private officesStore: OfficesStore
   ) {
     this.isOnline = navigator.onLine;
     this.online$ = Observable.fromEvent(window, 'online');
@@ -52,6 +53,8 @@ export class MyApp {
     this.online$.subscribe(e => {
       this.isOnline = true;
       this.peopleStore.syncIfNeeded()
+        .subscribe();
+      this.officesStore.syncIfNeeded()
         .subscribe();
     });
     this.offline$.subscribe(e => {
