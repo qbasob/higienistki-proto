@@ -5,10 +5,11 @@ export enum Gender {
     Pan
 }
 
-export class Person extends LocalModel{
-    id: number;
+export class Person extends LocalModel {
+    id?: number;
     localId?: string;
     name: string;
+
     gender?: Gender;
     email?: string;
     phone?: string;
@@ -25,6 +26,7 @@ export class Person extends LocalModel{
     agreeMark3?: boolean;
     agreeMark4?: boolean;
     additionalData?: string;
+
     serverLastEditedDate?: number;
     needSync?: boolean;
     isNew?: boolean;

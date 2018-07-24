@@ -24,6 +24,7 @@ import { EventWizardStep8Page } from '../pages/events/event-wizard/event-wizard-
 import { EventWizardStep9Page } from '../pages/events/event-wizard/event-wizard-step-9/event-wizard-step-9';
 import { OfficesPage } from '../pages/offices/offices';
 import { OfficeEditPage } from '../pages/offices/office-edit/office-edit';
+import { OfficeEditFormComponent } from '../pages/offices/office-edit/office-edit-form/office-edit-form';
 import { OfficeViewPage } from '../pages/offices/office-view/office-view';
 import { OfficePopoverPage } from '../pages/offices/office-popover/office-popover';
 import { PeoplePage } from '../pages/people/people';
@@ -36,7 +37,7 @@ import { SettingsPage } from '../pages/settings/settings';
 
 import { AppErrorHandler } from '../providers/app-error-handler/app-error-handler';
 import { PeopleStore } from '../providers/people-store/people-store';
-import { PeopleService } from '../providers/people-service/people-service';
+import { OfficesStore } from '../providers/offices-store/offices-store';
 
 @NgModule({
   declarations: [
@@ -57,15 +58,16 @@ import { PeopleService } from '../providers/people-service/people-service';
     EventWizardStep9Page,
     OfficesPage,
     OfficeEditPage,
+    OfficeEditFormComponent,
     OfficeViewPage,
     OfficePopoverPage,
     PeoplePage,
     PersonEditPage,
+    PersonEditFormComponent,
     PersonViewPage,
     PersonPopoverPage,
     PersonViewAcceptPage,
-    SettingsPage,
-    PersonEditFormComponent
+    SettingsPage
   ],
   imports: [
     BrowserModule,
@@ -110,7 +112,7 @@ import { PeopleService } from '../providers/people-service/people-service';
       useClass: AppErrorHandler
     },
     PeopleStore,
-    PeopleService
+    OfficesStore
   ]
 })
 export class AppModule {}

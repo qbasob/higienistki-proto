@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, LoadingController, Loading, Refresher } from 'ionic-angular';
+import { NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
 import { Person } from '../../shared/person.model';
 import { PersonViewPage } from './person-view/person-view';
 import { PersonEditPage } from './person-edit/person-edit';

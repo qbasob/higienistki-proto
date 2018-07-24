@@ -3,6 +3,7 @@ import { NavController, NavParams, PopoverController, AlertController } from 'io
 import { Office } from '../../../shared/office.model';
 import { OfficePopoverPage } from '../office-popover/office-popover';
 import { OfficeEditPage } from '../office-edit/office-edit';
+import { OfficesStore } from '../../../providers/offices-store/offices-store';
 
 @Component({
   selector: 'page-office-view',
@@ -15,7 +16,8 @@ export class OfficeViewPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private popoverCtrl: PopoverController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private officesStore: OfficesStore
   ) {
     this.office = navParams.get('office');
   }
@@ -57,7 +59,14 @@ export class OfficeViewPage {
         },
         {
           text: 'Usuń',
-          cssClass: 'danger-button'
+          cssClass: 'danger-button',
+          handler: () => {
+            this.officesStore.removeRecord(office)
+              .finally(() => {
+                this.navCtrl.popToRoot();
+              })
+              .subscribe();
+          }
         }
       ]
     });

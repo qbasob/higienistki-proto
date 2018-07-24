@@ -1,5 +1,5 @@
 export abstract class LocalModel {
-    id: number;
+    id?: number;
     localId?: string;
     name: string;
     serverLastEditedDate?: number;

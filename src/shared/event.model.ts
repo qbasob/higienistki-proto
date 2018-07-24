@@ -1,8 +1,12 @@
 import { Office } from "./office.model";
 import { Person } from "./person.model";
+import { LocalModel } from "./local.model";
 
-export class PEvent {
+export class PEvent extends LocalModel {
+    id?: number;
+    localId?: string;
     name: string;
+
     date: Date;
     photoOutside: File;
     photoInsideWaiting: File;
@@ -21,4 +25,9 @@ export class PEvent {
     doQualify: string;
     office: Office;
     people: Array<Person>;
+
+    serverLastEditedDate?: number;
+    needSync?: boolean;
+    isNew?: boolean;
+    isRemoved?: boolean;
 }

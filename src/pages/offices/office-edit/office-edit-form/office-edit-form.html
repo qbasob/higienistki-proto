@@ -1,0 +1,40 @@
+<ion-list [formGroup]="officeFormGroup">
+  <ion-item>
+    <ion-label floating>
+      Nazwa
+    </ion-label>
+    <ion-input type="text" formControlName="name"></ion-input>
+  </ion-item>
+  <span ion-text *ngIf="officeFormGroup.get('name').dirty && officeFormGroup.get('name').invalid" color="danger" padding-left>
+    <span *ngIf="officeFormGroup.get('name').errors.required">
+      To pole jest wymagane
+    </span>
+    <span *ngIf="officeFormGroup.get('name').errors.minlength">
+      Minimum {{ officeFormGroup.get('name').errors.minlength.requiredLength }} znaków
+    </span>
+  </span>
+  <ion-item>
+    <ion-label floating>Ulica</ion-label>
+    <ion-input type="text" formControlName="street"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label floating>Nr budynku</ion-label>
+    <ion-input type="text" formControlName="buildingNo"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label floating>Nr mieszkania</ion-label>
+    <ion-input type="text" formControlName="localNo"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label floating>Kod pocztowy</ion-label>
+    <ion-input type="text" formControlName="postal"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label floating>Miejscowość</ion-label>
+    <ion-input type="text" formControlName="city"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label floating>Powiat</ion-label>
+    <ion-input type="text" formControlName="county"></ion-input>
+  </ion-item>
+</ion-list>

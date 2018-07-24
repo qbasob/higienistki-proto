@@ -1,35 +1,57 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
 import { OfficeViewPage } from './office-view/office-view';
-import * as faker from 'faker';
 import { Office } from '../../shared/office.model';
 import { OfficeEditPage } from './office-edit/office-edit';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/finally';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/catch';
+import { OfficesStore } from '../../providers/offices-store/offices-store';
 
 @Component({
   selector: 'page-offices',
   templateUrl: 'offices.html'
 })
 export class OfficesPage {
-  offices: Array<Office>;
+  offices$: Observable<Array<Office>>;
+  public filter: string;
+  private _isLoading: boolean;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
+    private officesStore: OfficesStore
   ) {
-    this.offices = [];
-    for (let i = 1; i < 11; i++) {
-      this.offices.push({
-        name: faker.company.companyName(),
-        street: faker.address.streetName(),
-        buildingNo: faker.random.number(100).toString(),
-        localNo: faker.random.number(100).toString(),
-        postal: faker.address.zipCode("##-###"),
-        city: faker.address.city(),
-        county: faker.address.county()
-      });
-    }
+    this.populateOffices();
   }
+
+  // dane
+
+  populateOffices(): void {
+    let loading: Loading;
+    if (!this._isLoading) {
+      loading = this.loadingCtrl.create({
+        content: 'Ładowanie...'
+      });
+      this._isLoading = true;
+      loading.present();
+    }
+
+    this.offices$ = this.officesStore.getFilteredRecords(this.filter)
+      .do(
+        () => {
+          this._viewCleanup(loading);
+        },
+        () => {
+          this._viewCleanup(loading);
+        }
+      );
+  }
+
+  // nawigacja
 
   details(office) {
     this.navCtrl.push(OfficeViewPage, {
@@ -45,7 +67,7 @@ export class OfficesPage {
 
   remove(office) {
     const confirm = this.alertCtrl.create({
-      title: 'Usuwanie gabinetu',
+      title: 'Usuwanie gabinet',
       message: `Czy na pewno usunąć gabinet ${office.name}?`,
       buttons: [
         {
@@ -53,7 +75,11 @@ export class OfficesPage {
         },
         {
           text: 'Usuń',
-          cssClass: 'danger-button'
+          cssClass: 'danger-button',
+          handler: () => {
+            this.officesStore.removeRecord(office)
+              .subscribe();
+          }
         }
       ]
     });
@@ -61,13 +87,21 @@ export class OfficesPage {
   }
 
   doRefresh(refresher) {
-    console.log('Begin async operation', refresher);
-
-    setTimeout(() => {
-      console.log('Async operation has ended');
-      refresher.complete();
-    }, 2000);
+    this.officesStore.refreshRecords()
+      .finally(
+        () => {
+          refresher.complete();
+        }
+      )
+      .subscribe();
   }
 
+  // helpery
 
+  private _viewCleanup(loading?: Loading) {
+    if (loading && this._isLoading) {
+      this._isLoading = false;
+      loading.dismiss();
+    }
+  }
 }

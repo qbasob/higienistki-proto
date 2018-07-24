@@ -17,16 +17,27 @@
     </ion-refresher-content>
   </ion-refresher>
 
-  <ion-searchbar placeholder="Szukaj"></ion-searchbar>
+  <ion-searchbar
+    placeholder="Szukaj"
+    [(ngModel)]="filter"
+    (ionInput)="populateOffices()"
+    debounce="1000">
+  </ion-searchbar>
 
   <ion-list>
-    <ion-item-sliding *ngFor="let office of offices">
-      <button ion-item (click)="details(office)">
+    <ion-item-sliding *ngFor="let office of offices$ | async">
+      <button ion-item (click)="details(office)"  [disabled]="office.isRemoved">
         {{office.name}}
+        <ion-note item-end *ngIf="office.needSync && !office.isRemoved">
+          <ion-icon name="alert" color="danger"></ion-icon>
+        </ion-note>
+        <ion-note item-end *ngIf="office.isRemoved">
+          <ion-icon name="remove-circle" color="danger"></ion-icon>
+        </ion-note>
       </button>
       <ion-item-options side="right">
-        <button ion-button color="light" (click)="details(office)">Podgląd</button>
-        <button ion-button color="light" (click)="edit(office)">Edytuj</button>
+        <button ion-button color="light" (click)="details(office)" *ngIf="!office.isRemoved">Podgląd</button>
+        <button ion-button color="light" (click)="edit(office)" *ngIf="!office.isRemoved">Edytuj</button>
         <button ion-button color="danger" (click)="remove(office)">Usuń</button>
       </ion-item-options>
     </ion-item-sliding>

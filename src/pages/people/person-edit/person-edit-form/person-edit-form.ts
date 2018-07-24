@@ -39,8 +39,7 @@ export class PersonEditFormComponent implements OnInit {
       agreeMark2: '',
       agreeMark3: '',
       agreeMark4: '',
-      additionalData: '',
-      needSync: false
+      additionalData: ''
     });
     this.personFormGroup.patchValue(this.person);
 
