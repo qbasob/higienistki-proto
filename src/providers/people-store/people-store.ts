@@ -42,7 +42,13 @@ export class PeopleStore {
     this._initDataStore();
   }
 
-  // metody prywatne, pomocnicze, trzeba wymyślić logikę całego tego store (kiedy wysyłac/pobierać online, ogarnięcie konfliktów itp.)
+  // metody prywatne, pomocnicze, trzeba wymyślić logikę całego tego store (kiedy wysyłac/pobierać online, ogarnięcie konfliktów itp.)  q
+  private _generateObjectId(): string {
+    const timestamp = (new Date().getTime() / 1000 | 0).toString(16);
+    return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function () {
+      return (Math.random() * 16 | 0).toString(16);
+    }).toLowerCase();
+  }
 
   private _initDataStore(): void {
     // bierzemy dane lokalne
@@ -59,6 +65,11 @@ export class PeopleStore {
             this._getAllFromServer()
               // emitujemy i zapisujemy lokalnie
               .subscribe((data: Array<Person>) => {
+                data.forEach((serverPerson) => {
+                  if (!serverPerson.localId) {
+                    serverPerson.localId = this._generateObjectId();
+                  }
+                });
                 this._dataStore.people = data;
                 this._saveAllToStorage(this._dataStore.people);
                 this._people$.next(this._dataStore.people.concat());
@@ -81,12 +92,8 @@ export class PeopleStore {
   }
 
   private _addToServer(person: Person): Observable<Person> {
-    // może się zdarzyć że mamy uczestnika z lokalnym id
-    // musimy ten id usunąć przed wysłaniem danych, aby serwer stworzył swój własny id
     const clonePerson = Object.assign({}, person);
-    delete clonePerson.id;
-
-    // usuwamy też lokalne, tymczasowe flagi
+    // usuwamy lokalne, tymczasowe flagi
     delete clonePerson.needSync;
     delete clonePerson.isNew;
 
@@ -164,7 +171,7 @@ export class PeopleStore {
         person.needSync = true;
         // lokalnie aktualizujemy dane uczestnika
         this._dataStore.people.forEach((arrayPerson, index) => {
-          if (arrayPerson.id === person.id) {
+          if (arrayPerson.localId === person.localId) {
             this._dataStore.people[index] = person;
           }
         });
@@ -183,8 +190,8 @@ export class PeopleStore {
       .do((serverPerson: Person) => {
         // edytujemy uczestnika zwróconego z serwera, z id serwerowym, w store
         this._dataStore.people.forEach((arrayPerson, index) => {
-          // w store może nadal mieć lokalne id, więc szukamy po starym id i podmieniamy
-          if (arrayPerson.id === person.id) {
+          // szukamy po lokalnym id i podmieniamy
+          if (arrayPerson.localId === person.localId) {
             this._dataStore.people[index] = serverPerson;
           }
         });
@@ -193,15 +200,14 @@ export class PeopleStore {
 
   // dodaje osobę, emituje zmianę
   public addPerson(person: Person): Observable<Person> {
+    person.localId = this._generateObjectId();
     return this._addToServer(person)
       // jeżeli błąd serwera
       .catch<Person, never>((err) => {
         // ustawiamy flagę needSync i isNew na uczestniku
         person.needSync = true;
         person.isNew = true;
-        // dodajemy tymczasowy identyfikator, aktualny timestamp skonkatenowany z ilością uczestników; wystarczająco unikalny
-        person.id = +('' + Date.now() + this._dataStore.people.length);
-        // dodajemy aktualnego uczestnika z needSync i tymczasowym id do store
+        // dodajemy aktualnego uczestnika z needSync i lokalnym id do store
         this._dataStore.people.push(person);
 
         // rethrow obsługiwany w AppErrorHandler
@@ -227,7 +233,7 @@ export class PeopleStore {
     if (person.isNew) {
       this._dataStore.people.forEach((arrayPerson, index) => {
         // szukamy po lokalnym id i ususwamy
-        if (arrayPerson.id === person.id) {
+        if (arrayPerson.localId === person.localId) {
           this._dataStore.people.splice(index, 1);
         }
       });
@@ -245,7 +251,7 @@ export class PeopleStore {
         person.isRemoved = true;
         // lokalnie aktualizujemy dane uczestnika
         this._dataStore.people.forEach((arrayPerson, index) => {
-          if (arrayPerson.id === person.id) {
+          if (arrayPerson.localId === person.localId) {
             this._dataStore.people[index] = person;
           }
         });
@@ -265,7 +271,7 @@ export class PeopleStore {
         // usuwamy całkowicie rekord
         this._dataStore.people.forEach((arrayPerson, index) => {
           // szukamy po lokalnym id i ususwamy
-          if (arrayPerson.id === person.id) {
+          if (arrayPerson.localId === person.localId) {
             this._dataStore.people.splice(index, 1);
           }
         });
@@ -277,7 +283,7 @@ export class PeopleStore {
   // w p.p. edytuje
 
   // !!! DO PRZETESTOWANIA, teoretycznie działa !!!
-  public syncIfNeeded(): Observable<Array<any>> {
+  public syncIfNeeded(): Observable<Array<Person>> {
     const serverSyncObservables: Array<Observable<Person>> = [];
 
     this._dataStore.people.forEach((arrayPerson, index) => {
