@@ -5,7 +5,7 @@ export enum Gender {
 
 export class Person {
     id: number;
-    localId: string;
+    localId?: string;
     name: string;
     gender?: Gender;
     email?: string;
