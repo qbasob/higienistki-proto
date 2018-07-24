@@ -61,7 +61,7 @@ export class PersonViewPage {
           text: 'Usuń',
           cssClass: 'danger-button',
           handler: () => {
-            this.peopleStore.removePerson(person)
+            this.peopleStore.removeRecord(person)
               .finally(() => {
                 this.navCtrl.popToRoot();
               })

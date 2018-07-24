@@ -14,7 +14,7 @@
     </ion-refresher-content>
   </ion-refresher>
 
-  <ion-searchbar placeholder="Szukaj" [(ngModel)]="filter" (ionInput)="getPeopleOnline()" debounce="500"></ion-searchbar>
+  <ion-searchbar placeholder="Szukaj" [(ngModel)]="filter" (ionInput)="populatePeople()" debounce="500"></ion-searchbar>
 
   <ion-list>
     <ion-item-sliding *ngFor="let person of people$ | async">

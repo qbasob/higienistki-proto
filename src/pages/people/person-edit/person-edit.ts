@@ -51,14 +51,14 @@ export class PersonEditPage implements OnInit {
       const personData = Object.assign(this.person, this.personForm.value);
 
       if (this._isAdd) {
-        this.peopleStore.addPerson(personData)
+        this.peopleStore.addRecord(personData)
           .finally(() => {
             loading.dismiss();
             this.navCtrl.popToRoot();
           })
           .subscribe()
       } else {
-        this.peopleStore.editPerson(personData)
+        this.peopleStore.editRecord(personData)
           .finally(() => {
             loading.dismiss();
             this.navCtrl.popToRoot();

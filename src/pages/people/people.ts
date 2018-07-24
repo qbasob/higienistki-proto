@@ -42,7 +42,7 @@ export class PeoplePage {
       loading.present();
     }
 
-    this.people$ = this.peopleStore.getFilteredPeople(this.filter)
+    this.people$ = this.peopleStore.getFilteredRecords(this.filter)
       .do(
         () => {
           this._viewCleanup(loading);
@@ -85,7 +85,7 @@ export class PeoplePage {
           text: 'Usuń',
           cssClass: 'danger-button',
           handler: () => {
-            this.peopleStore.removePerson(person)
+            this.peopleStore.removeRecord(person)
               .subscribe();
           }
         }
@@ -95,7 +95,7 @@ export class PeoplePage {
   }
 
   doRefresh(refresher) {
-    this.peopleStore.refreshPeople()
+    this.peopleStore.refreshRecords()
       .finally(
         () => {
           refresher.complete();

@@ -1,9 +1,11 @@
+import { LocalModel } from "./local.model";
+
 export enum Gender {
     Pani,
     Pan
 }
 
-export class Person {
+export class Person extends LocalModel{
     id: number;
     localId?: string;
     name: string;
