@@ -21,6 +21,7 @@ import { LocalModel } from '../../shared/local.model';
 export abstract class AbstractStore<T extends LocalModel> {
   public records$: Observable<Array<T>>;
   private _apiUrl: string;
+  private _apiSuffix: string;
   private _storageKey: string;
   private _records$: BehaviorSubject<Array<T>>;
   private _dataStore: Array<T>;
@@ -31,6 +32,7 @@ export abstract class AbstractStore<T extends LocalModel> {
     public storage: Storage
   ) {
     this._apiUrl = `${ENV.endpoint}/${modelName}`;
+    this._apiSuffix = ENV.endpointSuffix;
     this._storageKey = modelName;
     this._dataStore = [];
     this._records$ = <BehaviorSubject<Array<T>>>new BehaviorSubject([]);
@@ -79,7 +81,7 @@ export abstract class AbstractStore<T extends LocalModel> {
         return Observable.throw("Nie można pobrać danych z serwera, dopóki istnieją lokalne dane niezsynchronizowane z serwerem.");
       }
     }
-    return this.http.get<Array<T>>(this._apiUrl)
+    return this.http.get<Array<T>>(this._apiUrl + this._apiSuffix)
       // dane pobierane z serwera mogą nie mieć localId (np. jeżeli nigdy nie były edytowane lokalnie)
       // w takiej sytuacji musimy go przypisać
       .map((serverRecords: T[]) => {
@@ -98,7 +100,7 @@ export abstract class AbstractStore<T extends LocalModel> {
     delete cloneRecord.needSync;
     delete cloneRecord.isNew;
 
-    return this.http.post<T>(this._apiUrl, cloneRecord);
+    return this.http.post<T>(this._apiUrl + this._apiSuffix, cloneRecord);
   }
 
   private _editOnServer(record: T): Observable<T> {
@@ -109,14 +111,14 @@ export abstract class AbstractStore<T extends LocalModel> {
 
     // jeżeli rekord istniał tylko lokalnie, to musimy go utworzyć na serwerze
     if (record.isNew) {
-      return this.http.post<T>(this._apiUrl, cloneRecord);
+      return this.http.post<T>(this._apiUrl + this._apiSuffix, cloneRecord);
     }
     // w p.p. normalny edit
-    return this.http.patch<T>(`${this._apiUrl}/${record.id}`, cloneRecord);
+    return this.http.put<T>(`${this._apiUrl}/${record.id}${this._apiSuffix}`, cloneRecord);
   }
 
   private _removeFromServer(record: T): Observable<T> {
-    return this.http.delete<T>(`${this._apiUrl}/${record.id}`);
+    return this.http.delete<T>(`${this._apiUrl}/${record.id}${this._apiSuffix}`);
   }
 
   // zapis wszystkich rekordów do storage
@@ -201,6 +203,7 @@ export abstract class AbstractStore<T extends LocalModel> {
   // dodaje rekord, emituje zmianę
   public addRecord(record: T): Observable<T> {
     record.localId = this._generateObjectId();
+    record.isNew = true;
     return this._addToServer(record)
       .catch<T, never>((err) => {
         // jeżeli błąd serwera, ustawiamy flagę rekordowi
