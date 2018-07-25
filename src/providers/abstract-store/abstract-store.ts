@@ -258,8 +258,8 @@ export abstract class AbstractStore<T extends LocalModel> {
       })
       .switchMap((serverRecord: T) => {
         // jeżeli dane zapisane na serwerze to usuwamy rekord ze store
-        // remove zwraca z serwera pusty obiekt, więc używamy ten który wysyłaliśmy
-        if (Object.keys(serverRecord).length === 0) {
+        // remove zwraca z serwera pusty obiekt/null, więc używamy ten który wysyłaliśmy
+        if (serverRecord == null || Object.keys(serverRecord).length === 0) {
           this._dataStore.forEach((arrayRecord, index) => {
             // szukamy po lokalnym id i ususwamy
             if (arrayRecord.localId === record.localId) {
