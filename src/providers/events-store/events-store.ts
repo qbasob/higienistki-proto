@@ -129,10 +129,10 @@ export class EventsStore extends AbstractStore<PEvent> {
   // uczestnicy
 
   private _updateEventsPerson(person: Person) {
-    let changedEvent: PEvent;
+    const changedEvents: Array<PEvent> = [];
     this._dataStore.forEach((event, index) => {
       //lecimy po wszystkich person eventu
-      return event.people.some((eventPerson, eventPersonIndex) => {
+      event.people.some((eventPerson, eventPersonIndex) => {
         // szukamy po lokalnym id
         if (eventPerson && eventPerson.localId === person.localId) {
           // jeżeli isRemoved to usuwamy
@@ -143,22 +143,22 @@ export class EventsStore extends AbstractStore<PEvent> {
           else {
             this._dataStore[index].people[eventPersonIndex] = person;
           }
-          changedEvent = this._dataStore[index];
+          changedEvents.push(this._dataStore[index]);
           return true;
         }
       });
     });
 
-    // zapisujemy zmianę (wyemituje zmianę)
-    if (changedEvent) {
+    // zapisujemy zmiany (wyemituje zmianę)
+    changedEvents.forEach((changedEvent) => {
       this.editRecord(changedEvent).subscribe();
-    }
+    });
   }
 
   private _updateEventsPeople(people: Array<Person>) {
     people.forEach((serverPerson) => {
-      this._dataStore.some((event) => {
-        return event.people.some((eventPerson) => {
+      this._dataStore.forEach((event) => {
+        event.people.some((eventPerson) => {
           if (serverPerson.localId === eventPerson.localId) {
             if (serverPerson.serverLastEditedDate > eventPerson.serverLastEditedDate) {
               this._updateEventsPerson(serverPerson);
@@ -173,7 +173,7 @@ export class EventsStore extends AbstractStore<PEvent> {
   // gabinety
 
   private _updateEventsOffice(office: Office) {
-    let changedEvent: PEvent;
+    const changedEvents: Array<PEvent> = [];
     this._dataStore.forEach((event, index) => {
       // szukamy po lokalnym id
       if (event.office && event.office.localId === office.localId) {
@@ -185,24 +185,23 @@ export class EventsStore extends AbstractStore<PEvent> {
         else {
           this._dataStore[index].office = office;
         }
-        changedEvent = this._dataStore[index];
+        changedEvents.push(this._dataStore[index]);
       }
     });
 
-    // zapisujemy zmianę (wyemituje zmianę)
-    if (changedEvent) {
+    // zapisujemy zmiany (wyemituje zmianę)
+    changedEvents.forEach((changedEvent) => {
       this.editRecord(changedEvent).subscribe();
-    }
+    });
   }
 
   private _updateEventsOffices(offices: Array<Office>) {
     offices.forEach((serverOffice) => {
-      this._dataStore.some((event) => {
+      this._dataStore.forEach((event) => {
         if (serverOffice.localId === event.office.localId) {
           if (serverOffice.serverLastEditedDate > event.office.serverLastEditedDate) {
             this._updateEventsOffice(serverOffice);
           }
-          return true;
         }
       });
     });
