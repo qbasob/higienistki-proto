@@ -10,9 +10,12 @@ import { SettingsPage } from '../pages/settings/settings';
 import { PeoplePage } from '../pages/people/people';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent'
-import { style, state, animate, transition, trigger } from '@angular/core';
+import { style, animate, transition, trigger } from '@angular/core';
 import { PeopleStore } from '../providers/people-store/people-store';
 import { OfficesStore } from '../providers/offices-store/offices-store';
+import { EventsStore } from '../providers/events-store/events-store';
+
+import { ENV } from '@app/env';
 
 @Component({
   templateUrl: 'app.html',
@@ -33,6 +36,7 @@ export class MyApp {
   public isOnline: boolean;
   private online$: Observable<Event>;
   private offline$: Observable<Event>;
+  public isDev: boolean;
 
   rootPage: any = EventsPage;
 
@@ -44,7 +48,8 @@ export class MyApp {
     public splashScreen: SplashScreen,
     private storage: Storage,
     private peopleStore: PeopleStore,
-    private officesStore: OfficesStore
+    private officesStore: OfficesStore,
+    private eventsStore: EventsStore
   ) {
     this.isOnline = navigator.onLine;
     this.online$ = Observable.fromEvent(window, 'online');
@@ -55,6 +60,8 @@ export class MyApp {
       this.peopleStore.syncIfNeeded()
         .subscribe();
       this.officesStore.syncIfNeeded()
+        .subscribe();
+      this.eventsStore.syncIfNeeded()
         .subscribe();
     });
     this.offline$.subscribe(e => {
@@ -77,6 +84,9 @@ export class MyApp {
       { title: 'Ustawienia', component: SettingsPage }
     ];
 
+    if(ENV.mode === 'Development') {
+      this.isDev = true;
+    }
   }
 
   initializeApp() {

@@ -13,6 +13,7 @@ export class OfficeEditPage implements OnInit {
   public officeForm: FormGroup;
   public office: Office;
   private _isAdd: boolean;
+  private _callbackHandler: Function;
 
   constructor(
     public navCtrl: NavController,
@@ -28,6 +29,10 @@ export class OfficeEditPage implements OnInit {
     } else {
       this._isAdd = true;
       this.office = { id: null, name: '' };
+    }
+
+    if (navParams.get('handler')) {
+      this._callbackHandler = navParams.get('handler');
     }
   }
 
@@ -52,14 +57,18 @@ export class OfficeEditPage implements OnInit {
         this.officesStore.addRecord(officeData)
           .finally(() => {
             loading.dismiss();
-            this.navCtrl.popToRoot();
+            this.navCtrl.pop();
           })
-          .subscribe()
+          .subscribe((addedOffice) => {
+            if (this._callbackHandler) {
+              this._callbackHandler(addedOffice);
+            }
+          })
       } else {
         this.officesStore.editRecord(officeData)
           .finally(() => {
             loading.dismiss();
-            this.navCtrl.popToRoot();
+            this.navCtrl.pop();
           })
           .subscribe()
       }
@@ -78,7 +87,7 @@ export class OfficeEditPage implements OnInit {
           text: 'Tak',
           cssClass: 'danger-button',
           handler: () => {
-            this.navCtrl.popToRoot();
+            this.navCtrl.pop();
           }
         }
       ]

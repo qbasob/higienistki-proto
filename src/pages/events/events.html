@@ -9,25 +9,35 @@
 
 <ion-content>
   <ion-refresher (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="arrow-down" pullingText="Przeciągnij w dół aby odświeżyć" refreshingSpinner="crescent"
+    <ion-refresher-content
+      pullingIcon="arrow-down"
+      pullingText="Przeciągnij w dół aby odświeżyć"
+      refreshingSpinner="crescent"
       refreshingText="Ładowanie...">
     </ion-refresher-content>
   </ion-refresher>
 
-  <ion-searchbar placeholder="Szukaj"></ion-searchbar>
+  <ion-searchbar
+    placeholder="Szukaj"
+    [(ngModel)]="filter"
+    (ionInput)="populateEvents()"
+    debounce="1000">
+  </ion-searchbar>
 
   <ion-list>
-    <ion-item-sliding *ngFor="let event of events">
+    <ion-item-sliding *ngFor="let event of events$ | async" #slidingItem>
       <button ion-item (click)="details(event)">
-        {{event.name}}
+        {{ event.office?.name || noname }}
         <ion-note item-end>
-           {{event.date | date: 'dd.MM.yyyy'}}
+          <ion-icon *ngIf="event.needSync && !event.isRemoved" name="alert" color="danger"></ion-icon>
+          <ion-icon *ngIf="event.isRemoved" name="remove-circle" color="danger"></ion-icon>
+          {{event.date | date: 'dd.MM.yyyy'}}
         </ion-note>
       </button>
       <ion-item-options side="right">
-        <button ion-button color="light" (click)="details(event)">Podgląd</button>
-        <button ion-button color="light" (click)="edit(event)">Edytuj</button>
-        <button ion-button color="danger" (click)="remove(event)">Usuń</button>
+        <button  *ngIf="!event.isRemoved" ion-button color="light" (click)="details(event)">Podgląd</button>
+        <button  *ngIf="!event.isRemoved" ion-button color="light" (click)="edit(event)">Edytuj</button>
+        <button  ion-button color="danger" (click)="remove(event, slidingItem)">Usuń</button>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>

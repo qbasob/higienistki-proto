@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import { ENV } from '@app/env';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
@@ -20,11 +21,16 @@ import { LocalModel } from '../../shared/local.model';
  */
 export abstract class AbstractStore<T extends LocalModel> {
   public records$: Observable<Array<T>>;
-  private _apiUrl: string;
-  private _apiSuffix: string;
-  private _storageKey: string;
-  private _records$: BehaviorSubject<Array<T>>;
-  private _dataStore: Array<T>;
+  public serverRecords$: Observable<Array<T>>;
+  public record$: Observable<T>;
+
+  protected _apiUrl: string;
+  protected _apiSuffix: string;
+  protected _dataStore: Array<T>;
+  protected _storageKey: string;
+  protected _records$: BehaviorSubject<Array<T>>;
+  protected _serverRecords$: Subject<Array<T>>;
+  protected _record$: Subject<T>;
 
   constructor(
     modelName: string,
@@ -36,7 +42,11 @@ export abstract class AbstractStore<T extends LocalModel> {
     this._storageKey = modelName;
     this._dataStore = [];
     this._records$ = <BehaviorSubject<Array<T>>>new BehaviorSubject([]);
+    this._serverRecords$ = <Subject<Array<T>>>new Subject();
+    this._record$ = <Subject<T>>new Subject();
     this.records$ = this._records$.asObservable(); // żeby ukryć na zewnątrz metody Subjectu (np. next())
+    this.serverRecords$ = this._serverRecords$.asObservable(); // żeby ukryć na zewnątrz metody Subjectu (np. next())
+    this.record$ = this._record$.asObservable(); // żeby ukryć na zewnątrz metody Subjectu (np. next())
     this._initDataStore();
   }
 
@@ -66,6 +76,7 @@ export abstract class AbstractStore<T extends LocalModel> {
                 this._dataStore = data;
                 this._saveAllToStorage(this._dataStore);
                 this._records$.next(this._dataStore.concat());
+                this._serverRecords$.next(this._dataStore.concat());
               });
           }
         }
@@ -74,7 +85,7 @@ export abstract class AbstractStore<T extends LocalModel> {
   }
 
   // ładuje wszystkie rekordy z serwera
-  private _getAllFromServer(): Observable<Array<T>> {
+  protected _getAllFromServer(): Observable<Array<T>> {
     if (this._dataStore) {
       const doNeedSync = this._dataStore.filter(record => record.needSync);
       if (doNeedSync.length > 0) {
@@ -87,7 +98,8 @@ export abstract class AbstractStore<T extends LocalModel> {
       .map((serverRecords: T[]) => {
         serverRecords.forEach((serverRecord) => {
           if (!serverRecord.localId) {
-            serverRecord.localId = this._generateObjectId();
+            // serverRecord.localId = this._generateObjectId();
+            serverRecord.localId = 'FirstCreatedOnServ_' + serverRecord.id;
           }
         });
         return serverRecords;
@@ -162,6 +174,7 @@ export abstract class AbstractStore<T extends LocalModel> {
         this._dataStore = data;
         this._saveAllToStorage(this._dataStore);
         this._records$.next(this._dataStore.concat());
+        this._serverRecords$.next(this._dataStore.concat());
       });
   }
 
@@ -191,6 +204,7 @@ export abstract class AbstractStore<T extends LocalModel> {
 
         // emitujemy zmianę
         this._records$.next(this._dataStore.concat());
+        this._record$.next(Object.assign({}, serverRecord));
 
         // na koniec zapisujemy zawartość store (wszystkie rekordy) do storage
         return this._saveAllToStorage(this._dataStore)
@@ -219,6 +233,7 @@ export abstract class AbstractStore<T extends LocalModel> {
 
         // emitujemy zmianę
         this._records$.next(this._dataStore.concat());
+        this._record$.next(Object.assign({}, serverRecord));
 
         // na koniec zapisujemy zawartość store (wszystkie rekordy) do storage
         return this._saveAllToStorage(this._dataStore)
@@ -240,6 +255,7 @@ export abstract class AbstractStore<T extends LocalModel> {
       });
       this._saveAllToStorage(this._dataStore);
       this._records$.next(this._dataStore.concat());
+      this._record$.next(Object.assign({}, record));
 
       // i zwracamy dane właśnie usuniętego rekordu
       return Observable.of(record);
@@ -279,6 +295,7 @@ export abstract class AbstractStore<T extends LocalModel> {
 
         // emitujemy zmianę
         this._records$.next(this._dataStore.concat());
+        this._record$.next(Object.assign({}, serverRecord));
 
         // na koniec zapisujemy zawartość store (wszystkie rekordy) do storage
         return this._saveAllToStorage(this._dataStore)

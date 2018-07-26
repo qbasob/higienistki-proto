@@ -36,6 +36,7 @@ import { PersonViewAcceptPage } from '../pages/people/person-view-accept/person-
 import { SettingsPage } from '../pages/settings/settings';
 
 import { AppErrorHandler } from '../providers/app-error-handler/app-error-handler';
+import { EventsStore } from '../providers/events-store/events-store';
 import { PeopleStore } from '../providers/people-store/people-store';
 import { OfficesStore } from '../providers/offices-store/offices-store';
 
@@ -111,6 +112,7 @@ import { OfficesStore } from '../providers/offices-store/offices-store';
       provide: ErrorHandler,
       useClass: AppErrorHandler
     },
+    EventsStore,
     PeopleStore,
     OfficesStore
   ]

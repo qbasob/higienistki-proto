@@ -14,7 +14,7 @@ import { OfficesStore } from '../../providers/offices-store/offices-store';
   templateUrl: 'offices.html'
 })
 export class OfficesPage {
-  offices$: Observable<Array<Office>>;
+  public offices$: Observable<Array<Office>>;
   public filter: string;
   private _loading: Loading; // jeden wspólny loading, dla ułatwienia
   private _isLoading: boolean;

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, App, Events } from 'ionic-angular';
 import { Person, Gender } from '../../../../shared/person.model';
-import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'page-event-wizard-step-7',

@@ -58,8 +58,7 @@ export class PersonEditPage implements OnInit {
             this.navCtrl.popToRoot();
           })
           .subscribe((data) => {
-            console.log("Add person subscribe result:", data);
-            // i tu będzie można wykonać callback ze zwrócnymi danymi do widoku np. w events
+            // i tu wykona się emit, event go przechwyci i zaktualizuje dane
           })
       } else {
         this.peopleStore.editRecord(personData)
@@ -68,8 +67,7 @@ export class PersonEditPage implements OnInit {
             this.navCtrl.popToRoot();
           })
           .subscribe((data) => {
-            console.log("Edit person subscribe result:", data);
-            // i tu będzie można wykonać callback ze zwrócnymi danymi do widoku np. w events
+            // i tu wykona się emit, event go przechwyci i zaktualizuje dane
           })
       }
     }

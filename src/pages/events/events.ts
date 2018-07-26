@@ -1,83 +1,57 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
-import * as faker from 'faker';
+import { NavController, NavParams, AlertController, LoadingController, Loading, ItemSliding } from 'ionic-angular';
 import { PEvent } from '../../shared/event.model';
 import { EventWizardPage } from './event-wizard/event-wizard';
-import { Gender } from '../../shared/person.model';
 import { EventViewPage } from './event-view/event-view';
 import { EventEditPage } from './event-edit/event-edit';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/finally';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/catch';
+import { EventsStore } from '../../providers/events-store/events-store';
 
 @Component({
   selector: 'page-events',
   templateUrl: 'events.html'
 })
 export class EventsPage {
-  events: Array<PEvent>;
+  public events$: Observable<Array<PEvent>>;
+  public filter: string;
+  public noname: string;
+  private _loading: Loading; // jeden wspólny loading, dla ułatwienia
+  private _isLoading: boolean;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
+    private eventsStore: EventsStore
   ) {
-    this.events = [];
-    for (let i = 1; i < 11; i++) {
-      let randomPeople = [];
-      for (let i = 1; i <= 4; i++) {
-        randomPeople.push({
-          name: faker.name.firstName() + " " + faker.name.lastName(),
-          gender: faker.random.arrayElement([Gender.Pani, Gender.Pan]),
-          email: faker.internet.email(),
-          phone: faker.phone.phoneNumber(),
-          officesNo: faker.random.number(5),
-          sonicareUser: faker.random.boolean(),
-          sonicareRecom: faker.random.boolean(),
-          wantCodes: faker.random.boolean(),
-          gotStarter: faker.random.boolean(),
-          starterNo: faker.random.number({ min: 10000, max: 99999 }).toString(),
-          gotExpositor: faker.random.boolean(),
-          agreeReg: true,
-          agreeMark1: faker.random.boolean(),
-          agreeMark2: faker.random.boolean(),
-          agreeMark3: faker.random.boolean(),
-          agreeMark4: faker.random.boolean(),
-          additionalData: faker.random.words(20)
-        });
-      }
-
-      this.events.push({
-        name: faker.company.companyName(),
-        date: faker.date.recent(),
-        photoOutside: null,
-        photoInsideWaiting: null,
-        noPhotoInsideWaiting: faker.random.boolean(),
-        noPhotoInsideWaitingWhy: faker.random.words(5),
-        photoInsideOffice: null,
-        noPhotoInsideOffice: faker.random.boolean(),
-        noPhotoInsideOfficeWhy: faker.random.words(5),
-        isOfficeNetwork: faker.random.boolean(),
-        networkOfficesCount: faker.random.number(10),
-        chairsCount: faker.random.number(10),
-        doctorsCount: faker.random.number(10),
-        hasOfficeHigienists: faker.random.boolean(),
-        higienistsCount: faker.random.number(10),
-        isBuyingSonicare: faker.random.arrayElement(['no', 'yes', 'yes_sell']),
-        doQualify: faker.random.arrayElement(['no', 'no_deny', 'yes']),
-
-        office: {
-          name: faker.company.companyName(),
-          street: faker.address.streetName(),
-          buildingNo: faker.random.number(100).toString(),
-          localNo: faker.random.number(100).toString(),
-          postal: faker.address.zipCode("##-###"),
-          city: faker.address.city(),
-          county: faker.address.county()
-        },
-
-        people: randomPeople
-      });
-    }
+    this.populateEvents();
+    this.noname = '<brak gabinetu>'
   }
+
+  // dane
+
+  populateEvents(): void {
+    this._loading = this.loadingCtrl.create({
+      content: 'Ładowanie...'
+    });
+    this._showLoading();
+
+    this.events$ = this.eventsStore.getFilteredRecords(this.filter)
+      .do(
+        () => {
+          this._hideLoading();
+        },
+        () => {
+          this._hideLoading();
+        }
+      );
+  }
+
+  // nawigacja
 
   details(event) {
     this.navCtrl.push(EventViewPage, {
@@ -97,17 +71,36 @@ export class EventsPage {
     });
   }
 
-  remove(event) {
+  remove(event: PEvent, slidingItem: ItemSliding) {
+    this._loading = this.loadingCtrl.create({
+      content: 'Usuwanie...'
+    });
+
     const confirm = this.alertCtrl.create({
       title: 'Usuwanie wizyty',
-      message: `Czy na pewno usunąć wizytę ${event.name}?`,
+      message: `Czy na pewno usunąć wizytę  ${event.name}?`,
       buttons: [
         {
           text: 'Anuluj',
         },
         {
           text: 'Usuń',
-          cssClass: 'danger-button'
+          cssClass: 'danger-button',
+          handler: () => {
+            this._showLoading();
+            this.eventsStore.removeRecord(event)
+              .do(
+                () => {
+                  this._hideLoading();
+                  slidingItem.close(); // po delete chowamy sliding, bo chowają się akcje, a slider się nie zwęża
+                },
+                () => {
+                  this._hideLoading();
+                  slidingItem.close(); // po delete chowamy sliding, bo chowają się akcje, a slider się nie zwęża
+                }
+              )
+              .subscribe();
+          }
         }
       ]
     });
@@ -115,12 +108,28 @@ export class EventsPage {
   }
 
   doRefresh(refresher) {
-    console.log('Begin async operation', refresher);
+    this.eventsStore.refreshRecords()
+      .finally(
+        () => {
+          refresher.complete();
+        }
+      )
+      .subscribe();
+  }
 
-    setTimeout(() => {
-      console.log('Async operation has ended');
-      refresher.complete();
-    }, 2000);
+  // helpery
+
+  private _showLoading() {
+    if (this._loading && !this._isLoading) {
+      this._isLoading = true;
+      this._loading.present();
+    }
+  }
+  private _hideLoading() {
+    if (this._loading && this._isLoading) {
+      this._isLoading = false;
+      this._loading.dismiss();
+    }
   }
 
 }

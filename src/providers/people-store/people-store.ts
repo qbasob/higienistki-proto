@@ -3,15 +3,6 @@ import { Storage } from '@ionic/storage';
 import { Injectable } from '@angular/core';
 import { AbstractStore } from '../abstract-store/abstract-store';
 import { Person } from '../../shared/person.model';
-// import { ENV } from '@app/env';
-// import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-// import { Observable } from 'rxjs/Observable';
-// import 'rxjs/add/operator/map';
-// import 'rxjs/add/operator/filter';
-// import 'rxjs/add/observable/throw';
-// import 'rxjs/add/observable/fromPromise';
-// import 'rxjs/add/observable/of';
-// import 'rxjs/add/observable/forkJoin';
 
 /**
  * Observable Data Service, "PeopleStore"
