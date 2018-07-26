@@ -15,6 +15,7 @@ export class PersonEditPage implements OnInit {
   public personForm: FormGroup;
   public person: Person;
   private _isAdd: boolean;
+  private _callbackHandler: Function;
 
   constructor(
     public navCtrl: NavController,
@@ -30,6 +31,10 @@ export class PersonEditPage implements OnInit {
     } else {
       this._isAdd = true;
       this.person = { id: null, name: '', gender: Gender.Pani };
+    }
+
+    if (navParams.get('handler')) {
+      this._callbackHandler = navParams.get('handler');
     }
   }
 
@@ -55,20 +60,20 @@ export class PersonEditPage implements OnInit {
         this.peopleStore.addRecord(personData)
           .finally(() => {
             loading.dismiss();
-            this.navCtrl.popToRoot();
+            this.navCtrl.pop();
           })
-          .subscribe((data) => {
-            // i tu wykona się emit, event go przechwyci i zaktualizuje dane
+          .subscribe((addedPerson) => {
+            if (this._callbackHandler) {
+              this._callbackHandler(addedPerson);
+            }
           })
       } else {
         this.peopleStore.editRecord(personData)
           .finally(() => {
             loading.dismiss();
-            this.navCtrl.popToRoot();
+            this.navCtrl.pop();
           })
-          .subscribe((data) => {
-            // i tu wykona się emit, event go przechwyci i zaktualizuje dane
-          })
+          .subscribe()
       }
     }
   }
@@ -85,7 +90,7 @@ export class PersonEditPage implements OnInit {
           text: 'Tak',
           cssClass: 'danger-button',
           handler: () => {
-            this.navCtrl.popToRoot();
+            this.navCtrl.pop();
           }
         }
       ]

@@ -245,6 +245,7 @@ export abstract class AbstractStore<T extends LocalModel> {
 
   // usuwa rekord, emituję zmianę
   public removeRecord(record: T): Observable<T> {
+    record.isRemoved = true;
     // jeżeli rekord jest lokalny, to usuwamy go bez łączenia z serwerem
     if (record.isNew) {
       this._dataStore.forEach((arrayRecord, index) => {
@@ -264,9 +265,8 @@ export abstract class AbstractStore<T extends LocalModel> {
     // w p.p. usuwamy go z serwera, i jeżeli sukces to lokalnie
     return this._removeFromServer(record)
       .catch<T, never>((err) => {
-        // jeżeli błąd serwera, ustawiamy flagi rekordowi
+        // jeżeli błąd serwera, ustawiamy flagę rekordowi
         record.needSync = true;
-        record.isRemoved = true;
 
         // jeżeli błąd serwera to kontynuujemy, zapisze się lokalnie i oznaczy do synchronizacji
         // w takiej sytuacji przekazujemy do switchMap rekord który chcieliśmy wysłać
@@ -295,7 +295,7 @@ export abstract class AbstractStore<T extends LocalModel> {
 
         // emitujemy zmianę
         this._records$.next(this._dataStore.concat());
-        this._record$.next(Object.assign({}, serverRecord));
+        this._record$.next(Object.assign({}, record));
 
         // na koniec zapisujemy zawartość store (wszystkie rekordy) do storage
         return this._saveAllToStorage(this._dataStore)

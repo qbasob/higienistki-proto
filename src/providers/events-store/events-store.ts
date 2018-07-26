@@ -5,7 +5,9 @@ import { Observable } from 'rxjs/Observable';
 import { AbstractStore } from '../abstract-store/abstract-store';
 import { PEvent } from '../../shared/event.model';
 import { Office } from '../../shared/office.model';
+import { Person } from '../../shared/person.model';
 import { OfficesStore } from '../offices-store/offices-store';
+import { PeopleStore } from '../people-store/people-store';
 
 /**
  * Observable Data Service, "EventsStore"
@@ -23,27 +25,45 @@ export class EventsStore extends AbstractStore<PEvent> {
   private office$: Observable<Office>;
   private offices$: Observable<Array<Office>>;
 
+  private person$: Observable<Person>;
+  private people$: Observable<Array<Person>>;
+
   constructor(
     public http: HttpClient,
     public storage: Storage,
-    public officesStore: OfficesStore
+    public officesStore: OfficesStore,
+    public peopleStore: PeopleStore
   ) {
     super('events', http, storage);
 
     this.office$ = this.officesStore.record$;
     this.offices$ = this.officesStore.serverRecords$;
-
     this.office$
       // za każdym razem kiedy dodany/edytowany/usunięty office
       // musimy zaktualizować rekord wewnątrz eventu
       .subscribe((office) => {
-        this.updateEventsOffice(office);
+        this._updateEventsOffice(office);
       })
-
     this.offices$
       // za każdym razem kiedy przychodzą z serwera office
+      // musimy polecieć po wszystkich, jeżeli ich serverLastEditedDate jest większy niż aktualny, to update
       .subscribe((offices) => {
+        this._updateEventsOffices(offices);
+      })
 
+    this.person$ = this.peopleStore.record$;
+    this.people$ = this.peopleStore.serverRecords$;
+    this.person$
+      // za każdym razem kiedy dodany/edytowany/usunięty person
+      // musimy zaktualizować rekord wewnątrz eventu
+      .subscribe((person) => {
+        this._updateEventsPerson(person);
+      })
+    this.people$
+      // za każdym razem kiedy przychodzą z serwera person
+      // musimy polecieć po wszystkich, jeżeli ich serverLastEditedDate jest większy niż aktualny, to update
+      .subscribe((people) => {
+        this._updateEventsPeople(people);
       })
   }
 
@@ -104,23 +124,88 @@ export class EventsStore extends AbstractStore<PEvent> {
       })
   }
 
-  // nowe metody
+  // nowe metody, potrzebne do aktualizacji danych w relacjach
 
-  updateEventsOffice(office: Office) {
+  // uczestnicy
+
+  private _updateEventsPerson(person: Person) {
     let changedEvent: PEvent;
-    this._dataStore.forEach((arrayRecord, index) => {
-      // szukamy po lokalnym id i aktualizujemy
-      if (arrayRecord.office && arrayRecord.office.localId === office.localId) {
-        this._dataStore[index].office = office;
+    this._dataStore.forEach((event, index) => {
+      //lecimy po wszystkich person eventu
+      return event.people.some((eventPerson, eventPersonIndex) => {
+        // szukamy po lokalnym id
+        if (eventPerson && eventPerson.localId === person.localId) {
+          // jeżeli isRemoved to usuwamy
+          if (person.isRemoved) {
+            this._dataStore[index].people[eventPersonIndex] = null;
+          }
+          // w p.p szukamy po lokalnym id i aktualizujemy
+          else {
+            this._dataStore[index].people[eventPersonIndex] = person;
+          }
+          changedEvent = this._dataStore[index];
+          return true;
+        }
+      });
+    });
+
+    // zapisujemy zmianę (wyemituje zmianę)
+    if (changedEvent) {
+      this.editRecord(changedEvent).subscribe();
+    }
+  }
+
+  private _updateEventsPeople(people: Array<Person>) {
+    people.forEach((serverPerson) => {
+      this._dataStore.some((event) => {
+        return event.people.some((eventPerson) => {
+          if (serverPerson.localId === eventPerson.localId) {
+            if (serverPerson.serverLastEditedDate > eventPerson.serverLastEditedDate) {
+              this._updateEventsPerson(serverPerson);
+            }
+            return true;
+          }
+        });
+      });
+    });
+  }
+
+  // gabinety
+
+  private _updateEventsOffice(office: Office) {
+    let changedEvent: PEvent;
+    this._dataStore.forEach((event, index) => {
+      // szukamy po lokalnym id
+      if (event.office && event.office.localId === office.localId) {
+        // jeżeli isRemoved to usuwamy
+        if (office.isRemoved) {
+          this._dataStore[index].office = null;
+        }
+        // w p.p szukamy po lokalnym id i aktualizujemy
+        else {
+          this._dataStore[index].office = office;
+        }
         changedEvent = this._dataStore[index];
       }
     });
 
     // zapisujemy zmianę (wyemituje zmianę)
     if (changedEvent) {
-      console.log("changedEvent", changedEvent);
       this.editRecord(changedEvent).subscribe();
     }
+  }
+
+  private _updateEventsOffices(offices: Array<Office>) {
+    offices.forEach((serverOffice) => {
+      this._dataStore.some((event) => {
+        if (serverOffice.localId === event.office.localId) {
+          if (serverOffice.serverLastEditedDate > event.office.serverLastEditedDate) {
+            this._updateEventsOffice(serverOffice);
+          }
+          return true;
+        }
+      });
+    });
   }
 
 }
