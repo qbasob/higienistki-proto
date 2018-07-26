@@ -131,9 +131,9 @@
         </ion-item-sliding>
       </ion-item-group>
       <ion-item-group *ngIf="!eventRelations.office">
-        <ion-item-divider color="light">Wybierz gabinet</ion-item-divider>
+        <ion-item-divider color="light">Wybierz istniejący gabinet</ion-item-divider>
         <ion-item>
-          <ion-label>Gabinet</ion-label>
+          <ion-label>Wybierz gabinet</ion-label>
           <ion-select (ionChange)="selectOffice($event)">
             <ion-option [value]="office.localId" *ngFor="let office of offices">
               {{office.name}}
@@ -149,7 +149,7 @@
 
       <ion-item-group>
         <ion-item-divider color="light">Uczestnicy</ion-item-divider>
-        <ion-item-sliding *ngFor="let person of event.people">
+        <ion-item-sliding *ngFor="let person of eventRelations.people">
           <button ion-item type="button" (click)="detailsPerson(person)">
             {{person.name}}
           </button>
@@ -157,13 +157,21 @@
             <button ion-button type="button" color="light" (click)="detailsPerson(person)">Podgląd</button>
             <button ion-button type="button" color="light" (click)="acceptPerson(person)">Podsumowanie</button>
             <button ion-button type="button" color="light" (click)="editPerson(person)">Edytuj</button>
-            <button ion-button type="button" color="danger" (click)="removePerson(person)">Usuń</button>
+            <button ion-button type="button" color="danger" (click)="removePerson(person)">Usuń z wizyty</button>
           </ion-item-options>
         </ion-item-sliding>
       </ion-item-group>
       <ion-item>
-        <button ion-button type="button" (click)="editPerson()">
-          Dodaj uczestnika
+        <ion-label>Wybierz uczestnika</ion-label>
+        <ion-select #peopleSelect (ionChange)="selectPerson($event, peopleSelect)">
+          <ion-option [value]="person.localId" *ngFor="let person of people">
+            {{person.name}}
+          </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <button ion-button type="button" (click)="addPerson()">
+          Dodaj nowego uczestnika
         </button>
       </ion-item>
     </ion-list>

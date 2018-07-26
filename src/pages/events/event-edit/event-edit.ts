@@ -3,9 +3,11 @@ import { NavController, NavParams, AlertController, LoadingController, Loading }
 // import { Observable } from 'rxjs/Observable';
 import { PEvent } from '../../../shared/event.model';
 import { Office } from '../../../shared/office.model';
+import { Person } from '../../../shared/person.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EventsStore } from '../../../providers/events-store/events-store';
 import { OfficesStore } from '../../../providers/offices-store/offices-store';
+import { PeopleStore } from '../../../providers/people-store/people-store';
 import 'rxjs/add/operator/finally';
 
 import { OfficeViewPage } from '../../offices/office-view/office-view';
@@ -22,7 +24,11 @@ export class EventEditPage {
   public eventForm: FormGroup;
   public event: PEvent;
   public offices: Array<Office>;
-  public eventRelations: any;
+  public people: Array<Person>;
+  public eventRelations: {
+    office?: Office,
+    people?: Array<Person>
+  };
   private _loading: Loading; // jeden wspólny loading, dla ułatwienia
   private _isLoading: boolean;
 
@@ -33,11 +39,15 @@ export class EventEditPage {
     private loadingCtrl: LoadingController,
     private formBuilder: FormBuilder,
     private eventsStore: EventsStore,
-    private officesStore: OfficesStore
+    private officesStore: OfficesStore,
+    private peopleStore: PeopleStore
   ) {
     this.event = <PEvent>navParams.get('event');
     this.officesStore.records$.subscribe((offices) => {
       this.offices = offices;
+    });
+    this.peopleStore.records$.subscribe((people) => {
+      this.people = people;
     });
   }
 
@@ -67,6 +77,10 @@ export class EventEditPage {
 
     if (this.event.office) {
       this.eventRelations.office = Object.assign({}, this.event.office);
+    }
+
+    if (this.event.people) {
+      this.eventRelations.people = this.event.people.concat();
     }
   }
 
@@ -123,7 +137,7 @@ export class EventEditPage {
   }
 
   addOffice() {
-    const handler = (newOffice) => {
+    const handler = (newOffice: Office) => {
       this.eventRelations.office = newOffice;
     }
 
@@ -182,10 +196,42 @@ export class EventEditPage {
     });
   }
 
-  removePerson(person) {
+  addPerson() {
+    const handler = (newPerson: Person) => {
+      this.eventRelations.people.push(newPerson);
+    }
+
+    this.navCtrl.push(PersonEditPage, {
+      handler
+    });
+  }
+
+  selectPerson(personLocalId, peopleSelect) {
+    console.log(peopleSelect);
+    peopleSelect.value = "";
+    this.people.some((person) => {
+      if (person.localId === personLocalId) {
+        this.eventRelations.people.push(person);
+        return true;
+      }
+    });
+  }
+
+  removePerson(person: Person) {
+
+    const handler = () => {
+      this.eventRelations.people.some((eventPerson, index) => {
+        console.log("some", eventPerson);
+        if (eventPerson.localId === person.localId) {
+          this.eventRelations.people.splice(index, 1);
+          return true;
+        }
+      });
+    }
+
     const confirm = this.alertCtrl.create({
-      title: 'Usuwanie uczestnika',
-      message: `Czy na pewno usunąć uczestnika ${person.name}?`,
+      title: 'Usuwanie uczestnika z wizyty',
+      message: `Czy na pewno usunąć uczestnika ${person.name} z tej wizyty??`,
       buttons: [
         {
           text: 'Anuluj',
@@ -193,6 +239,7 @@ export class EventEditPage {
         {
           text: 'Usuń',
           cssClass: 'danger-button',
+          handler
         }
       ]
     });
