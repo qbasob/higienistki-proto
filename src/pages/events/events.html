@@ -30,7 +30,7 @@
         {{ event.office?.name || noname }}
         <ion-note item-end>
           <ion-icon *ngIf="event.needSync && !event.isRemoved" name="alert" color="danger"></ion-icon>
-          <ion-icon *ngIf="event.isRemoved" name="remove-circle" color="danger"></ion-icon>
+          <ion-icon *ngIf="event.needSync && event.isRemoved" name="remove-circle" color="danger"></ion-icon>
           {{event.date | date: 'dd.MM.yyyy'}}
         </ion-note>
       </button>

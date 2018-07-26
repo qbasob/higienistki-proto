@@ -31,7 +31,7 @@
         <ion-note item-end *ngIf="person.needSync && !person.isRemoved">
           <ion-icon name="alert" color="danger"></ion-icon>
         </ion-note>
-        <ion-note item-end *ngIf="person.isRemoved">
+        <ion-note item-end *ngIf="person.needSync && person.isRemoved">
           <ion-icon name="remove-circle" color="danger"></ion-icon>
         </ion-note>
       </button>

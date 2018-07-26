@@ -31,7 +31,7 @@
         <ion-note item-end *ngIf="office.needSync && !office.isRemoved">
           <ion-icon name="alert" color="danger"></ion-icon>
         </ion-note>
-        <ion-note item-end *ngIf="office.isRemoved">
+        <ion-note item-end *ngIf="office.needSync && office.isRemoved">
           <ion-icon name="remove-circle" color="danger"></ion-icon>
         </ion-note>
       </button>
