@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, PopoverController, AlertController } from 'ionic-angular';
+import { SafeUrl } from '@angular/platform-browser';
 import { PEvent } from '../../../shared/event.model';
 import { EventPopoverPage } from '../event-popover/event-popover';
 import { EventEditPage } from '../event-edit/event-edit';
@@ -9,6 +10,7 @@ import { PersonViewPage } from '../../people/person-view/person-view';
 import { PersonViewAcceptPage } from '../../people/person-view-accept/person-view-accept';
 import { PersonEditPage } from '../../people/person-edit/person-edit';
 import { EventsStore } from '../../../providers/events-store/events-store';
+import { PhotoService } from '../../../providers/photo-service/photo-service';
 
 @Component({
   selector: 'page-event-view',
@@ -16,15 +18,23 @@ import { EventsStore } from '../../../providers/events-store/events-store';
 })
 export class EventViewPage {
   public event: PEvent;
+  public photosSrc: {
+    photoOutside: SafeUrl,
+    photoInsideWaiting: SafeUrl,
+    photoInsideOffice: SafeUrl
+  };
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private popoverCtrl: PopoverController,
     private alertCtrl: AlertController,
-    private eventsStore: EventsStore
+    private eventsStore: EventsStore,
+    private photoService: PhotoService
   ) {
     this.event = navParams.get('event');
+
+    this.loadPhotos();
   }
 
   presentPopover(event, pevent: PEvent) {
@@ -46,6 +56,27 @@ export class EventViewPage {
       }
     });
   }
+
+  // obsługa zdjęć
+
+  public loadPhotos() {
+    // na początek foty to placeholdery
+    this.photosSrc = {
+      photoOutside: 'assets/imgs/placeholder-image.jpg',
+      photoInsideWaiting: 'assets/imgs/placeholder-image.jpg',
+      photoInsideOffice: 'assets/imgs/placeholder-image.jpg'
+    };
+
+    // i bierzemy asynchronicznie foty z PhotoService, jeżeli event ma photoId
+    for (let photoKey in this.photosSrc) {
+      if (this.event[photoKey]) {
+        this.photoService.getPhotoUrl(this.event[photoKey])
+          .subscribe((photoUrl) => {
+            this.photosSrc[photoKey] = photoUrl;
+          });
+      }
+    }
+  };
 
   // skopiowane z events.ts, pomyśleć nad sposobem DRY
   edit(event) {

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, Events, NavController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
@@ -16,6 +16,8 @@ import { OfficesStore } from '../providers/offices-store/offices-store';
 import { EventsStore } from '../providers/events-store/events-store';
 
 import { ENV } from '@app/env';
+import { AuthService } from '../providers/auth-service/auth-service';
+import { PhotoService } from '../providers/photo-service/photo-service';
 
 @Component({
   templateUrl: 'app.html',
@@ -38,19 +40,29 @@ export class MyApp {
   private offline$: Observable<Event>;
   public isDev: boolean;
 
-  rootPage: any = EventsPage;
+  // rootPage: any = EventsPage;
+  rootPage: any = 'LoginPage';
 
   pages: Array<{title: string, component: any}>;
+  // nie można DI NavControllera w Root Componencie, oficjalne rozwiązanie z dokumentacji Ionica:
+  // https://ionicframework.com/docs/api/navigation/NavController/#navigating-from-the-root-component
+  @ViewChild('content') navCtrl: NavController;
 
   constructor(
     public platform: Platform,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
+    private events: Events,
     private storage: Storage,
     private peopleStore: PeopleStore,
     private officesStore: OfficesStore,
-    private eventsStore: EventsStore
+    private eventsStore: EventsStore,
+    private authService: AuthService
   ) {
+    if (this.authService.isLoggedIn()) {
+      this.rootPage = EventsPage;
+    }
+
     this.isOnline = navigator.onLine;
     this.online$ = Observable.fromEvent(window, 'online');
     this.offline$ = Observable.fromEvent(window, 'offline');
@@ -96,6 +108,7 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.statusBar.backgroundColorByHexString("#085c86");
       this.splashScreen.hide();
+      this.handleErrorEvents();
     });
   }
 
@@ -103,5 +116,15 @@ export class MyApp {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
+  }
+
+  handleErrorEvents() {
+    /*this.events.subscribe('UNHANDLED_ERROR', (error: Error) => {
+      this.navCtrl.setRoot('ErrorPage', { err: error }); // sprawdzić czy działa ErrorPage jako string - strony są lazy loaded więc nie powinno się do nich odnosić obiektem
+    });*/
+    this.events.subscribe('TOKEN_ERROR', (_error: Error) => {
+      this.authService.logout();
+      this.navCtrl.setRoot('LoginPage');
+    });
   }
 }

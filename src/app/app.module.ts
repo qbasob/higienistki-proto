@@ -5,7 +5,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
-import { HttpClientModule } from '../../node_modules/@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from '../providers/auth-interceptor/auth-interceptor';
 import { MyApp } from './app.component';
 
 import { EventsPage } from '../pages/events/events';
@@ -39,6 +40,8 @@ import { AppErrorHandler } from '../providers/app-error-handler/app-error-handle
 import { EventsStore } from '../providers/events-store/events-store';
 import { PeopleStore } from '../providers/people-store/people-store';
 import { OfficesStore } from '../providers/offices-store/offices-store';
+import { AuthService } from '../providers/auth-service/auth-service';
+import { PhotoService } from '../providers/photo-service/photo-service';
 
 @NgModule({
   declarations: [
@@ -114,7 +117,14 @@ import { OfficesStore } from '../providers/offices-store/offices-store';
     },
     EventsStore,
     PeopleStore,
-    OfficesStore
+    OfficesStore,
+    AuthService,
+    PhotoService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
   ]
 })
 export class AppModule {}

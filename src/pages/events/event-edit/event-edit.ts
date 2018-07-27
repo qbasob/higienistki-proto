@@ -8,13 +8,16 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EventsStore } from '../../../providers/events-store/events-store';
 import { OfficesStore } from '../../../providers/offices-store/offices-store';
 import { PeopleStore } from '../../../providers/people-store/people-store';
+import { PhotoService } from '../../../providers/photo-service/photo-service';
 import 'rxjs/add/operator/finally';
+import 'rxjs/add/operator/mergeMap';
 
 import { OfficeViewPage } from '../../offices/office-view/office-view';
 import { OfficeEditPage } from '../../offices/office-edit/office-edit';
 import { PersonViewPage } from '../../people/person-view/person-view';
 import { PersonViewAcceptPage } from '../../people/person-view-accept/person-view-accept';
 import { PersonEditPage } from '../../people/person-edit/person-edit';
+import { SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'page-event-edit',
@@ -30,6 +33,12 @@ export class EventEditPage {
     office?: Office,
     people?: Array<Person>
   };
+  public photosSrc: {
+    photoOutside: SafeUrl,
+    photoInsideWaiting: SafeUrl,
+    photoInsideOffice: SafeUrl
+  };
+
   private _loading: Loading; // jeden wspólny loading, dla ułatwienia
   private _isLoading: boolean;
 
@@ -41,7 +50,8 @@ export class EventEditPage {
     private formBuilder: FormBuilder,
     private eventsStore: EventsStore,
     private officesStore: OfficesStore,
-    private peopleStore: PeopleStore
+    private peopleStore: PeopleStore,
+    private photoService: PhotoService
   ) {
 
     if (navParams.get('event')) {
@@ -58,13 +68,15 @@ export class EventEditPage {
     this.peopleStore.records$.subscribe((people) => {
       this.people = people;
     });
+
+    this.loadPhotos();
   }
 
   ngOnInit(): void {
     this.eventForm = this.formBuilder.group({
       id: null,
       date: null,
-      photoOutside: null,
+      photoOutside: [null, Validators.required],
       photoInsideWaiting: null,
       noPhotoInsideWaiting: null,
       noPhotoInsideWaitingWhy: null,
@@ -92,8 +104,6 @@ export class EventEditPage {
     if (this.event.people) {
       this.eventRelations.people = this.event.people.concat();
     }
-
-    console.log(this.eventForm);
   }
 
   save() {
@@ -142,6 +152,43 @@ export class EventEditPage {
       ]
     });
     confirm.present();
+  }
+
+  // obsługa zdjęć
+
+  public loadPhotos() {
+    // na początek foty to placeholdery
+    this.photosSrc = {
+     photoOutside: 'assets/imgs/placeholder-image.jpg',
+     photoInsideWaiting: 'assets/imgs/placeholder-image.jpg',
+     photoInsideOffice: 'assets/imgs/placeholder-image.jpg'
+    };
+
+    // i bierzemy asynchronicznie foty z PhotoService, jeżeli event ma photoId
+    for(let photoKey in this.photosSrc) {
+      if (this.event[photoKey]) {
+        this.photoService.getPhotoUrl(this.event[photoKey])
+          .subscribe((photoUrl) => {
+            this.photosSrc[photoKey] = photoUrl;
+          });
+      }
+    }
+  };
+
+  public addPhotoClick(element){
+    element.click();
+  }
+
+  public addPhoto($event, index) {
+    const fileSelected: File = $event.target.files[0];
+      this.photoService.addPhoto(fileSelected)
+        .mergeMap((photoId) => {
+          this.eventForm.patchValue({ [index]: photoId });
+          return this.photoService.getPhotoUrl(photoId);
+        })
+        .subscribe((photoUrl) => {
+          this.photosSrc[index] = photoUrl;
+        });
   }
 
   // opcje gabinetu
@@ -268,16 +315,16 @@ export class EventEditPage {
 
   // helpery
 
-  private _showLoading() {
-    if (this._loading && !this._isLoading) {
-      this._isLoading = true;
-      this._loading.present();
-    }
-  }
-  private _hideLoading() {
-    if (this._loading && this._isLoading) {
-      this._isLoading = false;
-      this._loading.dismiss();
-    }
-  }
+  // private _showLoading() {
+  //   if (this._loading && !this._isLoading) {
+  //     this._isLoading = true;
+  //     this._loading.present();
+  //   }
+  // }
+  // private _hideLoading() {
+  //   if (this._loading && this._isLoading) {
+  //     this._isLoading = false;
+  //     this._loading.dismiss();
+  //   }
+  // }
 }
