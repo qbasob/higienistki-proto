@@ -41,6 +41,10 @@ export class LoginPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage', ENV);
+
+    if (this.isLoggedIn) {
+      this.navCtrl.setRoot(EventsPage)
+    }
   }
 
   login() {

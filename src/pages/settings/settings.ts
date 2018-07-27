@@ -19,6 +19,7 @@ export class SettingsPage {
 
   logout() {
     this.authService.logout();
+    // this.navCtrl.setRoot('LoginPage');
     this.navCtrl.setRoot('LoginPage');
   }
 }

@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, Events, NavController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { Storage } from '@ionic/storage';
+// import { Storage } from '@ionic/storage';
 
 import { EventsPage } from '../pages/events/events';
 import { OfficesPage } from '../pages/offices/offices';
@@ -41,7 +41,6 @@ export class MyApp {
   private offline$: Observable<Event>;
   public isDev: boolean;
 
-  // rootPage: any = EventsPage;
 
   pages: Array<{title: string, component: any}>;
   // nie można DI NavControllera w Root Componencie, oficjalne rozwiązanie z dokumentacji Ionica:
@@ -53,15 +52,12 @@ export class MyApp {
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     private events: Events,
-    private storage: Storage,
+    // private storage: Storage,
     private peopleStore: PeopleStore,
     private officesStore: OfficesStore,
     private eventsStore: EventsStore,
     private authService: AuthService
   ) {
-    if (this.authService.isLoggedIn()) {
-      this.rootPage = EventsPage;
-    }
 
     this.isOnline = navigator.onLine;
     this.online$ = Observable.fromEvent(window, 'online');
@@ -101,6 +97,11 @@ export class MyApp {
     if(ENV.mode === 'Development') {
       this.isDev = true;
     }
+
+
+    if (this.authService.isLoggedIn()) {
+      this.rootPage = EventsPage;
+    }
   }
 
   initializeApp() {
@@ -111,6 +112,7 @@ export class MyApp {
       this.statusBar.backgroundColorByHexString("#085c86");
       this.splashScreen.hide();
       this.handleErrorEvents();
+
     });
   }
 

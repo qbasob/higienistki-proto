@@ -8,7 +8,8 @@ import { FormGroup, FormBuilder } from '@angular/forms';
   templateUrl: 'event-wizard-step-7.html'
 })
 export class EventWizardStep7Page {
-  public personForm: FormGroup;
+  public stepForm: FormGroup;
+  private _stepData: any;
   public person: Person;
 
   constructor(
@@ -22,22 +23,36 @@ export class EventWizardStep7Page {
     this.person = {
       id: null,
       name: '',
-      gender: Gender.Pani,
-      needSync: false
+      gender: Gender.Pani
+    }
+  }
+
+  ionViewDidEnter() {
+    if (this.navParams.get('clear') === true) {
+      this.person = {
+        id: null,
+        name: '',
+        gender: Gender.Pani
+      }
+      this.stepForm.reset();
+      this.stepForm.patchValue(this.person);
     }
   }
 
   ngOnInit(): void {
-    this.personForm = this.formBuilder.group({});
+    this.stepForm = this.formBuilder.group({});
   }
 
   patchForm(formGroup: FormGroup) {
-    this.personForm = formGroup;
+    this.stepForm = formGroup;
   }
 
 
   next() {
-    this.events.publish('event-wizard-change-tab', 6, 7);
+    if (this.stepForm.valid) {
+      this._stepData = Object.assign({}, this.person, this.stepForm.value);
+      this.events.publish('event-wizard-change-tab', 6, 7, { person: this._stepData });
+    }
   }
 
   back() {

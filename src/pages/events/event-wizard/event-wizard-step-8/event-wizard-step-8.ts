@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, App, Events } from 'ionic-angular';
 import { Person, Gender } from '../../../../shared/person.model';
-import * as faker from 'faker';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'page-event-wizard-step-8',
@@ -9,6 +9,9 @@ import * as faker from 'faker';
 })
 export class EventWizardStep8Page {
   public person: Person;
+  public stepForm: FormGroup;
+  private _stepData: any;
+
   public Gender = Gender; // do używania w template
 
   constructor(
@@ -16,37 +19,48 @@ export class EventWizardStep8Page {
     public navParams: NavParams,
     private alertCtrl: AlertController,
     private appCtrl: App,
-    private events: Events
+    private tabEvents: Events,
+    private formBuilder: FormBuilder
   ) {
-    this.person = {
-      id: null,
-      name: faker.name.firstName() + " " + faker.name.lastName(),
-      gender: faker.random.arrayElement([Gender.Pani, Gender.Pan]),
-      email: faker.internet.email(),
-      phone: faker.phone.phoneNumber(),
-      officesNo: faker.random.number(5),
-      sonicareUser: faker.random.boolean(),
-      sonicareRecom: faker.random.boolean(),
-      wantCodes: faker.random.boolean(),
-      gotStarter: faker.random.boolean(),
-      starterNo: faker.random.number({ min: 10000, max: 99999 }).toString(),
-      gotExpositor: faker.random.boolean(),
-      agreeReg: true,
-      agreeMark1: faker.random.boolean(),
-      agreeMark2: faker.random.boolean(),
-      agreeMark3: faker.random.boolean(),
-      agreeMark4: faker.random.boolean(),
-      additionalData: faker.random.words(20),
-      needSync: false
+
+    if (this.navParams.get('person')) {
+      this.person = this.navParams.get('person');
+    } else {
+      this.person = { id: null, name: '', gender: Gender.Pani };
     }
   }
 
+  ngOnInit(): void {
+    this.stepForm = this.formBuilder.group({
+      agreeReg: null,
+      agreeMark1: null,
+      agreeMark2: null,
+      agreeMark3: null,
+      agreeMark4: null,
+    });
+    this.stepForm.patchValue(this.person);
+  }
+
+  ionViewDidEnter() {
+    console.log("paramperson", this.navParams.get('person'));
+    if (this.navParams.get('person')) {
+      this.person = this.navParams.get('person');
+    } else {
+      this.person = { id: null, name: '', gender: Gender.Pani };
+    }
+    this.stepForm.patchValue(this.person);
+  }
+
+
   next() {
-    this.events.publish('event-wizard-change-tab', 7, 8);
+    if (this.stepForm.valid) {
+      this._stepData = Object.assign({}, this.person, this.stepForm.value);
+      this.tabEvents.publish('event-wizard-change-tab', 7, 8, { person: this._stepData });
+    }
   }
 
   back() {
-    this.events.publish('event-wizard-change-tab', 7, 6);
+    this.tabEvents.publish('event-wizard-change-tab', 7, 6);
   }
 
   cancel() {

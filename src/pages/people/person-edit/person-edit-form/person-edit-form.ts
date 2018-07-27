@@ -8,7 +8,7 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors }
 })
 export class PersonEditFormComponent implements OnInit {
   @Input('personData')
-  public person: Person = { id: null, name: '', gender: Gender.Pani }; //default value
+  public person: Person = { id: null, name: null, gender: Gender.Pani }; //default value
 
   @Output()
   onFormInit = new EventEmitter<FormGroup>();
@@ -22,24 +22,24 @@ export class PersonEditFormComponent implements OnInit {
 
   ngOnInit() {
     this.personFormGroup = this.formBuilder.group({
-      id: '',
-      name: ['', [Validators.required, Validators.minLength(5)]],
-      gender: ['', Validators.required],
-      email: ['', [Validators.required, this.customEmailValidator]],
-      phone: '',
-      officesNo: '',
-      sonicareUser: '',
-      sonicareRecom: '',
-      wantCodes: '',
-      gotStarter: '',
-      starterNo: '',
-      gotExpositor: '',
-      agreeReg: '',
-      agreeMark1: '',
-      agreeMark2: '',
-      agreeMark3: '',
-      agreeMark4: '',
-      additionalData: ''
+      id: null,
+      name: [null, [Validators.required, Validators.minLength(5)]],
+      gender: [Gender.Pani, Validators.required],
+      email: [null, [Validators.required, this.customEmailValidator]],
+      phone: null,
+      officesNo: null,
+      sonicareUser: null,
+      sonicareRecom: null,
+      wantCodes: null,
+      gotStarter: null,
+      starterNo: null,
+      gotExpositor: null,
+      agreeReg: null,
+      agreeMark1: null,
+      agreeMark2: null,
+      agreeMark3: null,
+      agreeMark4: null,
+      additionalData: null
     });
     this.personFormGroup.patchValue(this.person);
 

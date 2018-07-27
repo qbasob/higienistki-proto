@@ -27,6 +27,11 @@
           <img [src]="photosSrc.photoOutside" class="photo">
           <input type="file" (change)="addPhoto($event, 'photoOutside')" id="file-input" style="display: none;" #fileInp0>
           <button ion-button type="button" (click)="addPhotoClick(fileInp0)">Zrób zdjęcie</button>
+          <div ion-text *ngIf="eventForm.get('photoOutside').invalid" color="danger" padding-left>
+            <span *ngIf="eventForm.get('photoOutside').errors.required">
+              To pole jest wymagane
+            </span>
+          </div>
         </ion-note>
       </ion-item>
       <ion-item>

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams, AlertController, App, Events } from 'ionic-angular';
-import * as faker from 'faker';
 import { Office } from '../../../../shared/office.model';
 import { FormGroup, FormBuilder } from '@angular/forms';
 

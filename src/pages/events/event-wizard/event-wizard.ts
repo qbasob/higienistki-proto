@@ -12,10 +12,11 @@ import { EventWizardStep8Page } from './event-wizard-step-8/event-wizard-step-8'
 import { EventWizardStep9Page } from './event-wizard-step-9/event-wizard-step-9';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Office } from '../../../shared/office.model';
+import { Person } from '../../../shared/person.model';
 import { OfficesStore } from '../../../providers/offices-store/offices-store';
 import { EventsStore } from '../../../providers/events-store/events-store';
+import { PeopleStore } from '../../../providers/people-store/people-store';
 
-// import { Person } from '../../../shared/person.model';
 
 @Component({
   selector: 'page-event-wizard',
@@ -28,12 +29,15 @@ export class EventWizardPage implements OnInit, OnDestroy {
   stepsEnabled: boolean[];
   stepsVisible: boolean[];
   tab3Params: any;
+  tab7Params: any;
+  tab8Params: any;
   tab9Params: any;
+  peopleCounter: number;
 
 
   private eventForm: FormGroup;
-  // private office: Office;
-  // private people: Array<Person>;
+
+  private people: Array<Person>;
 
   constructor(
     public navCtrl: NavController,
@@ -41,6 +45,7 @@ export class EventWizardPage implements OnInit, OnDestroy {
     private tabEvents: Events,
     private formBuilder: FormBuilder,
     private officesStore: OfficesStore,
+    private peopleStore: PeopleStore,
     private eventsStore: EventsStore,
     private loadingCtrl: LoadingController
   ) {
@@ -78,7 +83,10 @@ export class EventWizardPage implements OnInit, OnDestroy {
     this.stepsVisible[8] = false;
 
     this.tab3Params = {};
+    this.tab7Params = {};
+    this.tab8Params = {};
     this.tab9Params = {};
+    this.peopleCounter = 0;
 
 
     this.eventForm = this.formBuilder.group({
@@ -102,6 +110,8 @@ export class EventWizardPage implements OnInit, OnDestroy {
       office: null,
       people: null
     });
+
+    this.people = [];
   }
 
   // poniższe potrzebne żeby się Ionic nie wywalał po ponownym wejściu w tabsy
@@ -109,16 +119,41 @@ export class EventWizardPage implements OnInit, OnDestroy {
     this.tabEvents.subscribe('event-wizard-change-tab', (from: number, to: number, eventData: any = {}) => {
       // enablowanie następnego kroku, tylko po kliknięciu w formularzu
       this.stepsEnabled[to] = true;
+
+      // jeżeli przychodza dane uczestnika, to dodajemy go do arraya i ten array patchujemy z formularzem
+      if (eventData.person) {
+        this.people[this.peopleCounter] = eventData.person;
+        this.eventForm.patchValue({people: this.people});
+      } else {
+        this.eventForm.patchValue(eventData);
+      }
+
       // jeżeli idziemy na stronę 2 to przekazujemy jej aktualne dane office
       if (to === 2) {
         this.tab3Params.office = this.eventForm.value.office;
       }
+      // jeżeli idziemy na stronę 7 to przekazujemy jej aktualne dane person
+      if (to === 7) {
+        this.tab8Params.person = this.people.slice(-1)[0];
+      }
       // jeżeli idziemy na ostatnią stronę, to przekazujemy jej from (żeby wiedziała czy był przeskok)
-      if(to === 8) {
+      if (to === 8) {
         this.tab9Params.from = from;
       }
+
+      // jeżeli idziemy na 5 stronę z 8 to znaczy że kolejna osoba, czyścimy dane
+      if (from === 8 && to === 5) {
+        this.tab7Params.clear = true;
+        this.peopleCounter++;
+      }
+
+      // jeżeli ze strony 7 do 6 to nie czyścimy formularza
+      if (from === 7 && to === 6) {
+        this.tab7Params.clear = false;
+      }
+
+      // przechodzimy na kolejny tab
       this.tabRef.select(to);
-      this.eventForm.patchValue(eventData);
 
       console.log("eventData", eventData);
       console.log("eventForm", this.eventForm.value);
@@ -142,17 +177,47 @@ export class EventWizardPage implements OnInit, OnDestroy {
         officeSave = this.officesStore.editRecord(office)
       }
 
+      // musimy dodać ludzi
+      const people = this.eventForm.value.people;
+      let peopleSave: Array<Observable<Office>> = [];
+      people.forEach((person: Person) => {
+        peopleSave.push(this.peopleStore.addRecord(person));
+      });
+
+      // zapisujemy office i people
+      Observable.forkJoin(officeSave, ...peopleSave)
+        .subscribe((saveResults) => {
+          let office: Office;
+          let people: Array<Person>;
+          [office, ...people] = saveResults;
+
+          this.eventForm.value.office = office;
+          this.eventForm.value.people = people;
+          this.eventForm.value.date = new Date().toISOString();
+
+          // wiem że subscribe w subscribe ale już nie mam siły :P
+          // po urlopie pomyślę jak połączyć forkJoin ze switchMap
+
+          this.eventsStore.addRecord(this.eventForm.value)
+            .finally(() => {
+              loading.dismiss();
+              this.navCtrl.pop();
+            })
+            .subscribe()
+        });
+
       // po zapisie office dostajemy go z powrotem, podmieniamy w evencie i zapisujemy event
-      officeSave
+      /*officeSave
         .switchMap((office: Office) => {
           this.eventForm.value.office = office;
+          this.eventForm.value.date = new Date().toISOString();
           return this.eventsStore.addRecord(this.eventForm.value);
         })
         .finally(() => {
           loading.dismiss();
           this.navCtrl.pop();
         })
-        .subscribe()
+        .subscribe()*/
     });
   }
   ngOnDestroy() {

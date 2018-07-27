@@ -5,7 +5,7 @@
   <ion-tab [root]="steps[3]" [enabled]="stepsEnabled[3]" [show]="stepsVisible[3]" (ionSelect)="updateTabs($event)" tabTitle="4. Zdjęcie wnętrza placówki"></ion-tab>
   <ion-tab [root]="steps[4]" [enabled]="stepsEnabled[4]" [show]="stepsVisible[4]" (ionSelect)="updateTabs($event)" tabTitle="5. Charakterystyka gabinetu"></ion-tab>
   <ion-tab [root]="steps[5]" [enabled]="stepsEnabled[5]" [show]="stepsVisible[5]" (ionSelect)="updateTabs($event)" tabTitle="6. Program dla higienistek"></ion-tab>
-  <ion-tab [root]="steps[6]" [enabled]="stepsEnabled[6]" [show]="stepsVisible[6]" (ionSelect)="updateTabs($event)" tabTitle="7. Rejestracja uczestnika"></ion-tab>
-  <ion-tab [root]="steps[7]" [enabled]="stepsEnabled[7]" [show]="stepsVisible[7]" (ionSelect)="updateTabs($event)" tabTitle="8. Zgody uczestnika"></ion-tab>
+  <ion-tab [root]="steps[6]" [enabled]="stepsEnabled[6]" [show]="stepsVisible[6]" (ionSelect)="updateTabs($event)" tabTitle="7. Rejestracja uczestnika" [rootParams]="tab7Params"></ion-tab>
+  <ion-tab [root]="steps[7]" [enabled]="stepsEnabled[7]" [show]="stepsVisible[7]" (ionSelect)="updateTabs($event)" tabTitle="8. Zgody uczestnika" [rootParams]="tab8Params"></ion-tab>
   <ion-tab [root]="steps[8]" [enabled]="stepsEnabled[8]" [show]="stepsVisible[8]" (ionSelect)="updateTabs($event)" tabTitle="9. Informacje dodatkowe" [rootParams]="tab9Params"></ion-tab>
 </ion-tabs>

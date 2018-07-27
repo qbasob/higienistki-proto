@@ -8,29 +8,31 @@
 </ion-header>
 
 <ion-content>
-  <ion-list radio-group [(ngModel)]="doQualify">
+  <form novalidate [formGroup]="stepForm" (ngSubmit)="next()">
+    <ion-list radio-group formControlName="doQualify">
 
-    <ion-item>
-      <ion-label>Brak osób kwalifikujących się do Programu</ion-label>
-      <ion-radio value="no"></ion-radio>
-    </ion-item>
+      <ion-item>
+        <ion-label>Brak osób kwalifikujących się do Programu</ion-label>
+        <ion-radio value="no"></ion-radio>
+      </ion-item>
 
-    <ion-item>
-      <ion-label>Brak zainteresowania, odmowa udziału</ion-label>
-      <ion-radio value="no_deny"></ion-radio>
-    </ion-item>
+      <ion-item>
+        <ion-label>Brak zainteresowania, odmowa udziału</ion-label>
+        <ion-radio value="no_deny"></ion-radio>
+      </ion-item>
 
-    <ion-item>
-      <ion-label>Rejestruję Uczestnika/Uczestniczkę programu dla Higienistek/Higienistów</ion-label>
-      <ion-radio value="yes"></ion-radio>
-    </ion-item>
-  </ion-list>
+      <ion-item>
+        <ion-label>Rejestruję Uczestnika/Uczestniczkę programu dla Higienistek/Higienistów</ion-label>
+        <ion-radio value="yes"></ion-radio>
+      </ion-item>
+    </ion-list>
 
-  <ion-row>
-    <ion-col text-center>
-      <button ion-button (click)="next()">Dalej</button>
-      <button ion-button color="light" (click)="back()">Wstecz</button>
-      <button ion-button color="light" (click)="cancel()">Anuluj</button>
-    </ion-col>
-  </ion-row>
+    <ion-row>
+      <ion-col text-center>
+        <button ion-button type="submit" [disabled]="!stepForm.valid">Dalej</button>
+        <button ion-button type="button" color="light" (click)="back()">Wstecz</button>
+        <button ion-button type="button" color="light" (click)="cancel()">Anuluj</button>
+      </ion-col>
+    </ion-row>
+  </form>
 </ion-content>
