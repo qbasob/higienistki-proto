@@ -42,9 +42,19 @@
     </ion-item-sliding>
   </ion-list>
 
-  <ion-fab right bottom>
-    <button (click)="add()" ion-fab color="secondary">
+  <ion-fab right bottom #fab>
+    <button ion-fab color="secondary">
       <ion-icon name="add"></ion-icon>
     </button>
+    <ion-fab-list side="top">
+      <button ion-fab (click)="wizard(fab)">
+        <ion-icon name="add-circle"></ion-icon>
+        <div class="label">Kreator</div>
+      </button>
+      <button ion-fab (click)="add(fab)">
+        <ion-icon name="add"></ion-icon>
+        <div class="label">Dodaj</div>
+      </button>
+    </ion-fab-list>
   </ion-fab>
 </ion-content>

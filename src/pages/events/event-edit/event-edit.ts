@@ -23,6 +23,7 @@ import { PersonEditPage } from '../../people/person-edit/person-edit';
 export class EventEditPage {
   public eventForm: FormGroup;
   public event: PEvent;
+  private _isAdd: boolean;
   public offices: Array<Office>;
   public people: Array<Person>;
   public eventRelations: {
@@ -42,7 +43,15 @@ export class EventEditPage {
     private officesStore: OfficesStore,
     private peopleStore: PeopleStore
   ) {
-    this.event = <PEvent>navParams.get('event');
+
+    if (navParams.get('event')) {
+      this._isAdd = false;
+      this.event = <PEvent>navParams.get('event');
+    } else {
+      this._isAdd = true;
+      this.event = { id: null, name: ''};
+    }
+
     this.officesStore.records$.subscribe((offices) => {
       this.offices = offices;
     });
@@ -53,27 +62,28 @@ export class EventEditPage {
 
   ngOnInit(): void {
     this.eventForm = this.formBuilder.group({
-      id: '',
-      date: '',
-      photoOutside: '',
-      photoInsideWaiting: '',
-      noPhotoInsideWaiting: '',
-      noPhotoInsideWaitingWhy: '',
-      photoInsideOffice: '',
-      noPhotoInsideOffice: '',
-      noPhotoInsideOfficeWhy: '',
-      isOfficeNetwork: '',
-      networkOfficesCount: '',
-      chairsCount: '',
-      doctorsCount: '',
-      hasOfficeHigienists: '',
-      higienistsCount: '',
-      isBuyingSonicare: '',
-      doQualify: ''
+      id: null,
+      date: null,
+      photoOutside: null,
+      photoInsideWaiting: null,
+      noPhotoInsideWaiting: null,
+      noPhotoInsideWaitingWhy: null,
+      photoInsideOffice: null,
+      noPhotoInsideOffice: null,
+      noPhotoInsideOfficeWhy: null,
+      isOfficeNetwork: null,
+      networkOfficesCount: null,
+      chairsCount: null,
+      doctorsCount: null,
+      hasOfficeHigienists: null,
+      higienistsCount: null,
+      isBuyingSonicare: null,
+      doQualify: null
     });
 
     this.eventForm.patchValue(this.event);
     this.eventRelations = {};
+    this.eventRelations.people = [];
 
     if (this.event.office) {
       this.eventRelations.office = Object.assign({}, this.event.office);
@@ -82,6 +92,8 @@ export class EventEditPage {
     if (this.event.people) {
       this.eventRelations.people = this.event.people.concat();
     }
+
+    console.log(this.eventForm);
   }
 
   save() {
@@ -94,12 +106,21 @@ export class EventEditPage {
       // this.event = this.eventForm.value;
       const eventData = Object.assign(this.event, this.eventForm.value, this.eventRelations);
 
-      this.eventsStore.editRecord(eventData)
-        .finally(() => {
-          loading.dismiss();
-          this.navCtrl.popToRoot();
-        })
-        .subscribe()
+      if (this._isAdd) {
+        this.eventsStore.addRecord(eventData)
+          .finally(() => {
+            loading.dismiss();
+            this.navCtrl.pop();
+          })
+          .subscribe()
+      } else {
+        this.eventsStore.editRecord(eventData)
+          .finally(() => {
+            loading.dismiss();
+            this.navCtrl.pop();
+          })
+          .subscribe()
+      }
     }
   }
 
@@ -115,7 +136,7 @@ export class EventEditPage {
           text: 'Tak',
           cssClass: 'danger-button',
           handler: () => {
-            this.navCtrl.popToRoot();
+            this.navCtrl.pop();
           }
         }
       ]
@@ -207,7 +228,6 @@ export class EventEditPage {
   }
 
   selectPerson(personLocalId, peopleSelect) {
-    console.log(peopleSelect);
     peopleSelect.value = "";
     this.people.some((person) => {
       if (person.localId === personLocalId) {

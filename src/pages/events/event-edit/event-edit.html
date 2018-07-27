@@ -11,11 +11,15 @@
 <ion-content>
   <form novalidate [formGroup]="eventForm" (ngSubmit)="save()">
     <ion-list>
-      <ion-item>
+      <!-- <ion-item>
         Data wizyty
         <ion-note item-end>
           {{ event.date | date: 'dd.MM.yyyy' }}
         </ion-note>
+      </ion-item> -->
+      <ion-item>
+        <ion-label>Data wizyty</ion-label>
+        <ion-datetime formControlName="date"></ion-datetime>
       </ion-item>
       <ion-item>
         Zdjęcie z zewnątrz
@@ -122,6 +126,12 @@
         <ion-item-sliding>
           <button ion-item type="button" (click)="detailsOffice(office)">
             {{ office.name }}
+            <ion-note item-end *ngIf="office.needSync && !office.isRemoved">
+              <ion-icon name="alert" color="danger"></ion-icon>
+            </ion-note>
+            <ion-note item-end *ngIf="office.needSync && office.isRemoved">
+              <ion-icon name="remove-circle" color="danger"></ion-icon>
+            </ion-note>
           </button>
           <ion-item-options side="right">
             <button ion-button type="button" color="light" (click)="detailsOffice(office)">Podgląd</button>
@@ -152,6 +162,12 @@
         <ion-item-sliding *ngFor="let person of eventRelations.people">
           <button ion-item type="button" (click)="detailsPerson(person)">
             {{person.name}}
+            <ion-note item-end *ngIf="person.needSync && !person.isRemoved">
+              <ion-icon name="alert" color="danger"></ion-icon>
+            </ion-note>
+            <ion-note item-end *ngIf="person.needSync && person.isRemoved">
+              <ion-icon name="remove-circle" color="danger"></ion-icon>
+            </ion-note>
           </button>
           <ion-item-options side="right">
             <button ion-button type="button" color="light" (click)="detailsPerson(person)">Podgląd</button>

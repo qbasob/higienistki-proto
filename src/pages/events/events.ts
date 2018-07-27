@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, LoadingController, Loading, ItemSliding } from 'ionic-angular';
+import { NavController, NavParams, AlertController, LoadingController, Loading, ItemSliding, FabContainer } from 'ionic-angular';
 import { PEvent } from '../../shared/event.model';
 import { EventWizardPage } from './event-wizard/event-wizard';
 import { EventViewPage } from './event-view/event-view';
@@ -59,10 +59,14 @@ export class EventsPage {
     });
   }
 
-  add(event) {
-    this.navCtrl.push(EventWizardPage, {
-      event
-    });
+  wizard(fab: FabContainer) {
+    this.navCtrl.push(EventWizardPage);
+    fab.close();
+  }
+
+  add(fab: FabContainer) {
+    this.navCtrl.push(EventEditPage);
+    fab.close();
   }
 
   edit(event) {

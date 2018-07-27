@@ -8,6 +8,7 @@ import { OfficeEditPage } from '../../offices/office-edit/office-edit';
 import { PersonViewPage } from '../../people/person-view/person-view';
 import { PersonViewAcceptPage } from '../../people/person-view-accept/person-view-accept';
 import { PersonEditPage } from '../../people/person-edit/person-edit';
+import { EventsStore } from '../../../providers/events-store/events-store';
 
 @Component({
   selector: 'page-event-view',
@@ -20,7 +21,8 @@ export class EventViewPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private popoverCtrl: PopoverController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private eventsStore: EventsStore
   ) {
     this.event = navParams.get('event');
   }
@@ -62,7 +64,14 @@ export class EventViewPage {
         },
         {
           text: 'Usuń',
-          cssClass: 'danger-button'
+          cssClass: 'danger-button',
+          handler: () => {
+            this.eventsStore.removeRecord(event)
+              .finally(() => {
+                this.navCtrl.popToRoot();
+              })
+              .subscribe();
+          }
         }
       ]
     });
