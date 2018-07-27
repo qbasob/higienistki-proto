@@ -46,7 +46,21 @@ export class PhotoService {
         const updatedPhoto = Object.assign({}, photo);
         updatedPhoto.file = newFile;
         delete updatedPhoto.needSync;
-        return Object.assign({}, updatedPhoto)
+        return updatedPhoto;
+      })
+  }
+
+  private _downloadFromServer(photoId: string): Observable<PhotoObject> {
+    // plik z serwera nie będzie mieć nazwy, więc dajemy mu własną
+    const tmpName = `${photoId}.jpg`;
+    return this.http.get(`${this._apiUrl}/${photoId}`, { responseType: 'blob' })
+      .map((serverBlob: Blob) => {
+        const file = new File([serverBlob], tmpName);
+        const photo: PhotoObject = {
+          photoId,
+          file
+        }
+        return photo;
       })
   }
 
@@ -111,7 +125,6 @@ export class PhotoService {
               .catch<PhotoObject, never>((_err) => {
                 return Observable.of(photo);
               })
-
               // i w obu przypadkach zwracamy wygenerowany url zdjęcia
               .map((storagePhoto: PhotoObject): SafeUrl => {
                 return this._getSanitizedUrl(storagePhoto);
@@ -122,9 +135,27 @@ export class PhotoService {
             return Observable.of(this._getSanitizedUrl(photo));
           }
         }
-        // jeżeli nie znalazł zdjęcia to zwracamy placeholder z błędem
+        // jeżeli nie znalazł zdjęcia to próbujemy pobrać je z serwera
         else {
-          return Observable.of('assets/imgs/error-image.jpg');
+          return this._downloadFromServer(photoId)
+            // jeżeli się uda, to zapisujemy obrazek z serwera i go zwracamy
+            .switchMap((serverPhoto: PhotoObject): Observable<PhotoObject> => {
+              return this._setToStorage(serverPhoto);
+            })
+            // jeżeli nie uda się pobrać z serwera to zwracamy pusty obiekt
+            .catch<PhotoObject, never>((_err) => {
+              return Observable.of(null);
+            })
+            // i w obu przypadkach zwracamy wygenerowany url zdjęcia
+            .map((storagePhoto: PhotoObject): SafeUrl => {
+              console.log('blad na bledzie', storagePhoto );
+              if (storagePhoto) {
+                return this._getSanitizedUrl(storagePhoto);
+              }
+              else {
+                return 'assets/imgs/error-image.jpg';
+              }
+            })
         }
       })
 
