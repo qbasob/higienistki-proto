@@ -1,39 +1,73 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams, AlertController, App, Events } from 'ionic-angular';
 import * as faker from 'faker';
+import { OfficesStore } from '../../../../providers/offices-store/offices-store';
+import { Office } from '../../../../shared/office.model';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'page-event-wizard-step-1',
   templateUrl: 'event-wizard-step-1.html'
 })
-export class EventWizardStep1Page {
+export class EventWizardStep1Page implements OnInit {
   cities: string[];
-  offices: string[];
+  public offices: Array<Office>;
+  public office: Office;
+  public stepForm: FormGroup;
+  private _stepData: any;
+  public isNewOffice: boolean;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private alertCtrl: AlertController,
     private appCtrl: App,
-    private events: Events
-  ) {
-    this.cities = [];
-    for (let i = 1; i < 11; i++) {
-      this.cities.push(
-        faker.address.city()
-      );
-    }
+    private tabEvents: Events,
+    private officesStore: OfficesStore,
+    private formBuilder: FormBuilder
 
-    this.offices = [];
-    for (let i = 1; i < 11; i++) {
-      this.offices.push(
-        faker.company.companyName()
-      );
-    }
+  ) {
+    this.officesStore.records$.subscribe((offices) => {
+      this.offices = offices;
+    });
+
+    this.office = { id: null, name: '' };
+    this._stepData = {};
+    this.isNewOffice = false;
+  }
+
+  ngOnInit(): void {
+    this.stepForm = this.formBuilder.group({});
+  }
+
+  patchForm(formGroup: FormGroup) {
+    this.stepForm = formGroup;
+  }
+
+  addNewOffice(officeSelect) {
+    officeSelect.value = "";
+    this.office = { id: null, name: '' };
+    this.stepForm.reset();
+    this.isNewOffice = true;
+  }
+
+
+  selectOffice(officeLocalId) {
+    this.offices.some((office) => {
+      if (office.localId === officeLocalId) {
+        this.office = office;
+        this.stepForm.patchValue(office);
+
+        return true;
+      }
+    });
   }
 
   next() {
-    this.events.publish('event-wizard-change-tab', 0, 1);
+    if (this.stepForm.valid) {
+      this._stepData = Object.assign({}, this.office, this.stepForm.value);
+      this.tabEvents.publish('event-wizard-change-tab', 0, 1, {office: this._stepData});
+    }
   }
 
   cancel() {

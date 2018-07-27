@@ -8,56 +8,26 @@
 </ion-header>
 
 <ion-content>
+  <form novalidate [formGroup]="stepForm" (ngSubmit)="next()">
   <!-- <ion-row>
-    <ion-col>
-      <p>Sprawdź poprawność danych z bazy i uzupełnij braki, lub wpisz nowy gabinet</p>
-    </ion-col>
-  </ion-row> -->
+      <ion-col>
+        <p>Sprawdź poprawność danych z bazy i uzupełnij braki, lub wpisz nowy gabinet</p>
+      </ion-col>
+    </ion-row> -->
 
-  <ion-item-group>
-    <ion-item-divider color="light">
-      Sprawdź poprawność danych z bazy i uzupełnij braki, lub wpisz nowy gabinet
-    </ion-item-divider>
-    <ion-item>
-      <ion-label floating>Nazwa</ion-label>
-      <ion-note item-end>
-        <button ion-button clear (click)="showHelp('name')">
-          <ion-icon name="help-circle" color="dark"></ion-icon>
-        </button>
-      </ion-note>
-      <ion-input type="text" value="{{ office?.name }}"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Ulica</ion-label>
-      <ion-input type="text" value="{{ office?.street }}"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Nr budynku</ion-label>
-      <ion-input type="text" value="{{ office?.buildingNo }}"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Nr mieszkania</ion-label>
-      <ion-input type="text" value="{{ office?.localNo }}"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Kod pocztowy</ion-label>
-      <ion-input type="text" value="{{ office?.postal }}"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Miejscowość</ion-label>
-      <ion-input type="text" value="{{ office?.city }}"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Powiat</ion-label>
-      <ion-input type="text" value="{{ office?.county }}"></ion-input>
-    </ion-item>
-  </ion-item-group>
+    <ion-item-group>
+      <ion-item-divider color="light">
+        Sprawdź poprawność danych z bazy i uzupełnij braki, lub wpisz nowy gabinet
+      </ion-item-divider>
+    </ion-item-group>
+    <office-edit-form [officeData]="office" (onFormInit)="patchForm($event)"></office-edit-form>
 
-  <ion-row>
-    <ion-col text-center>
-      <button ion-button (click)="next()">Dalej</button>
-      <button ion-button color="light" (click)="back()">Wstecz</button>
-      <button ion-button color="light" (click)="cancel()">Anuluj</button>
-    </ion-col>
-  </ion-row>
+    <ion-row>
+      <ion-col text-center>
+        <button ion-button type="submit" [disabled]="!stepForm.valid">Dalej</button>
+        <button ion-button type="button" color="light" (click)="back()">Wstecz</button>
+        <button ion-button type="button" color="light" (click)="cancel()">Anuluj</button>
+      </ion-col>
+    </ion-row>
+  </form>
 </ion-content>

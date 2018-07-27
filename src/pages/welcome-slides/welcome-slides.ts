@@ -29,9 +29,9 @@ export class WelcomeSlidesPage {
 
   // POMIŃ/KONTYNUUJ
   startApp() {
-    this.navCtrl.setRoot(EventsPage).then(() => {
-      this.storage.set('hasSeenTutorial', 'true');
-    })
+    this.storage.set('hasSeenTutorial', 'true').then(() => {
+      this.navCtrl.setRoot(EventsPage)
+    });
   }
 
   // na ostatniej stronie nie pokazujemy POMIŃ

@@ -15,7 +15,8 @@ export class EventWizardStep9Page {
   ) { }
 
   finish() {
-    this.appCtrl.getRootNav().pop();
+    this.events.publish('event-wizard-finish-tab');
+    // this.appCtrl.getRootNav().pop();
   }
 
   back() {

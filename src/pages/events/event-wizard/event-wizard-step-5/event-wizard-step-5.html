@@ -8,74 +8,61 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
-    <ion-item>
-      <ion-label>Gabinet jest częścią sieci gabinetów</ion-label>
-      <ion-toggle [(ngModel)]="isOfficeNetwork"></ion-toggle>
-    </ion-item>
-    <ion-item *ngIf="isOfficeNetwork">
-      <ion-label floating>Liczba placówek w ramach sieci</ion-label>
-      <ion-input type="number"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Liczba stanowisk/foteli w gabinecie</ion-label>
-      <ion-input type="number"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Liczba lekarzy pracujących gabinecie</ion-label>
-      <ion-input type="number"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Czy w gabinecie są higienistki/higieniści</ion-label>
-      <ion-toggle [(ngModel)]="hasOfficeHigienists"></ion-toggle>
-    </ion-item>
-    <ion-item *ngIf="hasOfficeHigienists">
-      <ion-label floating>Liczba higienistek/higienistów</ion-label>
-      <ion-input type="number"></ion-input>
-    </ion-item>
-    <!-- <ion-item>
-      <ion-label>Czy kupują produkty Sonicare?</ion-label>
-    </ion-item> -->
-  </ion-list>
+  <form novalidate [formGroup]="stepForm" (ngSubmit)="next()">
+    <ion-list>
+      <ion-item>
+        <ion-label>Gabinet jest częścią sieci gabinetów</ion-label>
+        <ion-toggle formControlName="isOfficeNetwork"></ion-toggle>
+      </ion-item>
+      <ion-item *ngIf="stepForm.get('isOfficeNetwork').value">
+        <ion-label floating>Liczba placówek w ramach sieci</ion-label>
+        <ion-input type="number" formControlName="networkOfficesCount"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Liczba stanowisk/foteli w gabinecie</ion-label>
+        <ion-input type="number" formControlName="chairsCount"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Liczba lekarzy pracujących gabinecie</ion-label>
+        <ion-input type="number" formControlName="doctorsCount"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Czy w gabinecie są higienistki/higieniści</ion-label>
+        <ion-toggle formControlName="hasOfficeHigienists"></ion-toggle>
+      </ion-item>
+      <ion-item *ngIf="stepForm.get('hasOfficeHigienists').value">
+        <ion-label floating>Liczba higienistek/higienistów</ion-label>
+        <ion-input type="number" formControlName="higienistsCount"></ion-input>
+      </ion-item>
+    </ion-list>
 
-  <ion-list radio-group [(ngModel)]="isBuyingSonicare">
-    <ion-list-header>
-       Czy kupują produkty Sonicare?
-    </ion-list-header>
+    <ion-list radio-group formControlName="isBuyingSonicare">
+      <ion-list-header>
+        Czy kupują produkty Sonicare?
+      </ion-list-header>
 
-    <ion-item>
-      <ion-label>Nie</ion-label>
-      <ion-radio value="no"></ion-radio>
-    </ion-item>
+      <ion-item>
+        <ion-label>Nie</ion-label>
+        <ion-radio value="no"></ion-radio>
+      </ion-item>
 
-    <ion-item>
-      <ion-label>Tak, na własny użytek</ion-label>
-      <ion-radio value="yes"></ion-radio>
-    </ion-item>
+      <ion-item>
+        <ion-label>Tak, na własny użytek</ion-label>
+        <ion-radio value="yes"></ion-radio>
+      </ion-item>
 
-    <ion-item>
-      <ion-label>Tak, do odsprzedaży pacjentowi</ion-label>
-      <ion-radio value="yes_sell"></ion-radio>
-    </ion-item>
-  </ion-list>
+      <ion-item>
+        <ion-label>Tak, do odsprzedaży pacjentowi</ion-label>
+        <ion-radio value="yes_sell"></ion-radio>
+      </ion-item>
+    </ion-list>
 
-  <!-- <ion-segment [(ngModel)]="isBuyingSonicare" color="primary">
-    <ion-segment-button value="">
-      Nie
-    </ion-segment-button>
-    <ion-segment-button value="yes">
-      Na własny użytek
-    </ion-segment-button>
-    <ion-segment-button value="yes_sell">
-      Do odsprzedaży
-    </ion-segment-button>
-  </ion-segment> -->
-
-  <ion-row>
-    <ion-col text-center>
-      <button ion-button (click)="next()">Dalej</button>
-      <button ion-button color="light" (click)="back()">Wstecz</button>
-      <button ion-button color="light" (click)="cancel()">Anuluj</button>
-    </ion-col>
-  </ion-row>
+    <ion-row>
+      <ion-col text-center>
+        <button ion-button type="submit" [disabled]="!stepForm.valid">Dalej</button>
+        <button ion-button type="button" color="light" (click)="back()">Wstecz</button>
+        <button ion-button type="button" color="light" (click)="cancel()">Anuluj</button>
+      </ion-col>
+    </ion-row>
+  </form>
 </ion-content>

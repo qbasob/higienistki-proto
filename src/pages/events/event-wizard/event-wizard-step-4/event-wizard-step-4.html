@@ -8,48 +8,52 @@
 </ion-header>
 
 <ion-content>
-  <ion-item-group>
-    <ion-item-divider color="light">Uzyskaj zezwolenie i wykonaj zdjęcia - unikaj fotografowania Pacjentów</ion-item-divider>
-  </ion-item-group>
-  <ion-row>
-    <ion-col text-center>
-      <button ion-button>Zrób zdjęcie poczekalni</button>
-      <img src="assets/imgs/placeholder-image.jpg" class="photo">
-    </ion-col>
-  </ion-row>
-  <ion-list no-lines>
-    <ion-item>
-      <ion-label>Brak możliwości wykonania zdjęcia</ion-label>
-      <ion-toggle [(ngModel)]="noPhotoInsideWaiting"></ion-toggle>
-    </ion-item>
-    <ion-item *ngIf="noPhotoInsideWaiting">
-      <ion-label floating>Wpisz powód niewykonania zdjęcia</ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-  </ion-list>
+  <form novalidate [formGroup]="stepForm" (ngSubmit)="next()">
+    <ion-item-group>
+      <ion-item-divider color="light">Uzyskaj zezwolenie i wykonaj zdjęcia - unikaj fotografowania Pacjentów</ion-item-divider>
+    </ion-item-group>
+    <ion-row>
+      <ion-col text-center>
+        <img [src]="photosSrc.photoInsideWaiting" class="photo">
+        <input type="file" (change)="addPhoto($event, 'photoInsideWaiting')" id="file-input" style="display: none;" #fileInp1>
+        <button ion-button type="button" (click)="addPhotoClick(fileInp1)">Zrób zdjęcie</button>
+      </ion-col>
+    </ion-row>
+    <ion-list no-lines>
+      <ion-item>
+        <ion-label>Brak możliwości wykonania zdjęcia</ion-label>
+        <ion-toggle formControlName="noPhotoInsideWaiting"></ion-toggle>
+      </ion-item>
+      <ion-item *ngIf="stepForm.get('noPhotoInsideWaiting').value">
+        <ion-label floating>Wpisz powód niewykonania zdjęcia w poczekalni</ion-label>
+        <ion-input formControlName="noPhotoInsideWaitingWhy"></ion-input>
+      </ion-item>
+    </ion-list>
 
-  <ion-row>
-    <ion-col text-center>
-      <button ion-button>Zrób zdjęcie gabinetu</button>
-      <img src="assets/imgs/placeholder-image.jpg" class="photo">
-    </ion-col>
-  </ion-row>
-  <ion-list no-lines>
-    <ion-item>
-      <ion-label>Brak możliwości wykonania zdjęcia</ion-label>
-      <ion-toggle [(ngModel)]="photoInsideOffice"></ion-toggle>
-    </ion-item>
-    <ion-item *ngIf="photoInsideOffice">
-      <ion-label floating>Wpisz powód niewykonania zdjęcia</ion-label>
-      <ion-input></ion-input>
-    </ion-item>
-  </ion-list>
+    <ion-row>
+      <ion-col text-center>
+        <img [src]="photosSrc.photoInsideOffice" class="photo">
+        <input type="file" (change)="addPhoto($event, 'photoInsideOffice')" id="file-input" style="display: none;" #fileInp2>
+        <button ion-button type="button" (click)="addPhotoClick(fileInp2)">Zrób zdjęcie</button>
+      </ion-col>
+    </ion-row>
+    <ion-list no-lines>
+      <ion-item>
+        <ion-label>Brak możliwości wykonania zdjęcia</ion-label>
+        <ion-toggle formControlName="noPhotoInsideOffice"></ion-toggle>
+      </ion-item>
+      <ion-item *ngIf="stepForm.get('noPhotoInsideOffice').value">
+        <ion-label floating>Wpisz powód niewykonania zdjęcia w gabinecie</ion-label>
+        <ion-input formControlName="noPhotoInsideOfficeWhy"></ion-input>
+      </ion-item>
+    </ion-list>
 
-  <ion-row>
-    <ion-col text-center>
-      <button ion-button (click)="next()">Dalej</button>
-      <button ion-button color="light" (click)="back()">Wstecz</button>
-      <button ion-button color="light" (click)="cancel()">Anuluj</button>
-    </ion-col>
-  </ion-row>
+    <ion-row>
+      <ion-col text-center>
+        <button ion-button type="submit" [disabled]="!stepForm.valid">Dalej</button>
+        <button ion-button type="button" color="light" (click)="back()">Wstecz</button>
+        <button ion-button type="button" color="light" (click)="cancel()">Anuluj</button>
+      </ion-col>
+    </ion-row>
+  </form>
 </ion-content>

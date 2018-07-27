@@ -55,9 +55,9 @@
       </ion-item>
       <ion-item>
         <ion-label>Brak możliwości wykonania zdjęcia w gabinecie</ion-label>
-        <ion-toggle formControlName="photoInsideOffice"></ion-toggle>
+        <ion-toggle formControlName="noPhotoInsideOffice"></ion-toggle>
       </ion-item>
-      <ion-item *ngIf="eventForm.get('photoInsideOffice').value">
+      <ion-item *ngIf="eventForm.get('noPhotoInsideOffice').value">
         <ion-label floating>Wpisz powód niewykonania zdjęcia w gabinecie</ion-label>
         <ion-input formControlName="noPhotoInsideOfficeWhy"></ion-input>
       </ion-item>

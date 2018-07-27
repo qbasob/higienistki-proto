@@ -1,7 +1,7 @@
 <ion-tabs #eventWizardTabs>
   <ion-tab [root]="steps[0]" [enabled]="stepsEnabled[0]" [show]="stepsVisible[0]" (ionSelect)="updateTabs($event)" tabTitle="1. Wybór gabinetu"></ion-tab>
   <ion-tab [root]="steps[1]" [enabled]="stepsEnabled[1]" [show]="stepsVisible[1]" (ionSelect)="updateTabs($event)" tabTitle="2. Zdjęcie z zewnątrz"></ion-tab>
-  <ion-tab [root]="steps[2]" [enabled]="stepsEnabled[2]" [show]="stepsVisible[2]" (ionSelect)="updateTabs($event)" tabTitle="3. Dane podstawowe gabinetu"></ion-tab>
+  <ion-tab [root]="steps[2]" [enabled]="stepsEnabled[2]" [show]="stepsVisible[2]" (ionSelect)="updateTabs($event)" tabTitle="3. Dane podstawowe gabinetu" [rootParams]="tab3Params"></ion-tab>
   <ion-tab [root]="steps[3]" [enabled]="stepsEnabled[3]" [show]="stepsVisible[3]" (ionSelect)="updateTabs($event)" tabTitle="4. Zdjęcie wnętrza placówki"></ion-tab>
   <ion-tab [root]="steps[4]" [enabled]="stepsEnabled[4]" [show]="stepsVisible[4]" (ionSelect)="updateTabs($event)" tabTitle="5. Charakterystyka gabinetu"></ion-tab>
   <ion-tab [root]="steps[5]" [enabled]="stepsEnabled[5]" [show]="stepsVisible[5]" (ionSelect)="updateTabs($event)" tabTitle="6. Program dla higienistek"></ion-tab>

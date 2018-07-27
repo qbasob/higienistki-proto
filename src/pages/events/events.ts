@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController, Loading, ItemSliding, FabContainer } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
+
 import { PEvent } from '../../shared/event.model';
 import { EventWizardPage } from './event-wizard/event-wizard';
 import { EventViewPage } from './event-view/event-view';
@@ -26,10 +28,18 @@ export class EventsPage {
     public navParams: NavParams,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
-    private eventsStore: EventsStore
+    private eventsStore: EventsStore,
+    private storage: Storage
   ) {
     this.populateEvents();
-    this.noname = '<brak gabinetu>'
+    this.noname = '<brak gabinetu>';
+
+    this.storage.get('hasSeenTutorial')
+    .then((hasSeenTutorial) => {
+      if (!hasSeenTutorial) {
+        this.navCtrl.setRoot('WelcomeSlidesPage')
+      }
+    });
   }
 
   // dane

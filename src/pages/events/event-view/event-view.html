@@ -33,9 +33,33 @@
       </ion-note>
     </ion-item>
     <ion-item>
+       Brak możliwości wykonania zdjęcia w poczekalni
+      <ion-note item-end>
+        {{ event.noPhotoInsideWaiting ? 'Tak' : 'Nie' }}
+      </ion-note>
+    </ion-item>
+    <ion-item *ngIf="event.noPhotoInsideWaiting">
+      Powód niewykonania zdjęcia w poczekalni
+      <ion-note item-end>
+        {{ event.noPhotoInsideWaitingWhy }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
       Zdjęcie gabinetu
       <ion-note item-end>
         <img [src]="photosSrc.photoInsideOffice" class="photo">
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Brak możliwości wykonania zdjęcia w gabinecie
+      <ion-note item-end>
+        {{ event.noPhotoInsideOffice ? 'Tak' : 'Nie' }}
+      </ion-note>
+    </ion-item>
+    <ion-item *ngIf="event.noPhotoInsideOffice">
+      Powód niewykonania zdjęcia w gabinecie
+      <ion-note item-end>
+        {{ event.noPhotoInsideOfficeWhy }}
       </ion-note>
     </ion-item>
     <ion-item>

@@ -1,5 +1,6 @@
 import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import { NavController, NavParams, Events, Tabs } from 'ionic-angular';
+import { NavController, NavParams, Events, Tabs, LoadingController } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
 import { EventWizardStep1Page } from './event-wizard-step-1/event-wizard-step-1';
 import { EventWizardStep2Page } from './event-wizard-step-2/event-wizard-step-2';
 import { EventWizardStep3Page } from './event-wizard-step-3/event-wizard-step-3';
@@ -9,6 +10,12 @@ import { EventWizardStep6Page } from './event-wizard-step-6/event-wizard-step-6'
 import { EventWizardStep7Page } from './event-wizard-step-7/event-wizard-step-7';
 import { EventWizardStep8Page } from './event-wizard-step-8/event-wizard-step-8';
 import { EventWizardStep9Page } from './event-wizard-step-9/event-wizard-step-9';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Office } from '../../../shared/office.model';
+import { OfficesStore } from '../../../providers/offices-store/offices-store';
+import { EventsStore } from '../../../providers/events-store/events-store';
+
+// import { Person } from '../../../shared/person.model';
 
 @Component({
   selector: 'page-event-wizard',
@@ -20,12 +27,22 @@ export class EventWizardPage implements OnInit, OnDestroy {
   steps: any[];
   stepsEnabled: boolean[];
   stepsVisible: boolean[];
+  tab3Params: any;
   tab9Params: any;
+
+
+  private eventForm: FormGroup;
+  // private office: Office;
+  // private people: Array<Person>;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private events: Events
+    private tabEvents: Events,
+    private formBuilder: FormBuilder,
+    private officesStore: OfficesStore,
+    private eventsStore: EventsStore,
+    private loadingCtrl: LoadingController
   ) {
     this.steps = [];
     this.steps[0] = EventWizardStep1Page;
@@ -60,23 +77,87 @@ export class EventWizardPage implements OnInit, OnDestroy {
     this.stepsVisible[7] = false;
     this.stepsVisible[8] = false;
 
+    this.tab3Params = {};
     this.tab9Params = {};
+
+
+    this.eventForm = this.formBuilder.group({
+      id: null,
+      date: null,
+      photoOutside: [null, Validators.required],
+      photoInsideWaiting: null,
+      noPhotoInsideWaiting: null,
+      noPhotoInsideWaitingWhy: null,
+      photoInsideOffice: null,
+      noPhotoInsideOffice: null,
+      noPhotoInsideOfficeWhy: null,
+      isOfficeNetwork: null,
+      networkOfficesCount: null,
+      chairsCount: null,
+      doctorsCount: null,
+      hasOfficeHigienists: null,
+      higienistsCount: null,
+      isBuyingSonicare: null,
+      doQualify: null,
+      office: null,
+      people: null
+    });
   }
 
   // poniższe potrzebne żeby się Ionic nie wywalał po ponownym wejściu w tabsy
   ngOnInit () {
-    this.events.subscribe('event-wizard-change-tab', (from: number, to: number) => {
+    this.tabEvents.subscribe('event-wizard-change-tab', (from: number, to: number, eventData: any = {}) => {
       // enablowanie następnego kroku, tylko po kliknięciu w formularzu
       this.stepsEnabled[to] = true;
+      // jeżeli idziemy na stronę 2 to przekazujemy jej aktualne dane office
+      if (to === 2) {
+        this.tab3Params.office = this.eventForm.value.office;
+      }
       // jeżeli idziemy na ostatnią stronę, to przekazujemy jej from (żeby wiedziała czy był przeskok)
       if(to === 8) {
         this.tab9Params.from = from;
       }
       this.tabRef.select(to);
+      this.eventForm.patchValue(eventData);
+
+      console.log("eventData", eventData);
+      console.log("eventForm", this.eventForm.value);
+    });
+
+    this.tabEvents.subscribe('event-wizard-finish-tab', () => {
+      let loading = this.loadingCtrl.create({
+        content: 'Zapisywanie...'
+      });
+      loading.present();
+      // koniec formularza
+      // musimy zaktualizować/dodać office
+      const office = this.eventForm.value.office;
+      let officeSave: Observable<Office>;
+      // jeżeli nowy office
+      if (office.id === null) {
+        officeSave = this.officesStore.addRecord(office)
+      }
+      // jeżeli edytujemy office
+      else {
+        officeSave = this.officesStore.editRecord(office)
+      }
+
+      // po zapisie office dostajemy go z powrotem, podmieniamy w evencie i zapisujemy event
+      officeSave
+        .switchMap((office: Office) => {
+          this.eventForm.value.office = office;
+          return this.eventsStore.addRecord(this.eventForm.value);
+        })
+        .finally(() => {
+          loading.dismiss();
+          this.navCtrl.pop();
+        })
+        .subscribe()
     });
   }
   ngOnDestroy() {
-    this.events.unsubscribe('event-wizard-change-tab');
+    this.tabEvents.unsubscribe('event-wizard-change-tab');
+    this.tabEvents.unsubscribe('event-wizard-finish-tab');
   }
   updateTabs(event: any) {
     const currentIndex: number = event.index;

@@ -17,7 +17,6 @@ import { EventsStore } from '../providers/events-store/events-store';
 
 import { ENV } from '@app/env';
 import { AuthService } from '../providers/auth-service/auth-service';
-import { PhotoService } from '../providers/photo-service/photo-service';
 
 @Component({
   templateUrl: 'app.html',
@@ -34,6 +33,8 @@ import { PhotoService } from '../providers/photo-service/photo-service';
   ]
 })
 export class MyApp {
+  rootPage: any = 'LoginPage';
+
   @ViewChild(Nav) nav: Nav;
   public isOnline: boolean;
   private online$: Observable<Event>;
@@ -41,7 +42,6 @@ export class MyApp {
   public isDev: boolean;
 
   // rootPage: any = EventsPage;
-  rootPage: any = 'LoginPage';
 
   pages: Array<{title: string, component: any}>;
   // nie można DI NavControllera w Root Componencie, oficjalne rozwiązanie z dokumentacji Ionica:
@@ -80,13 +80,15 @@ export class MyApp {
       this.isOnline = false;
     });
 
-    this.storage.get('hasSeenTutorial')
-      .then((hasSeenTutorial) => {
-        if (!hasSeenTutorial) {
-          this.rootPage = 'WelcomeSlidesPage';
-        }
-        this.initializeApp();
-      });
+    // this.storage.get('hasSeenTutorial')
+    //   .then((hasSeenTutorial) => {
+    //     if (!hasSeenTutorial) {
+    //       this.rootPage = 'WelcomeSlidesPage';
+    //     }
+    //     this.initializeApp();
+    //   });
+
+    this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
