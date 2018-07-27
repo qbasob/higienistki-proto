@@ -107,6 +107,7 @@ export class EventWizardPage implements OnInit, OnDestroy {
       higienistsCount: null,
       isBuyingSonicare: null,
       doQualify: null,
+      additionalInfo: null,
       office: null,
       people: null
     });
@@ -155,11 +156,13 @@ export class EventWizardPage implements OnInit, OnDestroy {
       // przechodzimy na kolejny tab
       this.tabRef.select(to);
 
-      console.log("eventData", eventData);
-      console.log("eventForm", this.eventForm.value);
+      // console.log("eventData", eventData);
+      // console.log("eventForm", this.eventForm.value);
     });
 
-    this.tabEvents.subscribe('event-wizard-finish-tab', () => {
+    this.tabEvents.subscribe('event-wizard-finish-tab', (eventData: any = {}) => {
+      this.eventForm.patchValue(eventData);
+
       let loading = this.loadingCtrl.create({
         content: 'Zapisywanie...'
       });
@@ -180,9 +183,11 @@ export class EventWizardPage implements OnInit, OnDestroy {
       // musimy dodać ludzi
       const people = this.eventForm.value.people;
       let peopleSave: Array<Observable<Office>> = [];
-      people.forEach((person: Person) => {
-        peopleSave.push(this.peopleStore.addRecord(person));
-      });
+      if(people) {
+        people.forEach((person: Person) => {
+          peopleSave.push(this.peopleStore.addRecord(person));
+        });
+      }
 
       // zapisujemy office i people
       Observable.forkJoin(officeSave, ...peopleSave)

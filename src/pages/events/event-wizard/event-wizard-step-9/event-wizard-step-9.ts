@@ -1,32 +1,46 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, App, Events } from 'ionic-angular';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'page-event-wizard-step-9',
   templateUrl: 'event-wizard-step-9.html'
 })
 export class EventWizardStep9Page {
+  public stepForm: FormGroup;
+  private _stepData: any;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private alertCtrl: AlertController,
     private appCtrl: App,
-    private events: Events
+    private tabEvents: Events,
+    private formBuilder: FormBuilder
   ) { }
 
+  ngOnInit(): void {
+    this.stepForm = this.formBuilder.group({
+      additionalInfo: null
+    });
+  }
+
   finish() {
-    this.events.publish('event-wizard-finish-tab');
-    // this.appCtrl.getRootNav().pop();
+    if (this.stepForm.valid) {
+      this._stepData = Object.assign({}, this.stepForm.value);
+      this.tabEvents.publish('event-wizard-finish-tab', this._stepData);
+    }
+
   }
 
   back() {
     // mógł być przeskok z innej strony, musimy to sprawdzić i ew. wstecz do strony skąd był przeskok
     const fromPage = this.navParams.get('from');
-    this.events.publish('event-wizard-change-tab', 8, fromPage);
+    this.tabEvents.publish('event-wizard-change-tab', 8, fromPage);
   }
 
   anotherPerson() {
-    this.events.publish('event-wizard-change-tab', 8, 5);
+    this.tabEvents.publish('event-wizard-change-tab', 8, 5);
   }
 
   cancel() {

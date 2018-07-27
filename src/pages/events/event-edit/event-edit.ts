@@ -90,7 +90,8 @@ export class EventEditPage {
       hasOfficeHigienists: null,
       higienistsCount: null,
       isBuyingSonicare: null,
-      doQualify: null
+      doQualify: null,
+      additionalInfo: null
     });
 
     this.eventForm.patchValue(this.event);

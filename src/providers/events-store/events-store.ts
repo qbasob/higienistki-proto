@@ -132,21 +132,23 @@ export class EventsStore extends AbstractStore<PEvent> {
     const changedEvents: Array<PEvent> = [];
     this._dataStore.forEach((event, index) => {
       //lecimy po wszystkich person eventu
-      event.people.some((eventPerson, eventPersonIndex) => {
-        // szukamy po lokalnym id
-        if (eventPerson && eventPerson.localId === person.localId) {
-          // jeżeli isRemoved to usuwamy
-          if (person.isRemoved) {
-            this._dataStore[index].people[eventPersonIndex] = null;
+      if (event.people) {
+        event.people.some((eventPerson, eventPersonIndex) => {
+          // szukamy po lokalnym id
+          if (eventPerson && eventPerson.localId === person.localId) {
+            // jeżeli isRemoved to usuwamy
+            if (person.isRemoved) {
+              this._dataStore[index].people[eventPersonIndex] = null;
+            }
+            // w p.p szukamy po lokalnym id i aktualizujemy
+            else {
+              this._dataStore[index].people[eventPersonIndex] = person;
+            }
+            changedEvents.push(this._dataStore[index]);
+            return true;
           }
-          // w p.p szukamy po lokalnym id i aktualizujemy
-          else {
-            this._dataStore[index].people[eventPersonIndex] = person;
-          }
-          changedEvents.push(this._dataStore[index]);
-          return true;
-        }
-      });
+        });
+      }
     });
 
     // zapisujemy zmiany (wyemituje zmianę)

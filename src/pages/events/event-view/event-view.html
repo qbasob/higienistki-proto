@@ -123,6 +123,10 @@
           Rejestruję Uczestnika/Uczestniczkę programu dla Higienistek/Higienistów
       </span>
     </ion-item>
+    <ion-item>
+      <ion-label stacked>Informacje dodatkowe</ion-label>
+      <div item-content ion-text text-wrap padding-vertical text-left style="width:100%;">{{ event.additionalInfo }}</div>
+    </ion-item>
 
     <ion-item-group *ngIf="event.office as office">
       <ion-item-divider color="light">Gabinet</ion-item-divider>

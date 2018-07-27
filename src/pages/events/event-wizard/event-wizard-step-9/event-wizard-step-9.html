@@ -8,20 +8,21 @@
 </ion-header>
 
 <ion-content>
+  <form novalidate [formGroup]="stepForm" (ngSubmit)="finish()">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Informacje dodatkowe</ion-label>
+        <ion-textarea formControlName="additionalInfo"></ion-textarea>
+      </ion-item>
+    </ion-list>
 
-  <ion-list>
-    <ion-item>
-      <ion-label floating>Informacje dodatkowe</ion-label>
-      <ion-textarea></ion-textarea>
-    </ion-item>
-  </ion-list>
-
-  <ion-row>
-    <ion-col text-center>
-      <button ion-button (click)="finish()">Zakończ wizytę</button>
-      <button ion-button (click)="anotherPerson()">Rejestracja kolejnej osoby</button><br/>
-      <button ion-button color="light" (click)="back()">Wstecz</button>
-      <button ion-button color="light" (click)="cancel()">Anuluj</button>
-    </ion-col>
-  </ion-row>
+    <ion-row>
+      <ion-col text-center>
+        <button ion-button type="submit" [disabled]="!stepForm.valid">Zakończ wizytę</button>
+        <button ion-button type="button" (click)="anotherPerson()">Rejestracja kolejnej osoby</button><br/>
+        <button ion-button type="button" color="light" (click)="back()">Wstecz</button>
+        <button ion-button type="button" color="light" (click)="cancel()">Anuluj</button>
+      </ion-col>
+    </ion-row>
+  </form>
 </ion-content>

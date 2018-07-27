@@ -127,6 +127,11 @@
           <ion-label>Rejestruję Uczestnika/Uczestniczkę programu dla Higienistek/Higienistów</ion-label>
           <ion-radio value="yes"></ion-radio>
         </ion-item>
+
+        <ion-item>
+          <ion-label floating>Informacje dodatkowe</ion-label>
+          <ion-textarea formControlName="additionalInfo"></ion-textarea>
+        </ion-item>
       </ion-item-group>
 
       <ion-item-group *ngIf="eventRelations.office as office">

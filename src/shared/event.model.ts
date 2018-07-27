@@ -23,6 +23,8 @@ export class PEvent extends LocalModel {
     higienistsCount?: number;
     isBuyingSonicare?: string;
     doQualify?: string;
+    additionalInfo?: string;
+
     office?: Office;
     people?: Array<Person>;
 
