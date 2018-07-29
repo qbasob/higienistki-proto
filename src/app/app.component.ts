@@ -100,7 +100,8 @@ export class MyApp {
 
 
     if (this.authService.isLoggedIn()) {
-      this.rootPage = EventsPage;
+      // this.rootPage = EventsPage;
+      this.rootPage = PeoplePage;
     }
   }
 
