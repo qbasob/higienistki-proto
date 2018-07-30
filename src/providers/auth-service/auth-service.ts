@@ -25,7 +25,7 @@ export class AuthService {
   login(email: string, password: string): Observable<User> {
     // return this.http.post<User>(`${this._endpoint}/auth/login`, { email, password })
     // return this.http.post<User>(`${this._endpoint}/json_login`, { email, password })
-    return this.http.post<User>(`${this._endpoint}/login.json`, { email, password })
+    return this.http.post<User>(`${this._endpoint}/login`, { email, password })
       .do(res => this.setSession(res))
       .shareReplay();
       // We are calling shareReplay to prevent the receiver of this Observable from accidentally
@@ -36,7 +36,7 @@ export class AuthService {
     const token = this.getToken();
     // return this.http.post<User>(`${this._endpoint}/auth/login`, { token })
     // return this.http.post<User>(`${this._endpoint}/json_login`, { token })
-    return this.http.post<User>(`${this._endpoint}/login.json`, { token })
+    return this.http.post<User>(`${this._endpoint}/login`, { token })
       .do(res => this.setSession(res))
       .shareReplay();
   }
