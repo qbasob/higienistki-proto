@@ -7,7 +7,7 @@ export class PEvent extends LocalModel {
     localId?: string;
     name: string;
 
-    date?: Date;
+    visitDate?: Date;
     photoOutside?: File;
     photoInsideWaiting?: File;
     noPhotoInsideWaiting?: boolean;
