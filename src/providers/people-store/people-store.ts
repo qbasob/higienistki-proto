@@ -20,7 +20,7 @@ export class PeopleStore extends AbstractStore<Person> {
     http: HttpClient,
     storage: Storage
   ) {
-    const modelName = 'manage/people';
+    const modelName = 'people';
     super(modelName, http, storage);
   }
 }
