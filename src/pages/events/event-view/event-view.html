@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Wizyta {{event.name}} {{event.date | date: 'dd.MM.yyyy'}}</ion-title>
+    <ion-title>Wizyta {{event.name}} {{event?.office?.name}}, {{event.visitDate | date: 'dd.MM.yyyy'}}</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="presentPopover($event, event)">
         <ion-icon name="more"></ion-icon>
@@ -17,7 +17,7 @@
     <ion-item>
       Data wizyty
       <ion-note item-end>
-        {{ event.date | date: 'dd.MM.yyyy' }}
+        {{ event.visitDate | date: 'dd.MM.yyyy' }}
       </ion-note>
     </ion-item>
     <ion-item>

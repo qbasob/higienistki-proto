@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title *ngIf="event?.office?.name">Wizyta {{event?.office?.name}}, {{ event.date | date: 'dd.MM.yyyy' }}</ion-title>
+    <ion-title *ngIf="event?.office?.name">Wizyta {{event?.office?.name}}, {{ event.visitDate | date: 'dd.MM.yyyy' }}</ion-title>
     <ion-title *ngIf="!event?.office?.name">Brak gabinetu</ion-title>
   </ion-navbar>
 </ion-header>
@@ -19,7 +19,7 @@
       </ion-item> -->
       <ion-item>
         <ion-label>Data wizyty</ion-label>
-        <ion-datetime formControlName="date"></ion-datetime>
+        <ion-datetime formControlName="visitDate"></ion-datetime>
       </ion-item>
       <ion-item>
         Zdjęcie z zewnątrz

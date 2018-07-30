@@ -75,7 +75,7 @@ export class EventEditPage {
   ngOnInit(): void {
     this.eventForm = this.formBuilder.group({
       id: null,
-      date: null,
+      visitDate: null,
       photoOutside: [null, Validators.required],
       photoInsideWaiting: null,
       noPhotoInsideWaiting: null,
