@@ -15,6 +15,12 @@
 <ion-content>
   <ion-list>
     <ion-item>
+      NIP
+      <ion-note item-end>
+        {{ office.nip }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
       Ulica
       <ion-note item-end>
         {{ office.street }}
@@ -48,6 +54,12 @@
       Powiat
       <ion-note item-end>
         {{ office.county }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Województwo
+      <ion-note item-end>
+        {{ office.voivodeship }}
       </ion-note>
     </ion-item>
   </ion-list>

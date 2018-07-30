@@ -23,12 +23,14 @@ export class OfficeEditFormComponent implements OnInit {
     this.officeFormGroup = this.formBuilder.group({
       id: '',
       name: ['', [Validators.required, Validators.minLength(5)]],
+      nip: ['', [Validators.required, Validators.minLength(10)]],
       street: '',
       buildingNo: '',
       localNo: '',
       postal: '',
       city: '',
-      county: ''
+      county: '',
+      voivodeship: ''
     });
     this.officeFormGroup.patchValue(this.office);
 
