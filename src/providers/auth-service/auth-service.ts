@@ -23,7 +23,9 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<User> {
-    return this.http.post<User>(`${this._endpoint}/auth/login`, { email, password })
+    // return this.http.post<User>(`${this._endpoint}/auth/login`, { email, password })
+    // return this.http.post<User>(`${this._endpoint}/json_login`, { email, password })
+    return this.http.post<User>(`${this._endpoint}/login.json`, { email, password })
       .do(res => this.setSession(res))
       .shareReplay();
       // We are calling shareReplay to prevent the receiver of this Observable from accidentally
@@ -32,13 +34,16 @@ export class AuthService {
 
   public refreshToken(): Observable<User> {
     const token = this.getToken();
-    return this.http.post<User>(`${this._endpoint}/auth/login`, { token })
+    // return this.http.post<User>(`${this._endpoint}/auth/login`, { token })
+    // return this.http.post<User>(`${this._endpoint}/json_login`, { token })
+    return this.http.post<User>(`${this._endpoint}/login.json`, { token })
       .do(res => this.setSession(res))
       .shareReplay();
   }
 
   private setSession(authResult) {
     const decoded = jwt_decode(authResult.access_token);
+    // const decoded = jwt_decode(authResult.access_token, { header: true });
     const expiresAt = moment.unix(decoded.exp).format('x');
 
     localStorage.setItem('access_token', authResult.access_token);

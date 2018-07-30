@@ -1,8 +1,8 @@
 import { LocalModel } from "./local.model";
 
 export enum Gender {
-    Pani,
-    Pan
+    Pani = 'F',
+    Pan = 'M'
 }
 
 export class Person extends LocalModel {

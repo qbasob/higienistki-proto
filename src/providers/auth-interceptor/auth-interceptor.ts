@@ -20,9 +20,11 @@ export class AuthInterceptor implements HttpInterceptor {
   private setHeader(req: HttpRequest<any>): HttpRequest<any> {
     const idToken = this.authService.getToken();
     const cloned = req.clone({
-      headers: req.headers.set("Authorization",
-        "Bearer " + idToken)
+      // headers: req.headers.set("Authorization",
+      //   "Bearer " + idToken)
+      headers: req.headers.set("AuthToken", idToken)
     });
+    
     return cloned;
   }
 
@@ -37,7 +39,7 @@ export class AuthInterceptor implements HttpInterceptor {
     }
 
     // jeżeli logowanie, to puszczamy niezmieniony request (pętliło się przy refreshTokenie)
-    if (~req.url.indexOf('/auth/login')) {
+    if (~req.url.indexOf('/login')) {
       return next.handle(req);
     }
 
