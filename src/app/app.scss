@@ -40,3 +40,9 @@
     color: #fff;
     text-align: center;
 }
+
+.bar-button-default-md:hover:not(.disable-hover) {
+    &:hover {
+        color: #76aecb;
+    }
+}
