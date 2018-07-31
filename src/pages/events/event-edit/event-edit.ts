@@ -1,10 +1,13 @@
+// https://medium.com/@luukgruijs/validating-reactive-forms-with-default-and-custom-form-field-validators-in-angular-5586dc51c4ae
+// https://stackblitz.com/edit/angular-zhjoqj?file=app%2Frequired-if.directive.ts
+
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
 // import { Observable } from 'rxjs/Observable';
 import { PEvent } from '../../../shared/event.model';
 import { Office } from '../../../shared/office.model';
 import { Person } from '../../../shared/person.model';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms'; // FormControl
 import { EventsStore } from '../../../providers/events-store/events-store';
 import { OfficesStore } from '../../../providers/offices-store/offices-store';
 import { PeopleStore } from '../../../providers/people-store/people-store';
@@ -18,6 +21,8 @@ import { PersonViewPage } from '../../people/person-view/person-view';
 import { PersonViewAcceptPage } from '../../people/person-view-accept/person-view-accept';
 import { PersonEditPage } from '../../people/person-edit/person-edit';
 import { SafeUrl } from '@angular/platform-browser';
+
+// import { CustomValidators } from '../../../validators/custom-validators';
 
 @Component({
   selector: 'page-event-edit',
@@ -78,18 +83,31 @@ export class EventEditPage {
       visitDate: null,
       photoOutside: [null, Validators.required],
       photoInsideWaiting: null,
-      noPhotoInsideWaiting: null,
+      noPhotoInsideWaiting: false,
       noPhotoInsideWaitingWhy: null,
+
+      // noPhotoInsideWaitingWhy: new FormControl(null,
+      //   Validators.compose([
+      //     EventValidator.validData
+      //     // Validators.maxLength(25),
+      //     // Validators.minLength(5),
+      //     // Validators.pattern('^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+$'),
+      //     // Validators.required
+      //   ])
+      // ),
+
+      // noPhotoInsideWaitingWhy: [null, [CustomValidators.validAaa]],
+
       photoInsideOffice: null,
-      noPhotoInsideOffice: null,
+      noPhotoInsideOffice: false,
       noPhotoInsideOfficeWhy: null,
-      isOfficeNetwork: null,
+      isOfficeNetwork: false,
       networkOfficesCount: null,
       chairsCount: null,
       doctorsCount: null,
-      hasOfficeHigienists: null,
+      hasOfficeHigienists: false,
       higienistsCount: null,
-      isBuyingSonicare: null,
+      isBuyingSonicare: false,
       doQualify: null,
       additionalInfo: null
     });

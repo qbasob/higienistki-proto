@@ -34,7 +34,7 @@
           </div>
         </ion-note>
       </ion-item>
-      <ion-item>
+      <ion-item *ngIf="eventForm.get('noPhotoInsideWaiting').value==false">
         Zdjęcie poczekalni
         <ion-note item-end text-center>
           <img [src]="photosSrc.photoInsideWaiting" class="photo">
@@ -50,7 +50,7 @@
         <ion-label floating>Wpisz powód niewykonania zdjęcia w poczekalni</ion-label>
         <ion-input formControlName="noPhotoInsideWaitingWhy"></ion-input>
       </ion-item>
-      <ion-item>
+      <ion-item *ngIf="eventForm.get('noPhotoInsideOffice').value==false">
         Zdjęcie gabinetu
         <ion-note item-end text-center>
           <img [src]="photosSrc.photoInsideOffice" class="photo">
@@ -101,7 +101,7 @@
 
         <ion-item>
           <ion-label>Tak, na własny użytek</ion-label>
-          <ion-radio value="yes"></ion-radio>
+          <ion-radio value="yes_own"></ion-radio>
         </ion-item>
 
         <ion-item>

@@ -35,10 +35,10 @@ export class EventWizardStep4Page implements OnInit {
   ngOnInit(): void {
     this.stepForm = this.formBuilder.group({
       photoInsideWaiting: null,
-      noPhotoInsideWaiting: null,
+      noPhotoInsideWaiting: false,
       noPhotoInsideWaitingWhy: null,
       photoInsideOffice: null,
-      noPhotoInsideOffice: null,
+      noPhotoInsideOffice: false,
       noPhotoInsideOfficeWhy: null,
     });
   }

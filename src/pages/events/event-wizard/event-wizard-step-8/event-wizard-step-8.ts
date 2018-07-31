@@ -32,11 +32,11 @@ export class EventWizardStep8Page {
 
   ngOnInit(): void {
     this.stepForm = this.formBuilder.group({
-      agreeReg: null,
-      agreeMark1: null,
-      agreeMark2: null,
-      agreeMark3: null,
-      agreeMark4: null,
+      agreeReg: false,
+      agreeMark1: false,
+      agreeMark2: false,
+      agreeMark3: false,
+      agreeMark4: false,
     });
     this.stepForm.patchValue(this.person);
   }

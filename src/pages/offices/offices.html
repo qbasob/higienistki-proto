@@ -28,8 +28,10 @@
     <ion-item-sliding *ngFor="let office of offices$ | async" #slidingItem>
       <button ion-item (click)="details(office)"  [disabled]="office.isRemoved">
         {{office.name}}
-        <ion-note item-end *ngIf="office.needSync && !office.isRemoved">
-          <ion-icon name="alert" color="danger"></ion-icon>
+        <ion-note item-end>
+          <ion-icon *ngIf="office.needSync && !office.isRemoved" name="alert" color="danger"></ion-icon>
+          <ion-icon *ngIf="office.needSync && office.isRemoved" name="remove-circle" color="danger"></ion-icon>
+          {{office.city}}
         </ion-note>
         <ion-note item-end *ngIf="office.needSync && office.isRemoved">
           <ion-icon name="remove-circle" color="danger"></ion-icon>

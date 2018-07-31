@@ -22,13 +22,13 @@ export class EventWizardStep5Page implements OnInit {
 
   ngOnInit(): void {
     this.stepForm = this.formBuilder.group({
-      isOfficeNetwork: null,
+      isOfficeNetwork: false,
       networkOfficesCount: null,
       chairsCount: null,
       doctorsCount: null,
-      hasOfficeHigienists: null,
+      hasOfficeHigienists: false,
       higienistsCount: null,
-      isBuyingSonicare: null
+      isBuyingSonicare: false
     });
   }
 

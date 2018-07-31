@@ -43,6 +43,8 @@ import { OfficesStore } from '../providers/offices-store/offices-store';
 import { AuthService } from '../providers/auth-service/auth-service';
 import { PhotoService } from '../providers/photo-service/photo-service';
 
+// import { CustomValidators } from '../validators/custom-validators';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -125,6 +127,7 @@ import { PhotoService } from '../providers/photo-service/photo-service';
       useClass: AuthInterceptor,
       multi: true
     },
+    // CustomValidators
   ]
 })
 export class AppModule {}
