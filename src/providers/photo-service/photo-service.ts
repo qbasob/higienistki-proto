@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+// import { HttpHeaders } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 import { Injectable } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
@@ -26,9 +27,9 @@ export class PhotoService {
     this._apiUrl = `${ENV.endpoint}/photos`;
   }
 
-  private _generatePhototId(): string {
+  private _generatePhotoId(): string {
     const timestamp = (new Date().getTime() / 1000 | 0).toString(16);
-    return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function () {
+    return 'local_' +timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function () {
       return (Math.random() * 16 | 0).toString(16);
     }).toLowerCase();
   }
@@ -87,7 +88,7 @@ export class PhotoService {
   }
 
   public addPhoto(file: File): Observable<string> {
-    const photoId = this._generatePhototId();
+    const photoId = this._generatePhotoId();
     const photo: PhotoObject = {
       photoId,
       file
