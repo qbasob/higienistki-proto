@@ -126,7 +126,9 @@ export abstract class AbstractStore<T extends LocalModel> {
       return this.http.post<T>(this._apiUrl + this._apiSuffix, cloneRecord);
     }
     // w p.p. normalny edit
-    return this.http.put<T>(`${this._apiUrl}/${record.id}${this._apiSuffix}`, cloneRecord);
+    // return this.http.put<T>(`${this._apiUrl}/${record.id}${this._apiSuffix}`, cloneRecord);
+    // PUT na home.pl nie dziala???
+    return this.http.post<T>(`${this._apiUrl}/${record.id}${this._apiSuffix}`, cloneRecord);
   }
 
   private _removeFromServer(record: T): Observable<T> {
