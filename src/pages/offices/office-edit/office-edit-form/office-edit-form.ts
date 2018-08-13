@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Office } from '../../../../shared/office.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AlertController } from 'ionic-angular';
 
 @Component({
   selector: 'office-edit-form',
@@ -17,6 +18,7 @@ export class OfficeEditFormComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private alertCtrl: AlertController
   ) { }
 
   ngOnInit() {
@@ -38,5 +40,23 @@ export class OfficeEditFormComponent implements OnInit {
     this.officeFormGroup.patchValue(this.office);
 
     this.onFormInit.emit(this.officeFormGroup);
+  }
+
+  nameInfo() {
+    const alert = this.alertCtrl.create({
+      title: 'Co to oznacza?',
+      subTitle: 'Nazwa pod jaką występuje publicznie gabinet/szyld gabinetu.',
+      buttons: ['Rozumiem']
+    });
+    alert.present();
+  }
+
+  locationInfo() {
+    const alert = this.alertCtrl.create({
+      title: 'Co to oznacza?',
+      subTitle: 'Np. w podwórzu, wewnątrz centrum handlowego, w większej przychodni etc.',
+      buttons: ['Rozumiem']
+    });
+    alert.present();
   }
 }

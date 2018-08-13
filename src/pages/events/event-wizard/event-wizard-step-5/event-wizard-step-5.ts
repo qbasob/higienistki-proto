@@ -24,8 +24,8 @@ export class EventWizardStep5Page implements OnInit {
     this.stepForm = this.formBuilder.group({
       isOfficeNetwork: false,
       networkOfficesCount: null,
-      chairsCount: null,
-      doctorsCount: null,
+      chairsCount: [null, [Validators.required, Validators.min(1)]],
+      doctorsCount: [null, [Validators.required, Validators.min(1)]],
       hasOfficeHigienists: false,
       higienistsCount: null,
       isBuyingSonicare: false

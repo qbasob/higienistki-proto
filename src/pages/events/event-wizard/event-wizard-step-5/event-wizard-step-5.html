@@ -18,14 +18,35 @@
         <ion-label floating>Liczba placówek w ramach sieci</ion-label>
         <ion-input type="number" formControlName="networkOfficesCount"></ion-input>
       </ion-item>
+
+      <!-- LICZBA FOTELI -->
       <ion-item>
-        <ion-label floating>Liczba stanowisk/foteli w gabinecie</ion-label>
+        <ion-label floating>Liczba stanowisk/foteli w gabinecie *</ion-label>
         <ion-input type="number" formControlName="chairsCount"></ion-input>
       </ion-item>
+      <span ion-text *ngIf="stepForm.get('chairsCount').dirty && stepForm.get('chairsCount').invalid" color="danger" padding-left>
+        <span *ngIf="stepForm.get('chairsCount').errors.required">
+          To pole jest wymagane
+        </span>
+        <span *ngIf="stepForm.get('chairsCount').errors.min">
+          Wymagane minimum 1 stanowisko
+        </span>
+      </span>
+
+      <!-- LICZBA LEKARZY -->
       <ion-item>
-        <ion-label floating>Liczba lekarzy pracujących gabinecie</ion-label>
+        <ion-label floating>Liczba lekarzy pracujących gabinecie *</ion-label>
         <ion-input type="number" formControlName="doctorsCount"></ion-input>
       </ion-item>
+      <span ion-text *ngIf="stepForm.get('doctorsCount').dirty && stepForm.get('doctorsCount').invalid" color="danger" padding-left>
+        <span *ngIf="stepForm.get('doctorsCount').errors.required">
+          To pole jest wymagane
+        </span>
+        <span *ngIf="stepForm.get('doctorsCount').errors.min">
+          Wymagany minimum 1 lekarz
+        </span>
+      </span>
+
       <ion-item>
         <ion-label>Czy w gabinecie są higienistki/higieniści</ion-label>
         <ion-toggle formControlName="hasOfficeHigienists"></ion-toggle>
