@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Person, Gender } from '../../../../shared/person.model';
 import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { CustomValidators } from '../../../../validators/custom-validators';
 
 @Component({
   selector: 'person-edit-form',
@@ -26,8 +27,8 @@ export class PersonEditFormComponent implements OnInit {
       name: [null, [Validators.required, Validators.minLength(5)]],
       gender: [Gender.Pani, Validators.required],
       email: [null, [Validators.required, this.customEmailValidator]],
-      phone: null,
-      officesNo: null,
+      phone: [null, Validators.required],
+      officesNo: [null, Validators.required],
       sonicareUser: false,
       sonicareRecom: false,
       wantCodes: false,

@@ -17,17 +17,25 @@
           {{ event.date | date: 'dd.MM.yyyy' }}
         </ion-note>
       </ion-item> -->
+
+      <!-- DATA WIZYTY -->
       <ion-item>
-        <ion-label>Data wizyty</ion-label>
+        <ion-label>Data wizyty *</ion-label>
         <ion-datetime formControlName="visitDate"></ion-datetime>
       </ion-item>
+      <span ion-text *ngIf="eventForm.get('visitDate').dirty && eventForm.get('visitDate').invalid" color="danger" padding-left>
+        <span *ngIf="eventForm.get('visitDate').errors.required">
+          To pole jest wymagane
+        </span>
+      </span>
+
       <ion-item>
-        Zdjęcie z zewnątrz
+        Zdjęcie z zewnątrz *
         <ion-note item-end text-center>
           <img [src]="photosSrc.photoOutside" class="photo">
           <input type="file" (change)="addPhoto($event, 'photoOutside')" id="file-input" style="display: none;" #fileInp0>
           <button ion-button type="button" (click)="addPhotoClick(fileInp0)">Zrób zdjęcie</button>
-          <div ion-text *ngIf="eventForm.get('photoOutside').invalid" color="danger" padding-left>
+          <div ion-text *ngIf="eventForm.get('photoOutside').dirty && eventForm.get('photoOutside').invalid" color="danger" padding-left>
             <span *ngIf="eventForm.get('photoOutside').errors.required">
               To pole jest wymagane
             </span>
@@ -70,18 +78,41 @@
         <ion-label>Gabinet jest częścią sieci gabinetów</ion-label>
         <ion-toggle formControlName="isOfficeNetwork"></ion-toggle>
       </ion-item>
+
+      <!-- LICZBA PLACÓWEK -->
       <ion-item *ngIf="eventForm.get('isOfficeNetwork').value">
         <ion-label floating>Liczba placówek w ramach sieci</ion-label>
         <ion-input type="number" formControlName="networkOfficesCount" ></ion-input>
       </ion-item>
+
+      <!-- LICZBA FOTELI -->
       <ion-item>
-        <ion-label floating>Liczba stanowisk/foteli w gabinecie</ion-label>
+        <ion-label floating>Liczba stanowisk/foteli w gabinecie *</ion-label>
         <ion-input type="number" formControlName="chairsCount"></ion-input>
       </ion-item>
+      <span ion-text *ngIf="eventForm.get('chairsCount').dirty && eventForm.get('chairsCount').invalid" color="danger" padding-left>
+        <span *ngIf="eventForm.get('chairsCount').errors.required">
+          To pole jest wymagane
+        </span>
+        <span *ngIf="eventForm.get('chairsCount').errors.min">
+          Wymagane minimum 1 stanowisko
+        </span>
+      </span>
+
+      <!-- LICZBA LEKARZY -->
       <ion-item>
-        <ion-label floating>Liczba lekarzy pracujących gabinecie</ion-label>
+        <ion-label floating>Liczba lekarzy pracujących gabinecie *</ion-label>
         <ion-input type="number" formControlName="doctorsCount"></ion-input>
       </ion-item>
+      <span ion-text *ngIf="eventForm.get('doctorsCount').dirty && eventForm.get('doctorsCount').invalid" color="danger" padding-left>
+        <span *ngIf="eventForm.get('doctorsCount').errors.required">
+          To pole jest wymagane
+        </span>
+        <span *ngIf="eventForm.get('doctorsCount').errors.min">
+          Wymagany minimum 1 lekarz
+        </span>
+      </span>
+
       <ion-item>
         <ion-label>Czy w gabinecie są higienistki/higieniści</ion-label>
         <ion-toggle formControlName="hasOfficeHigienists"></ion-toggle>

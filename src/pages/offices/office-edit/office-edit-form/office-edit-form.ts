@@ -21,16 +21,19 @@ export class OfficeEditFormComponent implements OnInit {
 
   ngOnInit() {
     this.officeFormGroup = this.formBuilder.group({
-      id: '',
-      name: ['', [Validators.required, Validators.minLength(5)]],
-      nip: ['', [Validators.required, Validators.minLength(10)]],
-      street: '',
-      buildingNo: '',
-      localNo: '',
-      postal: '',
-      city: '',
-      county: '',
-      voivodeship: ''
+      id: null,
+      name: [null, [Validators.required, Validators.minLength(5)]],
+      nip: [null, Validators.required],
+      street: [null, Validators.required],
+      buildingNo: [null, Validators.required],
+      localNo: null,
+      postal: [null, Validators.required],
+      city: [null, Validators.required],
+      // county: null,
+      voivodeship: [null, Validators.required],
+      phone: [null, Validators.required],
+      krsName: [null, Validators.required],
+      locationInfo: null
     });
     this.officeFormGroup.patchValue(this.office);
 

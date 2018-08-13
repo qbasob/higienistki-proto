@@ -80,31 +80,18 @@ export class EventEditPage {
   ngOnInit(): void {
     this.eventForm = this.formBuilder.group({
       id: null,
-      visitDate: null,
+      visitDate: [null, Validators.required],
       photoOutside: [null, Validators.required],
       photoInsideWaiting: null,
       noPhotoInsideWaiting: false,
       noPhotoInsideWaitingWhy: null,
-
-      // noPhotoInsideWaitingWhy: new FormControl(null,
-      //   Validators.compose([
-      //     EventValidator.validData
-      //     // Validators.maxLength(25),
-      //     // Validators.minLength(5),
-      //     // Validators.pattern('^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+$'),
-      //     // Validators.required
-      //   ])
-      // ),
-
-      // noPhotoInsideWaitingWhy: [null, [CustomValidators.validAaa]],
-
       photoInsideOffice: null,
       noPhotoInsideOffice: false,
       noPhotoInsideOfficeWhy: null,
       isOfficeNetwork: false,
       networkOfficesCount: null,
-      chairsCount: null,
-      doctorsCount: null,
+      chairsCount: [null, [Validators.required, Validators.min(1)]],
+      doctorsCount: [null, [Validators.required, Validators.min(1)]],
       hasOfficeHigienists: false,
       higienistsCount: null,
       isBuyingSonicare: false,

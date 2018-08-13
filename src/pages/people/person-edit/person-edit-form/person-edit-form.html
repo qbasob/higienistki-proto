@@ -1,7 +1,7 @@
 <ion-list [formGroup]="personFormGroup">
   <ion-item>
     <ion-label floating>
-      Imię i nazwisko
+      Imię i nazwisko *
     </ion-label>
     <ion-input type="text" formControlName="name"></ion-input>
   </ion-item>
@@ -14,14 +14,19 @@
     </span>
   </span>
   <ion-item>
-    <ion-label floating>Zwrot grzecznościowy</ion-label>
+    <ion-label floating>Zwrot grzecznościowy *</ion-label>
     <ion-select formControlName="gender">
       <ion-option value="{{Gender.Pani}}">Pani</ion-option>
       <ion-option value="{{Gender.Pan}}">Pan</ion-option>
     </ion-select>
   </ion-item>
+  <span ion-text *ngIf="personFormGroup.get('gender').dirty && personFormGroup.get('gender').invalid" color="danger" padding-left>
+    <span *ngIf="personFormGroup.get('gender').errors.required">
+      To pole jest wymagane
+    </span>
+  </span>
   <ion-item>
-    <ion-label floating>Adres E-mail</ion-label>
+    <ion-label floating>Adres E-mail *</ion-label>
     <ion-input type="email" formControlName="email"></ion-input>
   </ion-item>
   <span ion-text *ngIf="personFormGroup.get('email').dirty && personFormGroup.get('email').invalid" color="danger" padding-left>
@@ -32,14 +37,31 @@
       Nieprawidłowy adres e-mail
     </span>
   </span>
-  <ion-item>
-    <ion-label floating>Telefon komórkowy</ion-label>
+  <!-- <ion-item>
+    <ion-label floating>Telefon komórkowy *</ion-label>
     <ion-input type="text" formControlName="phone"></ion-input>
-  </ion-item>
+  </ion-item> -->
+  <ion-input-mask
+    type="text"
+    label="Telefon komórkowy *"
+    typeLabel="floating"
+    formControlName="phone"
+    mask="000-000-000">
+  </ion-input-mask>
+  <span ion-text *ngIf="personFormGroup.get('phone').dirty && personFormGroup.get('phone').invalid" color="danger" padding-left>
+    <span *ngIf="personFormGroup.get('phone').errors.required">
+      To pole jest wymagane
+    </span>
+  </span>
   <ion-item>
-    <ion-label floating>Liczba gabinetów</ion-label>
+    <ion-label floating>Liczba gabinetów *</ion-label>
     <ion-input type="number" formControlName="officesNo"></ion-input>
   </ion-item>
+  <span ion-text *ngIf="personFormGroup.get('officesNo').dirty && personFormGroup.get('officesNo').invalid" color="danger" padding-left>
+    <span *ngIf="personFormGroup.get('officesNo').errors.required">
+      To pole jest wymagane
+    </span>
+  </span>
   <ion-item>
     <ion-label [ngSwitch]="personFormGroup.get('gender').value">
       <span *ngSwitchCase="Gender.Pani">Użytkowniczka</span>

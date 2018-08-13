@@ -91,7 +91,7 @@ export class EventWizardPage implements OnInit, OnDestroy {
 
     this.eventForm = this.formBuilder.group({
       id: null,
-      date: null,
+      visitDate: null,
       photoOutside: [null, Validators.required],
       photoInsideWaiting: null,
       noPhotoInsideWaiting: null,
@@ -198,7 +198,7 @@ export class EventWizardPage implements OnInit, OnDestroy {
 
           this.eventForm.value.office = office;
           this.eventForm.value.people = people;
-          this.eventForm.value.date = new Date().toISOString();
+          this.eventForm.value.visitDate = new Date().toISOString();
 
           // wiem że subscribe w subscribe ale już nie mam siły :P
           // po urlopie pomyślę jak połączyć forkJoin ze switchMap
@@ -215,7 +215,7 @@ export class EventWizardPage implements OnInit, OnDestroy {
       /*officeSave
         .switchMap((office: Office) => {
           this.eventForm.value.office = office;
-          this.eventForm.value.date = new Date().toISOString();
+          this.eventForm.value.visitDate = new Date().toISOString();
           return this.eventsStore.addRecord(this.eventForm.value);
         })
         .finally(() => {

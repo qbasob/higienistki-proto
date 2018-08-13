@@ -7,6 +7,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../providers/auth-interceptor/auth-interceptor';
+import { IonMaskModule } from '@pluritech/ion-mask';
 import { MyApp } from './app.component';
 
 import { EventsPage } from '../pages/events/events';
@@ -80,7 +81,8 @@ import { PhotoService } from '../providers/photo-service/photo-service';
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    IonMaskModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [

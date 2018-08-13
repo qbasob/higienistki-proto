@@ -10,8 +10,12 @@ export class Office extends LocalModel {
     localNo?: string;
     postal?: string;
     city?: string;
-    county?: string;
+    // county?: string;
     voivodeship?: string;
+
+    phone?: string;
+    krsName?: string;
+    locationInfo?: string;
 
     serverLastEditedDate?: number;
     needSync?: boolean;
