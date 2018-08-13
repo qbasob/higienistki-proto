@@ -3,13 +3,13 @@ import { FormControl, Validators } from '@angular/forms';
 export class CustomValidators extends Validators {
 
 	static validAaa(fc: FormControl) {
-		// console.log('fcfcfcfcfcfcfcfc', fc.value);
-		// let val = fc.value?.toLowerCase();
-		// console.log(fc.errors);
-		// return (null);
+		const fg = fc.parent;
+		if (fg) {
+			console.log("NAME VALUE:", fg.get('name').value);
+		}
+
 		if (fc.value === "tttta" || fc.value === "123abc") {
-			return ({ validData: true });
-		// 	return true;
+			return { validData: true };
 		} else {
 			return null;
 		}
