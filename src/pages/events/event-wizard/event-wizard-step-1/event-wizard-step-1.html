@@ -10,18 +10,18 @@
 <ion-content>
   <ion-item-group>
     <ion-item-divider color="light">Wskaż gabinet który odwiedzasz</ion-item-divider>
-    <!-- <ion-item>
+    <ion-item>
       <ion-label floating>Miejscowość</ion-label>
-      <ion-select>
-        <ion-option *ngFor="let city of cities">
-          {{city}}
+      <ion-select (ionChange)="selectCity($event)" [disabled]="isNewOffice" #citySelect>
+        <ion-option [value]="city" *ngFor="let city of cities">
+          {{ city }}
         </ion-option>
       </ion-select>
-    </ion-item> -->
+    </ion-item>
     <ion-item>
       <ion-label floating>Nazwa</ion-label>
       <ion-select (ionChange)="selectOffice($event)" [disabled]="isNewOffice" #officeSelect>
-        <ion-option [value]="office.localId" *ngFor="let office of offices">
+        <ion-option [value]="office.localId" *ngFor="let office of filteredOffices">
           {{office.name}}
         </ion-option>
       </ion-select>

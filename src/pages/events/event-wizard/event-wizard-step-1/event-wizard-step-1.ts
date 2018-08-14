@@ -9,8 +9,9 @@ import { FormGroup, FormBuilder } from '@angular/forms';
   templateUrl: 'event-wizard-step-1.html'
 })
 export class EventWizardStep1Page implements OnInit {
-  cities: string[];
+  public cities: Set<string>;
   public offices: Array<Office>;
+  public filteredOffices: Array<Office>;
   public office: Office;
   public stepForm: FormGroup;
   private _stepData: any;
@@ -26,8 +27,14 @@ export class EventWizardStep1Page implements OnInit {
     private formBuilder: FormBuilder
 
   ) {
+
     this.officesStore.records$.subscribe((offices) => {
       this.offices = offices;
+      this.filteredOffices = offices;
+      this.cities = new Set();
+      offices.forEach((office, index) => {
+        this.cities.add(office.city);
+      });
     });
 
     this.office = { id: null, name: '' };
@@ -50,6 +57,13 @@ export class EventWizardStep1Page implements OnInit {
     this.isNewOffice = true;
   }
 
+  selectCity(city) {
+    this.filteredOffices = this.offices.filter((office) => {
+      if (office.city === city) {
+        return true;
+      }
+    });
+  }
 
   selectOffice(officeLocalId) {
     this.offices.some((office) => {
