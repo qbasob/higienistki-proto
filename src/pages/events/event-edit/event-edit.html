@@ -128,10 +128,19 @@
       </ion-item>
 
       <!-- LICZBA PLACÓWEK -->
-      <ion-item *ngIf="eventForm.get('isOfficeNetwork').value">
+      <ion-item [hidden]="eventForm.get('isOfficeNetwork').value === false">
         <ion-label floating>Liczba placówek w ramach sieci</ion-label>
         <ion-input type="number" formControlName="networkOfficesCount" ></ion-input>
       </ion-item>
+      <span [hidden]="eventForm.get('isOfficeNetwork').value === false" ion-text *ngIf="(eventForm.get('networkOfficesCount').dirty || formDir.submitted) && eventForm.get('networkOfficesCount').invalid"
+        color="danger" padding-left>
+        <span *ngIf="eventForm.get('networkOfficesCount').errors.required">
+          To pole jest wymagane
+        </span>
+        <span *ngIf="eventForm.get('networkOfficesCount').errors.min">
+          Wymagany minimum 1 gabinet
+        </span>
+      </span>
 
       <!-- LICZBA FOTELI -->
       <ion-item>
@@ -165,10 +174,21 @@
         <ion-label>Czy w gabinecie są higienistki/higieniści</ion-label>
         <ion-toggle formControlName="hasOfficeHigienists"></ion-toggle>
       </ion-item>
-      <ion-item *ngIf="eventForm.get('hasOfficeHigienists').value">
+
+      <!-- LICZBA HIGIENISTEK -->
+      <ion-item [hidden]="eventForm.get('hasOfficeHigienists').value === false">
         <ion-label floating>Liczba higienistek/higienistów</ion-label>
         <ion-input type="number" formControlName="higienistsCount"></ion-input>
       </ion-item>
+      <span [hidden]="eventForm.get('hasOfficeHigienists').value === false" ion-text *ngIf="(eventForm.get('higienistsCount').dirty || formDir.submitted) && eventForm.get('higienistsCount').invalid"
+        color="danger" padding-left>
+        <span *ngIf="eventForm.get('higienistsCount').errors.required">
+          To pole jest wymagane
+        </span>
+        <span *ngIf="eventForm.get('higienistsCount').errors.min">
+          Wymagana/y minimum 1 higienistka/higienista
+        </span>
+      </span>
 
       <ion-item-group radio-group formControlName="isBuyingSonicare">
         <ion-item-divider color="light">Czy kupują produkty Sonicare?</ion-item-divider>

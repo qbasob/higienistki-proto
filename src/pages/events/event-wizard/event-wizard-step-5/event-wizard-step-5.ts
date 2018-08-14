@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams, AlertController, App, Events } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { CustomValidators } from '../../../../validators/custom-validators';
 
 
 @Component({
@@ -23,16 +24,21 @@ export class EventWizardStep5Page implements OnInit {
   ngOnInit(): void {
     this.stepForm = this.formBuilder.group({
       isOfficeNetwork: false,
-      networkOfficesCount: null,
+      networkOfficesCount: [null, CustomValidators.minAndRequireIfOther(1, 'isOfficeNetwork', true)],
       chairsCount: [null, [Validators.required, Validators.min(1)]],
       doctorsCount: [null, [Validators.required, Validators.min(1)]],
       hasOfficeHigienists: false,
-      higienistsCount: null,
+      higienistsCount: [null, CustomValidators.minAndRequireIfOther(1, 'hasOfficeHigienists', true)],
       isBuyingSonicare: false
     });
   }
 
   next() {
+    // po submicie odświeżamy wszystkie walidacje
+    for (let i in this.stepForm.controls) {
+      this.stepForm.controls[i].updateValueAndValidity();
+    }
+
     if (this.stepForm.valid) {
       this._stepData = Object.assign({}, this.stepForm.value);
       if (this.stepForm.value.isBuyingSonicare === "yes") {

@@ -87,11 +87,11 @@ export class EventEditPage {
       noPhotoInsideOffice: false,
       noPhotoInsideOfficeWhy: [null, CustomValidators.requireIfOther('noPhotoInsideOffice', true)],
       isOfficeNetwork: false,
-      networkOfficesCount: null,
+      networkOfficesCount: [null, CustomValidators.minAndRequireIfOther(1, 'isOfficeNetwork', true)],
       chairsCount: [null, [Validators.required, Validators.min(1)]],
       doctorsCount: [null, [Validators.required, Validators.min(1)]],
       hasOfficeHigienists: false,
-      higienistsCount: null,
+      higienistsCount: [null, CustomValidators.minAndRequireIfOther(1, 'hasOfficeHigienists', true)],
       isBuyingSonicare: false,
       doQualify: null,
       additionalInfo: null

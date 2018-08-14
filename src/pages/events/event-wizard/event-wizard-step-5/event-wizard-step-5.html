@@ -8,23 +8,34 @@
 </ion-header>
 
 <ion-content>
-  <form novalidate [formGroup]="stepForm" (ngSubmit)="next()">
+  <form novalidate [formGroup]="stepForm" #formDir="ngForm" (ngSubmit)="next()">
     <ion-list>
       <ion-item>
         <ion-label>Gabinet jest częścią sieci gabinetów</ion-label>
         <ion-toggle formControlName="isOfficeNetwork"></ion-toggle>
       </ion-item>
-      <ion-item *ngIf="stepForm.get('isOfficeNetwork').value">
+
+      <!-- LICZBA PLACÓWEK -->
+      <ion-item [hidden]="stepForm.get('isOfficeNetwork').value === false">
         <ion-label floating>Liczba placówek w ramach sieci</ion-label>
         <ion-input type="number" formControlName="networkOfficesCount"></ion-input>
       </ion-item>
+      <span [hidden]="stepForm.get('isOfficeNetwork').value === false" ion-text *ngIf="(stepForm.get('networkOfficesCount').dirty || formDir.submitted) && stepForm.get('networkOfficesCount').invalid"
+        color="danger" padding-left>
+        <span *ngIf="stepForm.get('networkOfficesCount').errors.required">
+          To pole jest wymagane
+        </span>
+        <span *ngIf="stepForm.get('networkOfficesCount').errors.min">
+          Wymagany minimum 1 gabinet
+        </span>
+      </span>
 
       <!-- LICZBA FOTELI -->
       <ion-item>
         <ion-label floating>Liczba stanowisk/foteli w gabinecie *</ion-label>
         <ion-input type="number" formControlName="chairsCount"></ion-input>
       </ion-item>
-      <span ion-text *ngIf="stepForm.get('chairsCount').dirty && stepForm.get('chairsCount').invalid" color="danger" padding-left>
+      <span ion-text *ngIf="(stepForm.get('chairsCount').dirty || formDir.submitted) && stepForm.get('chairsCount').invalid" color="danger" padding-left>
         <span *ngIf="stepForm.get('chairsCount').errors.required">
           To pole jest wymagane
         </span>
@@ -38,7 +49,7 @@
         <ion-label floating>Liczba lekarzy pracujących gabinecie *</ion-label>
         <ion-input type="number" formControlName="doctorsCount"></ion-input>
       </ion-item>
-      <span ion-text *ngIf="stepForm.get('doctorsCount').dirty && stepForm.get('doctorsCount').invalid" color="danger" padding-left>
+      <span ion-text *ngIf="(stepForm.get('doctorsCount').dirty || formDir.submitted) && stepForm.get('doctorsCount').invalid" color="danger" padding-left>
         <span *ngIf="stepForm.get('doctorsCount').errors.required">
           To pole jest wymagane
         </span>
@@ -51,10 +62,21 @@
         <ion-label>Czy w gabinecie są higienistki/higieniści</ion-label>
         <ion-toggle formControlName="hasOfficeHigienists"></ion-toggle>
       </ion-item>
-      <ion-item *ngIf="stepForm.get('hasOfficeHigienists').value">
+
+      <!-- LICZBA HIGIENISTEK -->
+      <ion-item [hidden]="stepForm.get('hasOfficeHigienists').value === false">
         <ion-label floating>Liczba higienistek/higienistów</ion-label>
         <ion-input type="number" formControlName="higienistsCount"></ion-input>
       </ion-item>
+      <span [hidden]="stepForm.get('hasOfficeHigienists').value === false" ion-text *ngIf="(stepForm.get('higienistsCount').dirty || formDir.submitted) && stepForm.get('higienistsCount').invalid"
+        color="danger" padding-left>
+        <span *ngIf="stepForm.get('higienistsCount').errors.required">
+          To pole jest wymagane
+        </span>
+        <span *ngIf="stepForm.get('higienistsCount').errors.min">
+          Wymagana/y minimum 1 higienistka/higienista
+        </span>
+      </span>
     </ion-list>
 
     <ion-list radio-group formControlName="isBuyingSonicare">
@@ -80,7 +102,8 @@
 
     <ion-row>
       <ion-col text-center>
-        <button ion-button type="submit" [disabled]="!stepForm.valid">Dalej</button>
+        <!-- <button ion-button type="submit" [disabled]="!stepForm.valid">Dalej</button> -->
+        <button ion-button type="submit">Dalej</button>
         <button ion-button type="button" color="light" (click)="back()">Wstecz</button>
         <button ion-button type="button" color="light" (click)="cancel()">Anuluj</button>
       </ion-col>
