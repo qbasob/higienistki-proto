@@ -6,7 +6,6 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/observable/of'
 import { ENV } from '@app/env';
-import { map } from '../../../node_modules/rxjs/operator/map';
 
 export class PhotoObject {
   photoId: string;

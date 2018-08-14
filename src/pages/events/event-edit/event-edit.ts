@@ -1,8 +1,5 @@
-// https://medium.com/@luukgruijs/validating-reactive-forms-with-default-and-custom-form-field-validators-in-angular-5586dc51c4ae
-// https://stackblitz.com/edit/angular-zhjoqj?file=app%2Frequired-if.directive.ts
-
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
+import { NavController, NavParams, AlertController, LoadingController/*, Loading*/ } from 'ionic-angular';
 // import { Observable } from 'rxjs/Observable';
 import { PEvent } from '../../../shared/event.model';
 import { Office } from '../../../shared/office.model';
@@ -44,8 +41,8 @@ export class EventEditPage {
     photoInsideOffice: SafeUrl
   };
 
-  private _loading: Loading; // jeden wspólny loading, dla ułatwienia
-  private _isLoading: boolean;
+  // private _loading: Loading; // jeden wspólny loading, dla ułatwienia
+  // private _isLoading: boolean;
 
   constructor(
     public navCtrl: NavController,

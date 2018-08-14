@@ -29,6 +29,7 @@ import { OfficeEditPage } from '../pages/offices/office-edit/office-edit';
 import { OfficeEditFormComponent } from '../pages/offices/office-edit/office-edit-form/office-edit-form';
 import { OfficeViewPage } from '../pages/offices/office-view/office-view';
 import { OfficePopoverPage } from '../pages/offices/office-popover/office-popover';
+import { OfficeInfoPopoverPage } from '../pages/offices/office-info-popover/office-info-popover';
 import { PeoplePage } from '../pages/people/people';
 import { PersonEditPage } from '../pages/people/person-edit/person-edit';
 import { PersonEditFormComponent } from '../pages/people/person-edit/person-edit-form/person-edit-form';
@@ -68,6 +69,7 @@ import { PhotoService } from '../providers/photo-service/photo-service';
     OfficeEditFormComponent,
     OfficeViewPage,
     OfficePopoverPage,
+    OfficeInfoPopoverPage,
     PeoplePage,
     PersonEditPage,
     PersonEditFormComponent,
@@ -105,6 +107,7 @@ import { PhotoService } from '../providers/photo-service/photo-service';
     OfficeEditPage,
     OfficeViewPage,
     OfficePopoverPage,
+    OfficeInfoPopoverPage,
     PeoplePage,
     PersonEditPage,
     PersonViewPage,

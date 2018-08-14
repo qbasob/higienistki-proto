@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Person, Gender } from '../../../../shared/person.model';
 import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { CustomValidators } from '../../../../validators/custom-validators';
 
 @Component({
   selector: 'person-edit-form',

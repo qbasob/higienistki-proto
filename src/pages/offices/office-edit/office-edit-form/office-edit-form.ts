@@ -1,7 +1,8 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Office } from '../../../../shared/office.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AlertController } from 'ionic-angular';
+import { AlertController, PopoverController } from 'ionic-angular';
+import { OfficeInfoPopoverPage } from '../../office-info-popover/office-info-popover';
 
 @Component({
   selector: 'office-edit-form',
@@ -18,7 +19,8 @@ export class OfficeEditFormComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private popoverCtrl: PopoverController
   ) { }
 
   ngOnInit() {
@@ -42,21 +44,30 @@ export class OfficeEditFormComponent implements OnInit {
     this.onFormInit.emit(this.officeFormGroup);
   }
 
-  nameInfo() {
-    const alert = this.alertCtrl.create({
-      title: 'Co to oznacza?',
-      subTitle: 'Nazwa pod jaką występuje publicznie gabinet/szyld gabinetu.',
-      buttons: ['Rozumiem']
-    });
-    alert.present();
+  nameInfo(event) {
+    // const alert = this.alertCtrl.create({
+    //   title: 'Co to oznacza?',
+    //   subTitle: 'Nazwa pod jaką występuje publicznie gabinet/szyld gabinetu.',
+    //   buttons: ['Rozumiem']
+    // });
+    // alert.present();
+    this._createPopover(event, 'Nazwa pod jaką występuje publicznie gabinet/szyld gabinetu.');
   }
 
-  locationInfo() {
-    const alert = this.alertCtrl.create({
-      title: 'Co to oznacza?',
-      subTitle: 'Np. w podwórzu, wewnątrz centrum handlowego, w większej przychodni etc.',
-      buttons: ['Rozumiem']
+  locationInfo(event) {
+    // const alert = this.alertCtrl.create({
+    //   title: 'Co to oznacza?',
+    //   subTitle: 'Np. w podwórzu, wewnątrz centrum handlowego, w większej przychodni etc.',
+    //   buttons: ['Rozumiem']
+    // });
+    // alert.present();
+    this._createPopover(event, 'Np. w podwórzu, wewnątrz centrum handlowego, w większej przychodni etc.')
+  }
+
+  private _createPopover(event, content) {
+    const popover = this.popoverCtrl.create(OfficeInfoPopoverPage, { content });
+    popover.present({
+      ev: event //przekazujemy event, żeby popover wiedział skąd ma się wysunąć
     });
-    alert.present();
   }
 }
