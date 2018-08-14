@@ -9,7 +9,7 @@
 </ion-header>
 
 <ion-content>
-  <form novalidate [formGroup]="eventForm" (ngSubmit)="save()">
+  <form novalidate [formGroup]="eventForm" #formDir="ngForm" (ngSubmit)="save()">
     <ion-list>
       <!-- <ion-item>
         Data wizyty
@@ -23,7 +23,7 @@
         <ion-label>Data wizyty *</ion-label>
         <ion-datetime formControlName="visitDate"></ion-datetime>
       </ion-item>
-      <span ion-text *ngIf="eventForm.get('visitDate').dirty && eventForm.get('visitDate').invalid" color="danger" padding-left>
+      <span ion-text *ngIf="(eventForm.get('visitDate').dirty || formDir.submitted) && eventForm.get('visitDate').invalid" color="danger" padding-left>
         <span *ngIf="eventForm.get('visitDate').errors.required">
           To pole jest wymagane
         </span>
@@ -35,45 +35,93 @@
           <img [src]="photosSrc.photoOutside" class="photo">
           <input type="file" (change)="addPhoto($event, 'photoOutside')" id="file-input" style="display: none;" #fileInp0>
           <button ion-button type="button" (click)="addPhotoClick(fileInp0)">Zrób zdjęcie</button>
-          <div ion-text *ngIf="eventForm.get('photoOutside').dirty && eventForm.get('photoOutside').invalid" color="danger" padding-left>
+          <div ion-text *ngIf="(eventForm.get('photoOutside').dirty || formDir.submitted) && eventForm.get('photoOutside').invalid" color="danger" padding-left>
             <span *ngIf="eventForm.get('photoOutside').errors.required">
               To pole jest wymagane
             </span>
           </div>
         </ion-note>
       </ion-item>
-      <ion-item *ngIf="eventForm.get('noPhotoInsideWaiting').value==false">
+
+      <!-- ZDJĘCIE POCZEKALNI -->
+      <ion-item [hidden]="eventForm.get('noPhotoInsideWaiting').value === true">
         Zdjęcie poczekalni
         <ion-note item-end text-center>
           <img [src]="photosSrc.photoInsideWaiting" class="photo">
           <input type="file" (change)="addPhoto($event, 'photoInsideWaiting')" id="file-input" style="display: none;" #fileInp1>
           <button ion-button type="button" (click)="addPhotoClick(fileInp1)">Zrób zdjęcie</button>
+          <div ion-text *ngIf="(eventForm.get('photoInsideWaiting').dirty || formDir.submitted) && eventForm.get('photoInsideWaiting').invalid"
+            color="danger" padding-left>
+            <span *ngIf="eventForm.get('photoInsideWaiting').errors.required">
+              To pole jest wymagane
+            </span>
+          </div>
         </ion-note>
       </ion-item>
+
+      <!-- BRAK MOŻLIWOŚCI WYKONANIA ZDJĘCIA W POCZEKALNI -->
       <ion-item>
         <ion-label>Brak możliwości wykonania zdjęcia w poczekalni</ion-label>
         <ion-toggle formControlName="noPhotoInsideWaiting"></ion-toggle>
       </ion-item>
-      <ion-item *ngIf="eventForm.get('noPhotoInsideWaiting').value">
+      <span ion-text *ngIf="(eventForm.get('noPhotoInsideWaiting').dirty || formDir.submitted) && eventForm.get('noPhotoInsideWaiting').invalid" color="danger" padding-left>
+        <span *ngIf="eventForm.get('noPhotoInsideWaiting').errors.required">
+          To pole jest wymagane
+        </span>
+      </span>
+
+      <!-- POWÓD NIEWYKONANIA ZDJĘCIA W POCZEKALNI -->
+      <ion-item [hidden]="eventForm.get('noPhotoInsideWaiting').value === false">
         <ion-label floating>Wpisz powód niewykonania zdjęcia w poczekalni</ion-label>
         <ion-input formControlName="noPhotoInsideWaitingWhy"></ion-input>
       </ion-item>
-      <ion-item *ngIf="eventForm.get('noPhotoInsideOffice').value==false">
+      <span [hidden]="eventForm.get('noPhotoInsideWaiting').value === false" ion-text *ngIf="(eventForm.get('noPhotoInsideWaitingWhy').dirty || formDir.submitted) && eventForm.get('noPhotoInsideWaitingWhy').invalid" color="danger" padding-left>
+        <span *ngIf="eventForm.get('noPhotoInsideWaitingWhy').errors.required">
+          To pole jest wymagane
+        </span>
+      </span>
+
+      <!-- ZDJĘCIE GABINETU -->
+      <ion-item [hidden]="eventForm.get('noPhotoInsideOffice').value === true">
         Zdjęcie gabinetu
         <ion-note item-end text-center>
           <img [src]="photosSrc.photoInsideOffice" class="photo">
           <input type="file" (change)="addPhoto($event, 'photoInsideOffice')" id="file-input" style="display: none;" #fileInp2>
           <button ion-button type="button" (click)="addPhotoClick(fileInp2)">Zrób zdjęcie</button>
+          <div ion-text *ngIf="(eventForm.get('photoInsideOffice').dirty || formDir.submitted) && eventForm.get('photoInsideOffice').invalid"
+            color="danger" padding-left>
+            <span *ngIf="eventForm.get('photoInsideOffice').errors.required">
+              To pole jest wymagane
+            </span>
+          </div>
         </ion-note>
       </ion-item>
+
+      <!-- BRAK MOŻLIWOŚCI WYKONANIA ZDJĘCIA W GABINECIE -->
       <ion-item>
         <ion-label>Brak możliwości wykonania zdjęcia w gabinecie</ion-label>
         <ion-toggle formControlName="noPhotoInsideOffice"></ion-toggle>
       </ion-item>
-      <ion-item *ngIf="eventForm.get('noPhotoInsideOffice').value">
+      <span ion-text *ngIf="(eventForm.get('noPhotoInsideOffice').dirty || formDir.submitted) && eventForm.get('noPhotoInsideOffice').invalid"
+        color="danger" padding-left>
+        <span *ngIf="eventForm.get('noPhotoInsideOffice').errors.required">
+          To pole jest wymagane
+        </span>
+      </span>
+
+      <!-- POWÓD NIEWYKONANIA ZDJĘCIA W GABINECIE -->
+      <ion-item [hidden]="eventForm.get('noPhotoInsideOffice').value === false">
         <ion-label floating>Wpisz powód niewykonania zdjęcia w gabinecie</ion-label>
         <ion-input formControlName="noPhotoInsideOfficeWhy"></ion-input>
       </ion-item>
+      <span [hidden]="eventForm.get('noPhotoInsideOffice').value === false" ion-text *ngIf="(eventForm.get('noPhotoInsideOfficeWhy').dirty || formDir.submitted) && eventForm.get('noPhotoInsideOfficeWhy').invalid"
+        color="danger" padding-left>
+        <span *ngIf="eventForm.get('noPhotoInsideOfficeWhy').errors.required">
+          To pole jest wymagane
+        </span>
+      </span>
+
+
       <ion-item>
         <ion-label>Gabinet jest częścią sieci gabinetów</ion-label>
         <ion-toggle formControlName="isOfficeNetwork"></ion-toggle>
@@ -90,7 +138,7 @@
         <ion-label floating>Liczba stanowisk/foteli w gabinecie *</ion-label>
         <ion-input type="number" formControlName="chairsCount"></ion-input>
       </ion-item>
-      <span ion-text *ngIf="eventForm.get('chairsCount').dirty && eventForm.get('chairsCount').invalid" color="danger" padding-left>
+      <span ion-text *ngIf="(eventForm.get('chairsCount').dirty || formDir.submitted) && eventForm.get('chairsCount').invalid" color="danger" padding-left>
         <span *ngIf="eventForm.get('chairsCount').errors.required">
           To pole jest wymagane
         </span>
@@ -104,7 +152,7 @@
         <ion-label floating>Liczba lekarzy pracujących gabinecie *</ion-label>
         <ion-input type="number" formControlName="doctorsCount"></ion-input>
       </ion-item>
-      <span ion-text *ngIf="eventForm.get('doctorsCount').dirty && eventForm.get('doctorsCount').invalid" color="danger" padding-left>
+      <span ion-text *ngIf="(eventForm.get('doctorsCount').dirty || formDir.submitted) && eventForm.get('doctorsCount').invalid" color="danger" padding-left>
         <span *ngIf="eventForm.get('doctorsCount').errors.required">
           To pole jest wymagane
         </span>
@@ -238,7 +286,8 @@
 
     <ion-row>
       <ion-col text-center>
-        <button ion-button type="submit" [disabled]="!eventForm.valid">Zapisz</button>
+        <!-- <button ion-button type="submit" [disabled]="!eventForm.valid">Zapisz</button> -->
+        <button ion-button type="submit">Zapisz</button>
         <button ion-button type="button" color="light" (click)="cancel()">Anuluj</button>
       </ion-col>
     </ion-row>

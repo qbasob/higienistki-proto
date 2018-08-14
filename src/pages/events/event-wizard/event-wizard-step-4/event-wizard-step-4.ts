@@ -3,7 +3,7 @@ import { NavController, NavParams, AlertController, App, Events } from 'ionic-an
 import { SafeUrl } from '@angular/platform-browser';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { PhotoService } from '../../../../providers/photo-service/photo-service';
-
+import { CustomValidators } from '../../../../validators/custom-validators';
 
 @Component({
   selector: 'page-event-wizard-step-4',
@@ -34,12 +34,12 @@ export class EventWizardStep4Page implements OnInit {
 
   ngOnInit(): void {
     this.stepForm = this.formBuilder.group({
-      photoInsideWaiting: null,
+      photoInsideWaiting: [null, CustomValidators.requireIfOther('noPhotoInsideWaiting', false)],
       noPhotoInsideWaiting: false,
-      noPhotoInsideWaitingWhy: null,
-      photoInsideOffice: null,
+      noPhotoInsideWaitingWhy: [null, CustomValidators.requireIfOther('noPhotoInsideWaiting', true)],
+      photoInsideOffice: [null, CustomValidators.requireIfOther('noPhotoInsideOffice', false)],
       noPhotoInsideOffice: false,
-      noPhotoInsideOfficeWhy: null,
+      noPhotoInsideOfficeWhy: [null, CustomValidators.requireIfOther('noPhotoInsideOffice', true)],
     });
   }
 
@@ -60,6 +60,11 @@ export class EventWizardStep4Page implements OnInit {
   }
 
   next() {
+    // po submicie odświeżamy wszystkie walidacje
+    for (let i in this.stepForm.controls) {
+      this.stepForm.controls[i].updateValueAndValidity();
+    }
+
     if (this.stepForm.valid) {
       this._stepData = Object.assign({}, this.stepForm.value);
       this.tabEvents.publish('event-wizard-change-tab', 3, 4, this._stepData);

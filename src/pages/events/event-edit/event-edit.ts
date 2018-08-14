@@ -18,6 +18,7 @@ import { PersonViewPage } from '../../people/person-view/person-view';
 import { PersonViewAcceptPage } from '../../people/person-view-accept/person-view-accept';
 import { PersonEditPage } from '../../people/person-edit/person-edit';
 import { SafeUrl } from '@angular/platform-browser';
+import { CustomValidators } from '../../../validators/custom-validators';
 
 // import { CustomValidators } from '../../../validators/custom-validators';
 
@@ -79,12 +80,12 @@ export class EventEditPage {
       id: null,
       visitDate: [null, Validators.required],
       photoOutside: [null, Validators.required],
-      photoInsideWaiting: null,
+      photoInsideWaiting: [null, CustomValidators.requireIfOther('noPhotoInsideWaiting', false)],
       noPhotoInsideWaiting: false,
-      noPhotoInsideWaitingWhy: null,
-      photoInsideOffice: null,
+      noPhotoInsideWaitingWhy: [null, CustomValidators.requireIfOther('noPhotoInsideWaiting', true)],
+      photoInsideOffice: [null, CustomValidators.requireIfOther('noPhotoInsideOffice', false)],
       noPhotoInsideOffice: false,
-      noPhotoInsideOfficeWhy: null,
+      noPhotoInsideOfficeWhy: [null, CustomValidators.requireIfOther('noPhotoInsideOffice', true)],
       isOfficeNetwork: false,
       networkOfficesCount: null,
       chairsCount: [null, [Validators.required, Validators.min(1)]],
@@ -110,6 +111,11 @@ export class EventEditPage {
   }
 
   save() {
+    // po submicie odświeżamy wszystkie walidacje
+    for (let i in this.eventForm.controls) {
+      this.eventForm.controls[i].updateValueAndValidity();
+    }
+
     if (this.eventForm.valid) {
       let loading = this.loadingCtrl.create({
         content: 'Zapisywanie...'
