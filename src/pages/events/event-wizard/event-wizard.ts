@@ -28,6 +28,7 @@ export class EventWizardPage implements OnInit, OnDestroy {
   steps: any[];
   stepsEnabled: boolean[];
   stepsVisible: boolean[];
+  tab1Params: any;
   tab3Params: any;
   tab7Params: any;
   tab8Params: any;
@@ -82,6 +83,7 @@ export class EventWizardPage implements OnInit, OnDestroy {
     this.stepsVisible[7] = false;
     this.stepsVisible[8] = false;
 
+    this.tab1Params = {};
     this.tab3Params = {};
     this.tab7Params = {};
     this.tab8Params = {};
@@ -127,6 +129,12 @@ export class EventWizardPage implements OnInit, OnDestroy {
         this.eventForm.patchValue({people: this.people});
       } else {
         this.eventForm.patchValue(eventData);
+      }
+
+      // jeżeli wracamy na stronę 1 to przekazujemy jej aktualne dane office
+      if (from === 1 && to === 0) {
+        console.log("from 1 to 0", this.eventForm.value.office);
+        this.tab1Params.office = this.eventForm.value.office;
       }
 
       // jeżeli idziemy na stronę 2 to przekazujemy jej aktualne dane office

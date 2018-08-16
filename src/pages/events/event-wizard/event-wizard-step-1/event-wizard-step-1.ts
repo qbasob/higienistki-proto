@@ -42,12 +42,22 @@ export class EventWizardStep1Page implements OnInit {
     });
 
     this.office = { id: null, name: '' };
+
     this._stepData = {};
     this.isNewOffice = false;
   }
 
   ngOnInit(): void {
     this.stepForm = this.formBuilder.group({});
+  }
+
+  ionViewDidEnter() {
+    if (this.navParams.get('office')) {
+      this.office = this.navParams.get('office');
+      this.stepForm.patchValue(this.office);
+    } else {
+      this.office = { id: null, name: '' };
+    }
   }
 
   patchForm(formGroup: FormGroup) {
