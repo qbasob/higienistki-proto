@@ -193,6 +193,9 @@ export abstract class AbstractStore<T extends LocalModel> {
         // jeżeli błąd serwera, ustawiamy flagę rekordowi
         record.needSync = true;
 
+        // toast na blad zapisu na sewerze
+        throw(err);
+
         // jeżeli błąd serwera to kontynuujemy, zapisze się lokalnie i oznaczy do synchronizacji
         // w takiej sytuacji przekazujemy do switchMap rekord który chcieliśmy wysłać
         return Observable.of(record);

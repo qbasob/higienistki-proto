@@ -15,7 +15,8 @@ export class PhotoObject {
 
 @Injectable()
 export class PhotoService {
-  private _apiUrl: string;
+  protected _apiUrl: string;
+  protected _apiSuffix: string;
 
   constructor(
     public http: HttpClient,
@@ -24,6 +25,7 @@ export class PhotoService {
 
   ) {
     this._apiUrl = `${ENV.endpoint}/photos`;
+    this._apiSuffix = ENV.endpointSuffix;
   }
 
   private _generatePhotoId(): string {
@@ -40,7 +42,7 @@ export class PhotoService {
     formData.append('file', photo.file);
     const tmpName = photo.file.name;
 
-    return this.http.post(this._apiUrl, formData, {responseType: 'blob'})
+    return this.http.post(this._apiUrl + this._apiSuffix, formData, {responseType: 'blob'})
       .map((serverBlob: Blob) => {
         const newFile = new File([serverBlob], tmpName);
         const updatedPhoto = Object.assign({}, photo);
@@ -53,7 +55,7 @@ export class PhotoService {
   private _downloadFromServer(photoId: string): Observable<PhotoObject> {
     // plik z serwera nie będzie mieć nazwy, więc dajemy mu własną
     const tmpName = `${photoId}.jpg`;
-    return this.http.get(`${this._apiUrl}/${photoId}`, { responseType: 'blob' })
+    return this.http.get(`${this._apiUrl}/${photoId}${this._apiSuffix}`, { responseType: 'blob' })
       .map((serverBlob: Blob) => {
         const file = new File([serverBlob], tmpName);
         const photo: PhotoObject = {
@@ -65,7 +67,7 @@ export class PhotoService {
   }
 
   private _getFromStorage(photoId: string): Observable<PhotoObject> {
-    return Observable.fromPromise(this.storage.get(`photo_${photoId}`)
+    return Observable.fromPromise(this.storage.get(`photo_${photoId}${this._apiSuffix}`)
       .then((data: PhotoObject) => {
         return data;
       })
@@ -73,7 +75,7 @@ export class PhotoService {
   }
 
   private _setToStorage(photo: PhotoObject): Observable<PhotoObject> {
-    return Observable.fromPromise(this.storage.set(`photo_${photo.photoId}`, photo)
+    return Observable.fromPromise(this.storage.set(`photo_${photo.photoId}${this._apiSuffix}`, photo)
       .then((data: PhotoObject) => {
         return data;
       })
