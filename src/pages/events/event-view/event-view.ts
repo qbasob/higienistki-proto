@@ -34,6 +34,12 @@ export class EventViewPage {
   ) {
     this.event = navParams.get('event');
 
+    //this.loadPhotos();
+    this.initPhotos();
+  }
+
+  // ładowanie zdjęć na viewDidEnter - po powrocie z edycji oświezy zdjęcia
+  ionViewDidEnter() {
     this.loadPhotos();
   }
 
@@ -59,14 +65,16 @@ export class EventViewPage {
 
   // obsługa zdjęć
 
-  public loadPhotos() {
-    // na początek foty to placeholdery
+  public initPhotos() {
+  // na początek foty to placeholdery
     this.photosSrc = {
       photoOutside: 'assets/imgs/placeholder-image.jpg',
       photoInsideWaiting: 'assets/imgs/placeholder-image.jpg',
       photoInsideOffice: 'assets/imgs/placeholder-image.jpg'
     };
+  }
 
+  public loadPhotos() {
     // i bierzemy asynchronicznie foty z PhotoService, jeżeli event ma photoId
     for (let photoKey in this.photosSrc) {
       if (this.event[photoKey]) {
