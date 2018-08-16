@@ -75,7 +75,6 @@ export class EventWizardStep1Page implements OnInit {
   }
 
   selectOffice(event) {
-    console.log(event);
     if (event.value) {
       this.offices.some((office) => {
         if (office.localId === event.value.localId) {
