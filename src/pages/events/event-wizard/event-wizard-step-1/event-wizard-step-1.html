@@ -11,20 +11,48 @@
   <ion-item-group>
     <ion-item-divider color="light">Wskaż gabinet który odwiedzasz</ion-item-divider>
     <ion-item>
+      <!--<ion-label floating>Miejscowość</ion-label>
+          <ion-select (ionChange)="selectCity($event)" [disabled]="isNewOffice" #citySelect>
+            <ion-option [value]="city" *ngFor="let city of cities">
+              {{ city }}
+            </ion-option>
+          </ion-select> -->
       <ion-label floating>Miejscowość</ion-label>
-      <ion-select (ionChange)="selectCity($event)" [disabled]="isNewOffice" #citySelect>
-        <ion-option [value]="city" *ngFor="let city of cities">
-          {{ city }}
-        </ion-option>
-      </ion-select>
+      <select-searchable
+        #citySelect
+        [isEnabled]="!isNewOffice"
+        item-content
+        [items]="cities"
+        [canSearch]="true"
+        searchPlaceholder="Szukaj"
+        searchFailText="Nie znaleziono"
+        [canClear]="true"
+        clearButtonText="Wyczyść"
+        (onChange)="selectCity($event)">
+      </select-searchable>
     </ion-item>
     <ion-item>
-      <ion-label floating>Nazwa</ion-label>
+      <!-- <ion-label floating>Nazwa</ion-label>
       <ion-select (ionChange)="selectOffice($event)" [disabled]="isNewOffice" #officeSelect>
         <ion-option [value]="office.localId" *ngFor="let office of filteredOffices">
           {{office.name}}
         </ion-option>
-      </ion-select>
+      </ion-select> -->
+      <ion-label floating>Nazwa</ion-label>
+      <select-searchable
+        #officeSelect
+        [isEnabled]="!isNewOffice"
+        item-content
+        [items]="filteredOffices"
+        itemValueField="localId"
+        itemTextField="name"
+        [canSearch]="true"
+        searchPlaceholder="Szukaj"
+        searchFailText="Nie znaleziono"
+        [canClear]="true"
+        clearButtonText="Wyczyść"
+        (onChange)="selectOffice($event)">
+      </select-searchable>
     </ion-item>
   </ion-item-group>
 
@@ -39,7 +67,7 @@
       <ion-item-divider color="light">lub dodaj nowy gabinet</ion-item-divider>
     </ion-item-group>
     <ion-item *ngIf="!isNewOffice">
-      <button ion-button type="button" color="primary" (click)="addNewOffice(officeSelect)">Dodaj nowy gabinet</button>
+      <button ion-button type="button" color="primary" (click)="addNewOffice(officeSelect, citySelect)">Dodaj nowy gabinet</button>
     </ion-item>
     <office-edit-form [hidden]="!isNewOffice" [officeData]="office" (onFormInit)="patchForm($event)"></office-edit-form>
 

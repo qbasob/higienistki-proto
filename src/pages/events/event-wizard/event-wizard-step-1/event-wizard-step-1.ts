@@ -9,7 +9,9 @@ import { FormGroup, FormBuilder } from '@angular/forms';
   templateUrl: 'event-wizard-step-1.html'
 })
 export class EventWizardStep1Page implements OnInit {
-  public cities: Set<string>;
+  public cities: Array<string>
+  public city: string;
+
   public offices: Array<Office>;
   public filteredOffices: Array<Office>;
   public office: Office;
@@ -31,9 +33,11 @@ export class EventWizardStep1Page implements OnInit {
     this.officesStore.records$.subscribe((offices) => {
       this.offices = offices;
       this.filteredOffices = offices;
-      this.cities = new Set();
-      offices.forEach((office, index) => {
-        this.cities.add(office.city);
+      this.cities = [];
+      offices.forEach((office) => {
+        if (this.cities.indexOf(office.city) == -1) {
+          this.cities.push(office.city);
+        }
       });
     });
 
@@ -50,30 +54,42 @@ export class EventWizardStep1Page implements OnInit {
     this.stepForm = formGroup;
   }
 
-  addNewOffice(officeSelect) {
+  addNewOffice(officeSelect, citySelect) {
     officeSelect.value = "";
+    citySelect.value = "";
     this.office = { id: null, name: '' };
     this.stepForm.reset();
     this.isNewOffice = true;
   }
 
-  selectCity(city) {
-    this.filteredOffices = this.offices.filter((office) => {
-      if (office.city === city) {
-        return true;
-      }
-    });
+  selectCity(event) {
+    if (event.value) {
+      this.filteredOffices = this.offices.filter((office) => {
+        if (office.city === event.value) {
+          return true;
+        }
+      });
+    } else {
+      this.filteredOffices = this.offices;
+    }
   }
 
-  selectOffice(officeLocalId) {
-    this.offices.some((office) => {
-      if (office.localId === officeLocalId) {
-        this.office = office;
-        this.stepForm.patchValue(office);
+  selectOffice(event) {
+    console.log(event);
+    if (event.value) {
+      this.offices.some((office) => {
+        if (office.localId === event.value.localId) {
+          this.office = office;
+          this.stepForm.patchValue(office);
 
-        return true;
-      }
-    });
+          return true;
+        }
+      });
+    } else {
+      const emptyOffice = { id: null, name: '' };
+      this.office = emptyOffice
+      this.stepForm.patchValue(emptyOffice);
+    }
   }
 
   next() {

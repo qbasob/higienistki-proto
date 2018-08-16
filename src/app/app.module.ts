@@ -8,6 +8,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../providers/auth-interceptor/auth-interceptor';
 import { IonMaskModule } from '@pluritech/ion-mask';
+import { SelectSearchableModule } from 'ionic-select-searchable';
 import { MyApp } from './app.component';
 
 import { EventsPage } from '../pages/events/events';
@@ -84,7 +85,8 @@ import { PhotoService } from '../providers/photo-service/photo-service';
     IonicStorageModule.forRoot(),
     HttpClientModule,
     BrowserAnimationsModule,
-    IonMaskModule.forRoot()
+    IonMaskModule.forRoot(),
+    SelectSearchableModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
