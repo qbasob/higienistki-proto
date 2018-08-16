@@ -8,6 +8,7 @@ import { Office } from '../../shared/office.model';
 import { Person } from '../../shared/person.model';
 import { OfficesStore } from '../offices-store/offices-store';
 import { PeopleStore } from '../people-store/people-store';
+import { AuthService } from '../auth-service/auth-service';
 
 /**
  * Observable Data Service, "EventsStore"
@@ -31,10 +32,11 @@ export class EventsStore extends AbstractStore<PEvent> {
   constructor(
     public http: HttpClient,
     public storage: Storage,
+    public authService: AuthService,
     public officesStore: OfficesStore,
     public peopleStore: PeopleStore
   ) {
-    super('events', http, storage);
+    super('events', http, storage, authService);
 
     this.office$ = this.officesStore.record$;
     this.offices$ = this.officesStore.serverRecords$;

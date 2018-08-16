@@ -6,6 +6,10 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ENV } from '@app/env';
 import { EventsPage } from '../events/events';
 
+import { PeopleStore } from '../../providers/people-store/people-store';
+import { OfficesStore } from '../../providers/offices-store/offices-store';
+import { EventsStore } from '../../providers/events-store/events-store';
+
 /**
  * Generated class for the LoginPage page.
  *
@@ -28,7 +32,10 @@ export class LoginPage {
     public navParams: NavParams,
     private authService: AuthService,
     private fb: FormBuilder,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private peopleStore: PeopleStore,
+    private officesStore: OfficesStore,
+    private eventsStore: EventsStore,
   ) {
     this.form = this.fb.group({
       email: ['', Validators.required],
@@ -54,6 +61,14 @@ export class LoginPage {
       .subscribe(
         _data => {
           this.navCtrl.setRoot(EventsPage);
+
+          // po zalogowaniu pobieramy dane z serwera
+          this.peopleStore.refreshRecords()
+            .subscribe();
+          this.officesStore.refreshRecords()
+            .subscribe();
+          this.eventsStore.refreshRecords()
+            .subscribe();
         },
         // jeśli złe dane, pokazujemy toast
         error => {

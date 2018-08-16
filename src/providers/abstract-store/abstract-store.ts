@@ -14,6 +14,7 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/empty';
 import 'rxjs/add/observable/forkJoin';
 import { LocalModel } from '../../shared/local.model';
+import { AuthService } from '../auth-service/auth-service';
 
 /**
  * Observable Data Service, "PeopleStore"
@@ -35,7 +36,8 @@ export abstract class AbstractStore<T extends LocalModel> {
   constructor(
     modelName: string,
     public http: HttpClient,
-    public storage: Storage
+    public storage: Storage,
+    public authService: AuthService
   ) {
     this._apiUrl = `${ENV.endpoint}/${modelName}`;
     this._apiSuffix = ENV.endpointSuffix;
@@ -68,8 +70,8 @@ export abstract class AbstractStore<T extends LocalModel> {
             this._dataStore = data;
             this._records$.next(this._dataStore.concat());
           }
-          // jeżeli nie ma to bierzemy z serwera
-          else {
+          // jeżeli nie ma to bierzemy z serwera (jeżeli zalogowany)
+          else if (this.authService.isLoggedIn()) {
             this._getAllFromServer()
               // emitujemy i zapisujemy lokalnie
               .subscribe((data: Array<T>) => {
