@@ -298,11 +298,24 @@
       </ion-item-group>
       <ion-item>
         <ion-label>Wybierz uczestnika</ion-label>
-        <ion-select #peopleSelect (ionChange)="selectPerson($event, peopleSelect)">
+        <!-- <ion-select #peopleSelect (ionChange)="selectPerson($event, peopleSelect)">
           <ion-option [value]="person.localId" *ngFor="let person of people">
             {{person.name}}
           </ion-option>
-        </ion-select>
+        </ion-select> -->
+        <select-searchable
+          #peopleSelect
+          item-content
+          [items]="people"
+          itemValueField="localId"
+          itemTextField="name"
+          [canSearch]="true"
+          searchPlaceholder="Szukaj"
+          searchFailText="Nie znaleziono"
+          [canClear]="true"
+          clearButtonText="Wyczyść"
+          (onChange)="selectPerson($event, peopleSelect)">
+        </select-searchable>
       </ion-item>
       <ion-item>
         <button ion-button type="button" (click)="addPerson()">
