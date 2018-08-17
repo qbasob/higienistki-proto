@@ -11,6 +11,8 @@ import { OfficeInfoPopoverPage } from '../../office-info-popover/office-info-pop
 export class OfficeEditFormComponent implements OnInit {
   @Input('officeData')
   public office: Office = { id: null, name: '' }; //default value
+  @Input('formData')
+  public formDir;
 
   @Output()
   onFormInit = new EventEmitter<FormGroup>();
@@ -27,15 +29,15 @@ export class OfficeEditFormComponent implements OnInit {
     this.officeFormGroup = this.formBuilder.group({
       id: null,
       name: [null, [Validators.required, Validators.minLength(5)]],
-      nip: [null, Validators.required],
+      nip: [null, Validators.minLength(10)],
       street: [null, Validators.required],
       buildingNo: [null, Validators.required],
       localNo: null,
-      postal: [null, Validators.required],
+      postal: [null, [Validators.required, Validators.minLength(5)]],
       city: [null, Validators.required],
       // county: null,
       voivodeship: [null, Validators.required],
-      phone: [null, Validators.required],
+      phone: [null, [Validators.required, Validators.minLength(9)]],
       krsName: [null, Validators.required],
       locationInfo: null
     });

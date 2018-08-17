@@ -53,6 +53,11 @@ export class EventWizardStep3Page implements OnInit {
   }
 
   next() {
+    // po submicie odświeżamy wszystkie walidacje
+    for (let i in this.stepForm.controls) {
+      this.stepForm.controls[i].updateValueAndValidity();
+    }
+
     if (this.stepForm.valid) {
       this._stepData = Object.assign({}, this.office, this.stepForm.value);
       this.tabEvents.publish('event-wizard-change-tab', 2, 3, { office: this._stepData });

@@ -53,7 +53,7 @@
       To pole jest wymagane
     </span>
     <span *ngIf="personFormGroup.get('phone').errors.minlength">
-      Numer telefonu musi składać się z {{ personFormGroup.get('phone').errors.minlength.requiredLength }} cyfr
+      Minimum {{ personFormGroup.get('phone').errors.minlength.requiredLength }} cyfr
     </span>
   </span>
   <ion-item>

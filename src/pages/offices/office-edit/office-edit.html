@@ -9,11 +9,12 @@
 </ion-header>
 
 <ion-content>
-  <form novalidate [formGroup]="officeForm" (ngSubmit)="save()">
-    <office-edit-form [officeData]="office" (onFormInit)="patchForm($event)"></office-edit-form>
+  <form novalidate [formGroup]="officeForm" #formDir="ngForm" (ngSubmit)="save()">
+    <office-edit-form [officeData]="office" [formData]="formDir" (onFormInit)="patchForm($event)"></office-edit-form>
     <ion-row>
       <ion-col text-center>
-        <button ion-button type="submit" [disabled]="!officeForm.valid">Zapisz</button>
+        <!-- <button ion-button type="submit" [disabled]="!officeForm.valid">Zapisz</button> -->
+        <button ion-button type="submit">Zapisz</button>
         <button ion-button type="button" color="light" (click)="cancel()">Anuluj</button>
       </ion-col>
     </ion-row>

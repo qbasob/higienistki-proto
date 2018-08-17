@@ -60,18 +60,19 @@
     </ion-col>
   </ion-row> -->
 
-  <form novalidate [formGroup]="stepForm" (ngSubmit)="next()">
+  <form novalidate [formGroup]="stepForm" #formDir="ngForm" (ngSubmit)="next()">
     <ion-item-group>
       <ion-item-divider color="light">lub dodaj nowy gabinet</ion-item-divider>
     </ion-item-group>
     <ion-item *ngIf="!isNewOffice">
       <button ion-button type="button" color="primary" (click)="addNewOffice(officeSelect, citySelect)">Dodaj nowy gabinet</button>
     </ion-item>
-    <office-edit-form [hidden]="!isNewOffice" [officeData]="office" (onFormInit)="patchForm($event)"></office-edit-form>
+    <office-edit-form [hidden]="!isNewOffice" [officeData]="office" [formData]="formDir" (onFormInit)="patchForm($event)"></office-edit-form>
 
     <ion-row>
       <ion-col text-center>
-        <button ion-button type="submit" [disabled]="!stepForm.valid">Dalej</button>
+        <!-- <button ion-button type="submit" [disabled]="!stepForm.valid">Dalej</button> -->
+        <button ion-button type="submit">Dalej</button>
         <button ion-button type="button" color="light" (click)="cancel()">Anuluj</button>
       </ion-col>
     </ion-row>

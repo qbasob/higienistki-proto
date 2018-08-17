@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-  <form novalidate [formGroup]="stepForm" (ngSubmit)="next()">
+  <form novalidate [formGroup]="stepForm" #formDir="ngForm" (ngSubmit)="next()">
   <!-- <ion-row>
       <ion-col>
         <p>Sprawdź poprawność danych z bazy i uzupełnij braki, lub wpisz nowy gabinet</p>
@@ -20,11 +20,12 @@
         Sprawdź poprawność danych z bazy i uzupełnij braki, lub wpisz nowy gabinet
       </ion-item-divider>
     </ion-item-group>
-    <office-edit-form [officeData]="office" (onFormInit)="patchForm($event)"></office-edit-form>
+    <office-edit-form [officeData]="office" [formData]="formDir" (onFormInit)="patchForm($event)"></office-edit-form>
 
     <ion-row>
       <ion-col text-center>
-        <button ion-button type="submit" [disabled]="!stepForm.valid">Dalej</button>
+        <!-- <button ion-button type="submit" [disabled]="!stepForm.valid">Dalej</button> -->
+        <button ion-button type="submit">Dalej</button>
         <button ion-button type="button" color="light" (click)="back()">Wstecz</button>
         <button ion-button type="button" color="light" (click)="cancel()">Anuluj</button>
       </ion-col>

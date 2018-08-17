@@ -45,6 +45,11 @@ export class OfficeEditPage implements OnInit {
   }
 
   save() {
+    // po submicie odświeżamy wszystkie walidacje
+    for (let i in this.officeForm.controls) {
+      this.officeForm.controls[i].updateValueAndValidity();
+    }
+
     if (this.officeForm.valid) {
       let loading = this.loadingCtrl.create({
         content: 'Zapisywanie...'
