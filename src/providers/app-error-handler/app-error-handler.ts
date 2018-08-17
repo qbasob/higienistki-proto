@@ -12,12 +12,18 @@ import { Events } from 'ionic-angular';
 */
 @Injectable()
 export class AppErrorHandler implements ErrorHandler {
-
+  private isToastOpen: boolean;
   constructor(
     private events: Events,
     private toastCtrl: ToastController
     // private rollbar: Rollbar,
-  ) {}
+  ) {
+    this.isToastOpen = false;
+    // jeżeli obsłużony wyjątek emituje event, to na niego reagujemy:
+    this.events.subscribe('HANDLED_ERROR', (error: Error) => {
+      this.handleError(error);
+    });
+  }
 
   handleError(error: Error | HttpErrorResponse) {
     // Server error happened
@@ -29,7 +35,13 @@ export class AppErrorHandler implements ErrorHandler {
           duration: 3000,
           cssClass: `toast-warning`
         });
-        toast.present();
+        toast.onDidDismiss(() => {
+          this.isToastOpen = false;
+        });
+        if (!this.isToastOpen) {
+          this.isToastOpen = true;
+          toast.present();
+        }
         return;
       }
       // Send the error to the server
@@ -45,7 +57,13 @@ export class AppErrorHandler implements ErrorHandler {
         duration: 3000,
         cssClass: `toast-warning`
       });
-      toast.present();
+      toast.onDidDismiss(() => {
+        this.isToastOpen = false;
+      });
+      if (!this.isToastOpen) {
+        this.isToastOpen = true;
+        toast.present();
+      }
     }
     // Client Error Happend
     else {
@@ -58,7 +76,13 @@ export class AppErrorHandler implements ErrorHandler {
         duration: 3000,
         cssClass: `toast-warning`
       });
-      toast.present();
+      toast.onDidDismiss(() => {
+        this.isToastOpen = false;
+      });
+      if (!this.isToastOpen) {
+        this.isToastOpen = true;
+        toast.present();
+      }
       return this.events.publish('UNHANDLED_ERROR', error);
     }
   }

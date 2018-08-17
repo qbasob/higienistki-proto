@@ -9,6 +9,7 @@ import { Person } from '../../shared/person.model';
 import { OfficesStore } from '../offices-store/offices-store';
 import { PeopleStore } from '../people-store/people-store';
 import { AuthService } from '../auth-service/auth-service';
+import { Events } from 'ionic-angular';
 
 /**
  * Observable Data Service, "EventsStore"
@@ -34,9 +35,10 @@ export class EventsStore extends AbstractStore<PEvent> {
     public storage: Storage,
     public authService: AuthService,
     public officesStore: OfficesStore,
-    public peopleStore: PeopleStore
+    public peopleStore: PeopleStore,
+    public events: Events
   ) {
-    super('events', http, storage, authService);
+    super('events', http, storage, authService, events);
 
     this.office$ = this.officesStore.record$;
     this.offices$ = this.officesStore.serverRecords$;

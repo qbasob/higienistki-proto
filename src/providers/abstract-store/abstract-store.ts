@@ -15,6 +15,7 @@ import 'rxjs/add/observable/empty';
 import 'rxjs/add/observable/forkJoin';
 import { LocalModel } from '../../shared/local.model';
 import { AuthService } from '../auth-service/auth-service';
+import { Events } from 'ionic-angular';
 
 /**
  * Observable Data Service, "PeopleStore"
@@ -37,7 +38,8 @@ export abstract class AbstractStore<T extends LocalModel> {
     modelName: string,
     public http: HttpClient,
     public storage: Storage,
-    public authService: AuthService
+    public authService: AuthService,
+    public events: Events
   ) {
     this._apiUrl = `${ENV.endpoint}/${modelName}`;
     this._apiSuffix = ENV.endpointSuffix;
@@ -194,7 +196,7 @@ export abstract class AbstractStore<T extends LocalModel> {
         record.needSync = true;
 
         // toast na blad zapisu na sewerze
-        throw(err);
+        this.events.publish('HANDLED_ERROR', err);
 
         // jeżeli błąd serwera to kontynuujemy, zapisze się lokalnie i oznaczy do synchronizacji
         // w takiej sytuacji przekazujemy do switchMap rekord który chcieliśmy wysłać
@@ -229,6 +231,9 @@ export abstract class AbstractStore<T extends LocalModel> {
       .catch<T, never>((err) => {
         // jeżeli błąd serwera, ustawiamy flagę rekordowi
         record.needSync = true;
+
+        // toast na blad zapisu na sewerze
+        this.events.publish('HANDLED_ERROR', err);
 
         // jeżeli błąd serwera to kontynuujemy, zapisze się lokalnie i oznaczy do synchronizacji
         // w takiej sytuacji przekazujemy do switchMap rekord który chcieliśmy wysłać
@@ -274,6 +279,9 @@ export abstract class AbstractStore<T extends LocalModel> {
       .catch<T, never>((err) => {
         // jeżeli błąd serwera, ustawiamy flagę rekordowi
         record.needSync = true;
+
+        // toast na blad zapisu na sewerze
+        this.events.publish('HANDLED_ERROR', err);
 
         // jeżeli błąd serwera to kontynuujemy, zapisze się lokalnie i oznaczy do synchronizacji
         // w takiej sytuacji przekazujemy do switchMap rekord który chcieliśmy wysłać

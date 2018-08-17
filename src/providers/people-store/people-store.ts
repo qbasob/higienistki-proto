@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { AbstractStore } from '../abstract-store/abstract-store';
 import { Person } from '../../shared/person.model';
 import { AuthService } from '../auth-service/auth-service';
+import { Events } from 'ionic-angular';
 
 /**
  * Observable Data Service, "PeopleStore"
@@ -20,9 +21,10 @@ export class PeopleStore extends AbstractStore<Person> {
   constructor(
     http: HttpClient,
     storage: Storage,
-    authService: AuthService
+    authService: AuthService,
+    events: Events
   ) {
     const modelName = 'people';
-    super(modelName, http, storage, authService);
+    super(modelName, http, storage, authService, events);
   }
 }
