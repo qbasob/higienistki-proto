@@ -26,7 +26,7 @@
         <img [src]="photosSrc.photoOutside" class="photo">
       </ion-note>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="!event.noPhotoInsideWaiting">
       Zdjęcie poczekalni
       <ion-note item-end>
         <img [src]="photosSrc.photoInsideWaiting" class="photo">
@@ -44,7 +44,7 @@
         {{ event.noPhotoInsideWaitingWhy }}
       </ion-note>
     </ion-item>
-    <ion-item>
+    <ion-item  *ngIf="!event.noPhotoInsideOffice">
       Zdjęcie gabinetu
       <ion-note item-end>
         <img [src]="photosSrc.photoInsideOffice" class="photo">
