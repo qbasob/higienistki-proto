@@ -77,27 +77,31 @@
           Wymagana/y minimum 1 higienistka/higienista
         </span>
       </span>
-    </ion-list>
 
-    <ion-list radio-group formControlName="isBuyingSonicare">
-      <ion-list-header>
-        Czy kupują produkty Sonicare?
-      </ion-list-header>
 
-      <ion-item>
-        <ion-label>Nie</ion-label>
-        <ion-radio value="no"></ion-radio>
-      </ion-item>
+      <span radio-group formControlName="isBuyingSonicare">
+        <!-- <ion-list-header>
+          Czy kupują produkty Sonicare?
+        </ion-list-header> -->
+        <ion-item-group>
+          <ion-item-divider color="light">Czy kupują produkty Sonicare?</ion-item-divider>
+        </ion-item-group>
 
-      <ion-item>
-        <ion-label>Tak, na własny użytek</ion-label>
-        <ion-radio value="yes"></ion-radio>
-      </ion-item>
+        <ion-item>
+          <ion-label>Nie</ion-label>
+          <ion-radio value="no"></ion-radio>
+        </ion-item>
 
-      <ion-item>
-        <ion-label>Tak, do odsprzedaży pacjentowi</ion-label>
-        <ion-radio value="yes_sell"></ion-radio>
-      </ion-item>
+        <ion-item>
+          <ion-label>Tak, na własny użytek</ion-label>
+          <ion-radio value="yes"></ion-radio>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Tak, do odsprzedaży pacjentowi</ion-label>
+          <ion-radio value="yes_sell"></ion-radio>
+        </ion-item>
+      </span>
     </ion-list>
 
     <ion-row>
