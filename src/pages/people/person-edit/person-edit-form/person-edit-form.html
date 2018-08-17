@@ -5,7 +5,7 @@
     </ion-label>
     <ion-input type="text" formControlName="name"></ion-input>
   </ion-item>
-  <span ion-text *ngIf="personFormGroup.get('name').dirty && personFormGroup.get('name').invalid" color="danger" padding-left>
+  <span ion-text *ngIf="(personFormGroup.get('name').dirty || formDir.submitted) && personFormGroup.get('name').invalid" color="danger" padding-left>
     <span *ngIf="personFormGroup.get('name').errors.required">
       To pole jest wymagane
     </span>
@@ -20,7 +20,7 @@
       <ion-option value="{{Gender.Pan}}">Pan</ion-option>
     </ion-select>
   </ion-item>
-  <span ion-text *ngIf="personFormGroup.get('gender').dirty && personFormGroup.get('gender').invalid" color="danger" padding-left>
+  <span ion-text *ngIf="(personFormGroup.get('gender').dirty || formDir.submitted) && personFormGroup.get('gender').invalid" color="danger" padding-left>
     <span *ngIf="personFormGroup.get('gender').errors.required">
       To pole jest wymagane
     </span>
@@ -29,7 +29,7 @@
     <ion-label floating>Adres E-mail *</ion-label>
     <ion-input type="email" formControlName="email"></ion-input>
   </ion-item>
-  <span ion-text *ngIf="personFormGroup.get('email').dirty && personFormGroup.get('email').invalid" color="danger" padding-left>
+  <span ion-text *ngIf="(personFormGroup.get('email').dirty || formDir.submitted) && personFormGroup.get('email').invalid" color="danger" padding-left>
     <span *ngIf="personFormGroup.get('email').errors.required">
       To pole jest wymagane
     </span>
@@ -48,18 +48,24 @@
     formControlName="phone"
     mask="000-000-000">
   </ion-input-mask>
-  <span ion-text *ngIf="personFormGroup.get('phone').dirty && personFormGroup.get('phone').invalid" color="danger" padding-left>
+  <span ion-text *ngIf="(personFormGroup.get('phone').dirty || formDir.submitted) && personFormGroup.get('phone').invalid" color="danger" padding-left>
     <span *ngIf="personFormGroup.get('phone').errors.required">
       To pole jest wymagane
+    </span>
+    <span *ngIf="personFormGroup.get('phone').errors.minlength">
+      Numer telefonu musi składać się z {{ personFormGroup.get('phone').errors.minlength.requiredLength }} cyfr
     </span>
   </span>
   <ion-item>
     <ion-label floating>Liczba gabinetów *</ion-label>
     <ion-input type="number" formControlName="officesNo"></ion-input>
   </ion-item>
-  <span ion-text *ngIf="personFormGroup.get('officesNo').dirty && personFormGroup.get('officesNo').invalid" color="danger" padding-left>
+  <span ion-text *ngIf="(personFormGroup.get('officesNo').dirty || formDir.submitted) && personFormGroup.get('officesNo').invalid" color="danger" padding-left>
     <span *ngIf="personFormGroup.get('officesNo').errors.required">
       To pole jest wymagane
+    </span>
+    <span *ngIf="personFormGroup.get('officesNo').errors.min">
+       Wymagany minimum 1 gabinet
     </span>
   </span>
   <ion-item>
@@ -87,10 +93,16 @@
     <ion-label>Wręczono pakiet startowy</ion-label>
     <ion-toggle formControlName="gotStarter"></ion-toggle>
   </ion-item>
-  <ion-item *ngIf="personFormGroup.get('gotStarter').value">
+  <ion-item [hidden]="!personFormGroup.get('gotStarter').value">
     <ion-label floating>Numer pakietu startowego</ion-label>
     <ion-input type="text" formControlName="starterNo"></ion-input>
   </ion-item>
+  <span ion-text *ngIf="(personFormGroup.get('starterNo').dirty || formDir.submitted) && personFormGroup.get('starterNo').invalid" color="danger"
+    padding-left>
+    <span *ngIf="personFormGroup.get('starterNo').errors.required">
+      To pole jest wymagane
+    </span>
+  </span>
   <ion-item>
     <ion-label>Wręczono ekspozytor Sonicare</ion-label>
     <ion-toggle formControlName="gotExpositor"></ion-toggle>

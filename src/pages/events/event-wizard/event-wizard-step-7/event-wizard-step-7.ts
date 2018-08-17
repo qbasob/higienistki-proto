@@ -49,6 +49,11 @@ export class EventWizardStep7Page {
 
 
   next() {
+    // po submicie odświeżamy wszystkie walidacje
+    for (let i in this.stepForm.controls) {
+      this.stepForm.controls[i].updateValueAndValidity();
+    }
+
     if (this.stepForm.valid) {
       this._stepData = Object.assign({}, this.person, this.stepForm.value);
       this.events.publish('event-wizard-change-tab', 6, 7, { person: this._stepData });

@@ -8,11 +8,12 @@
 </ion-header>
 
 <ion-content>
-  <form novalidate [formGroup]="stepForm" (ngSubmit)="next()">
-    <person-edit-form [personData]="person" (onFormInit)="patchForm($event)"></person-edit-form>
+  <form novalidate [formGroup]="stepForm" #formDir="ngForm" (ngSubmit)="next()">
+    <person-edit-form [personData]="person" [formData]="formDir" (onFormInit)="patchForm($event)"></person-edit-form>
     <ion-row>
       <ion-col text-center>
-        <button ion-button type="submit" [disabled]="!stepForm.valid">Dalej</button>
+        <!-- <button ion-button type="submit" [disabled]="!stepForm.valid">Dalej</button> -->
+        <button ion-button type="submit">Dalej</button>
         <button ion-button type="button" color="light" (click)="back()">Wstecz</button>
         <button ion-button type="button" color="light" (click)="cancel()">Anuluj</button>
       </ion-col>

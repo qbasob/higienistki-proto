@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Person, Gender } from '../../../../shared/person.model';
 import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { CustomValidators } from '../../../../validators/custom-validators';
+
 
 @Component({
   selector: 'person-edit-form',
@@ -9,6 +11,8 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors }
 export class PersonEditFormComponent implements OnInit {
   @Input('personData')
   public person: Person = { id: null, name: null, gender: Gender.Pani }; //default value
+  @Input('formData')
+  public formDir;
 
   @Output()
   onFormInit = new EventEmitter<FormGroup>();
@@ -26,13 +30,13 @@ export class PersonEditFormComponent implements OnInit {
       name: [null, [Validators.required, Validators.minLength(5)]],
       gender: [Gender.Pani, Validators.required],
       email: [null, [Validators.required, this.customEmailValidator]],
-      phone: [null, Validators.required],
-      officesNo: [null, Validators.required],
+      phone: [null, [Validators.required, Validators.minLength(9)]],
+      officesNo: [null, [Validators.required, Validators.min(1)]],
       sonicareUser: false,
       sonicareRecom: false,
       wantCodes: false,
       gotStarter: false,
-      starterNo: null,
+      starterNo: [null, CustomValidators.requireIfOther('gotStarter', true)],
       gotExpositor: false,
       agreeReg: false,
       agreeMark1: false,

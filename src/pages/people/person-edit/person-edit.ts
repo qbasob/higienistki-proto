@@ -47,6 +47,11 @@ export class PersonEditPage implements OnInit {
   }
 
   save() {
+    // po submicie odświeżamy wszystkie walidacje
+    for (let i in this.personForm.controls) {
+      this.personForm.controls[i].updateValueAndValidity();
+    }
+
     if (this.personForm.valid) {
       let loading = this.loadingCtrl.create({
         content: 'Zapisywanie...'
