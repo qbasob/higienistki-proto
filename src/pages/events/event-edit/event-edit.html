@@ -21,7 +21,12 @@
       <!-- DATA WIZYTY -->
       <ion-item>
         <ion-label>Data wizyty *</ion-label>
-        <ion-datetime formControlName="visitDate"></ion-datetime>
+        <ion-datetime
+          monthShortNames="sty, lut, mar, kwi, maj, cze, lip, sie, wrz, paź, lis, gru"
+          doneText="Gotowe"
+          cancelText="Anuluj"
+          formControlName="visitDate">
+        </ion-datetime>
       </ion-item>
       <span ion-text *ngIf="(eventForm.get('visitDate').dirty || formDir.submitted) && eventForm.get('visitDate').invalid" color="danger" padding-left>
         <span *ngIf="eventForm.get('visitDate').errors.required">
