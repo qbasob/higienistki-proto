@@ -17,7 +17,7 @@
     <ion-item>
       Zwrot grzecznościowy
       <ion-note item-end>
-        {{ !person.gender ? 'Pani' : 'Pan' }}
+        {{ person.gender === 'F' ? 'Pani' : 'Pan' }}
       </ion-note>
     </ion-item>
     <ion-item>
@@ -39,19 +39,19 @@
       </ion-note>
     </ion-item>
     <ion-item>
-       {{ !person.gender ? 'Użytkowniczka' : 'Użytkownik' }} Sonicare
+       {{ person.gender === 'F' ? 'Użytkowniczka' : 'Użytkownik' }} Sonicare
       <ion-note item-end>
         {{ person.sonicareUser ? 'Tak' : 'Nie' }}
       </ion-note>
     </ion-item>
     <ion-item>
-       {{ !person.gender ? 'Zainteresowana' : 'Zainteresowany' }} Sonicare
+       {{ person.gender === 'F' ? 'Zainteresowana' : 'Zainteresowany' }} Sonicare
       <ion-note item-end>
         {{ person.sonicareRecom ? 'Tak' : 'Nie' }}
       </ion-note>
     </ion-item>
     <ion-item>
-       {{ !person.gender ? 'Zainteresowana' : 'Zainteresowany' }} otrzymaniem kodów rabatowych
+       {{ person.gender === 'F' ? 'Zainteresowana' : 'Zainteresowany' }} otrzymaniem kodów rabatowych
       <ion-note item-end>
         {{ person.wantCodes ? 'Tak' : 'Nie' }}
       </ion-note>

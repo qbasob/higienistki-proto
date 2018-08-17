@@ -11,9 +11,9 @@
   <form novalidate [formGroup]="stepForm" (ngSubmit)="next()">
     <ion-list>
       <ion-item>
-        {{ !person.gender ? 'Uczestniczka' : 'Uczestnik' }} programu programu
+        {{ person.gender === 'F' ? 'Uczestniczka' : 'Uczestnik' }} programu programu
         <ion-note item-end>
-          {{ !person.gender ? 'Pani' : 'Pan' }} {{ person.name }}
+          {{ person.gender === 'F' ? 'Pani' : 'Pan' }} {{ person.name }}
         </ion-note>
       </ion-item>
       <ion-item>
@@ -32,10 +32,10 @@
         Pracuję w {{ person.officesNo }} gabinetach
       </ion-item>
       <ion-item>
-        {{ person.sonicareUser ? 'Jestem' : 'NIE jestem' }} {{ !person.gender ? 'użytkowniczką' : 'użytkownikiem' }} Sonicare
+        {{ person.sonicareUser ? 'Jestem' : 'NIE jestem' }} {{ person.gender === 'F' ? 'użytkowniczką' : 'użytkownikiem' }} Sonicare
       </ion-item>
       <ion-item>
-        {{ person.sonicareRecom ? 'Jestem' : 'NIE jestem' }} {{ !person.gender ? 'zainteresowana' : 'zainteresowany' }} rekomendowaniem
+        {{ person.sonicareRecom ? 'Jestem' : 'NIE jestem' }} {{ person.gender === 'F' ? 'zainteresowana' : 'zainteresowany' }} rekomendowaniem
         produktów Sonicare pacjentom
       </ion-item>
       <ion-item *ngIf="person.gotStarter">
