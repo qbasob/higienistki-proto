@@ -73,6 +73,8 @@ export class EventWizardStep1Page implements OnInit {
   }
 
   selectCity(event) {
+    this.isNewOffice = false;
+
     if (event.value) {
       this.filteredOffices = this.offices.filter((office) => {
         if (office.city === event.value) {
@@ -85,6 +87,8 @@ export class EventWizardStep1Page implements OnInit {
   }
 
   selectOffice(event) {
+    this.isNewOffice = false;
+
     if (event.value) {
       this.offices.some((office) => {
         if (office.localId === event.value.localId) {

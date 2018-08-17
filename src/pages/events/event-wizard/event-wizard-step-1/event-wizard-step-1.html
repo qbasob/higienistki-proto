@@ -20,7 +20,6 @@
       <ion-label floating>Miejscowość</ion-label>
       <select-searchable
         #citySelect
-        [isEnabled]="!isNewOffice"
         item-content
         [items]="cities"
         [canSearch]="true"
@@ -41,7 +40,6 @@
       <ion-label floating>Nazwa</ion-label>
       <select-searchable
         #officeSelect
-        [isEnabled]="!isNewOffice"
         item-content
         [items]="filteredOffices"
         itemValueField="localId"
