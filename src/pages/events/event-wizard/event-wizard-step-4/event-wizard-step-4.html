@@ -9,26 +9,28 @@
 
 <ion-content>
   <form novalidate [formGroup]="stepForm" #formDir="ngForm" (ngSubmit)="next()">
-    <ion-item-group>
-      <ion-item-divider color="light">Uzyskaj zezwolenie i wykonaj zdjęcia - unikaj fotografowania Pacjentów</ion-item-divider>
-    </ion-item-group>
+    <ion-list>
+      <ion-item-group>
+        <ion-item-divider color="light">Uzyskaj zezwolenie i wykonaj zdjęcia - unikaj fotografowania Pacjentów</ion-item-divider>
+      </ion-item-group>
 
-    <!-- ZDJĘCIE POCZEKALNI -->
-    <ion-row [hidden]="stepForm.get('noPhotoInsideWaiting').value === true">
-      <ion-col text-center>
-        <img [src]="photosSrc.photoInsideWaiting" class="photo">
-        <input type="file" (change)="addPhoto($event, 'photoInsideWaiting')" id="file-input" style="display: none;" #fileInp1>
-        <button ion-button type="button" (click)="addPhotoClick(fileInp1)">Zrób zdjęcie</button>
-        <div ion-text *ngIf="(stepForm.get('photoInsideWaiting').dirty || formDir.submitted) && stepForm.get('photoInsideWaiting').invalid"
-          color="danger" padding-left>
-          <span *ngIf="stepForm.get('photoInsideWaiting').errors.required">
-            To pole jest wymagane
-          </span>
-        </div>
-      </ion-col>
-    </ion-row>
+      <!-- ZDJĘCIE POCZEKALNI -->
+      <ion-item [hidden]="stepForm.get('noPhotoInsideWaiting').value === true">
+        <ion-row>
+          <ion-col text-center>
+            <img [src]="photosSrc.photoInsideWaiting" class="photo">
+            <input type="file" (change)="addPhoto($event, 'photoInsideWaiting')" id="file-input" style="display: none;" #fileInp1>
+            <button ion-button type="button" (click)="addPhotoClick(fileInp1)">Zrób zdjęcie</button>
+            <div ion-text *ngIf="(stepForm.get('photoInsideWaiting').dirty || formDir.submitted) && stepForm.get('photoInsideWaiting').invalid"
+              color="danger" padding-left>
+              <span *ngIf="stepForm.get('photoInsideWaiting').errors.required">
+                To pole jest wymagane
+              </span>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-item>
 
-    <ion-list no-lines>
       <!-- BRAK MOŻLIWOŚCI WYKONANIA ZDJĘCIA W POCZEKALNI -->
       <ion-item>
         <ion-label>Brak możliwości wykonania zdjęcia</ion-label>
@@ -52,24 +54,25 @@
           To pole jest wymagane
         </span>
       </span>
-    </ion-list>
 
-    <!-- ZDJĘCIE GABINETU -->
-    <ion-row [hidden]="stepForm.get('noPhotoInsideOffice').value === true">
-      <ion-col text-center>
-        <img [src]="photosSrc.photoInsideOffice" class="photo">
-        <input type="file" (change)="addPhoto($event, 'photoInsideOffice')" id="file-input" style="display: none;" #fileInp2>
-        <button ion-button type="button" (click)="addPhotoClick(fileInp2)">Zrób zdjęcie</button>
-        <div ion-text *ngIf="(stepForm.get('photoInsideOffice').dirty || formDir.submitted) && stepForm.get('photoInsideOffice').invalid"
-          color="danger" padding-left>
-          <span *ngIf="stepForm.get('photoInsideOffice').errors.required">
-            To pole jest wymagane
-          </span>
-        </div>
-      </ion-col>
-    </ion-row>
 
-    <ion-list no-lines>
+      <!-- ZDJĘCIE GABINETU -->
+      <ion-item [hidden]="stepForm.get('noPhotoInsideOffice').value === true">
+        <ion-row>
+          <ion-col text-center>
+            <img [src]="photosSrc.photoInsideOffice" class="photo">
+            <input type="file" (change)="addPhoto($event, 'photoInsideOffice')" id="file-input" style="display: none;" #fileInp2>
+            <button ion-button type="button" (click)="addPhotoClick(fileInp2)">Zrób zdjęcie</button>
+            <div ion-text *ngIf="(stepForm.get('photoInsideOffice').dirty || formDir.submitted) && stepForm.get('photoInsideOffice').invalid"
+              color="danger" padding-left>
+              <span *ngIf="stepForm.get('photoInsideOffice').errors.required">
+                To pole jest wymagane
+              </span>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+
       <!-- BRAK MOŻLIWOŚCI WYKONANIA ZDJĘCIA W GABINECIE -->
       <ion-item>
         <ion-label>Brak możliwości wykonania zdjęcia</ion-label>
