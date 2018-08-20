@@ -79,7 +79,12 @@
   <!-- WOJEWÓDZTWO -->
   <ion-item>
     <ion-label floating>Województwo *</ion-label>
-    <ion-input type="text" formControlName="voivodeship"></ion-input>
+    <!-- <ion-input type="text" formControlName="voivodeship"></ion-input> -->
+    <ion-select formControlName="voivodeship">
+      <ion-option [value]="voivodeship" *ngFor="let voivodeship of voivodeships">
+        {{ voivodeship }}
+      </ion-option>
+    </ion-select>
   </ion-item>
   <span ion-text *ngIf="(officeFormGroup.get('voivodeship').dirty || formDir.submitted) && officeFormGroup.get('voivodeship').invalid" color="danger" padding-left>
     <span *ngIf="officeFormGroup.get('voivodeship').errors.required">
