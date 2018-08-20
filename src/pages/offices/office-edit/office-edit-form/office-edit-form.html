@@ -1,7 +1,7 @@
 <ion-list [formGroup]="officeFormGroup">
   <!-- NAZWA GABINETU -->
   <ion-item>
-    <ion-label floating>Nazwa gabinetu *</ion-label>
+    <ion-label floating>Nazwa gabinet11u *</ion-label>
     <ion-input type="text" formControlName="name"></ion-input>
     <button ion-button type="button" clear item-end (click)="nameInfo($event)">
       <ion-icon name="information-circle" style="font-size: 2.4em;"></ion-icon>
@@ -17,6 +17,12 @@
   </span>
 
   <!-- NIP -->
+  <!-- <ion-item>
+      <ion-label floating>NIP</ion-label>
+      <ion-input type="text" formControlName="nip"></ion-input>
+    </ion-item> -->
+  <ion-input-mask type="text" label="NIP" typeLabel="floating" formControlName="nip" mask="0000000000">
+  </ion-input-mask>
   <span ion-text *ngIf="(officeFormGroup.get('nip').dirty || formDir.submitted) && officeFormGroup.get('nip').invalid" color="danger"
     padding-left>
     <span *ngIf="officeFormGroup.get('nip').errors.required">
@@ -134,17 +140,6 @@
       To pole jest wymagane
     </span>
   </span>
-  <!-- <ion-item>
-    <ion-label floating>NIP</ion-label>
-    <ion-input type="text" formControlName="nip"></ion-input>
-  </ion-item> -->
-  <ion-input-mask
-    type="text"
-    label="NIP"
-    typeLabel="floating"
-    formControlName="nip"
-    mask="0000000000">
-  </ion-input-mask>
 
   <!-- LOCATION INFO -->
   <ion-item>
