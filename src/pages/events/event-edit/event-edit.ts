@@ -283,21 +283,23 @@ export class EventEditPage {
     });
   }
 
-  selectPerson(personLocalId, peopleSelect) {
+  selectPerson(event, peopleSelect) {
     peopleSelect.value = "";
-    this.people.some((person) => {
-      if (person.localId === personLocalId) {
-        this.eventRelations.people.push(person);
-        return true;
-      }
-    });
+
+    if (event.value) {
+      this.people.some((person) => {
+        if (person.localId === event.value.localId) {
+          this.eventRelations.people.push(person);
+          return true;
+        }
+      });
+    }
   }
 
   removePerson(person: Person) {
 
     const handler = () => {
       this.eventRelations.people.some((eventPerson, index) => {
-        console.log("some", eventPerson);
         if (eventPerson.localId === person.localId) {
           this.eventRelations.people.splice(index, 1);
           return true;
