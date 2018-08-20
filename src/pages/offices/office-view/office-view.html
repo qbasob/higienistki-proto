@@ -50,16 +50,34 @@
         {{ office.city }}
       </ion-note>
     </ion-item>
-    <ion-item>
+    <!-- <ion-item>
       Powiat
       <ion-note item-end>
         {{ office.county }}
       </ion-note>
-    </ion-item>
+    </ion-item> -->
     <ion-item>
       Województwo
       <ion-note item-end>
         {{ office.voivodeship }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Numer telefonu do gabinetu
+      <ion-note item-end>
+        {{ office.phone }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Nazwa firmy - właściciela gabinetu
+      <ion-note item-end>
+        {{ office.krsName }}
+      </ion-note>
+    </ion-item>
+    <ion-item>
+      Uwagi dotyczące położenia gabinetu
+      <ion-note item-end>
+        {{ office.locationInfo }}
       </ion-note>
     </ion-item>
   </ion-list>
