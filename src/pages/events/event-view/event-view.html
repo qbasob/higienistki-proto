@@ -14,120 +14,6 @@
 
 <ion-content>
   <ion-list>
-    <ion-item>
-      Data wizyty
-      <ion-note item-end>
-        {{ event.visitDate | date: 'dd.MM.yyyy' }}
-      </ion-note>
-    </ion-item>
-    <ion-item>
-      Zdjęcie z zewnątrz
-      <ion-note item-end>
-        <img [src]="photosSrc.photoOutside" class="photo">
-      </ion-note>
-    </ion-item>
-    <ion-item *ngIf="!event.noPhotoInsideWaiting">
-      Zdjęcie poczekalni
-      <ion-note item-end>
-        <img [src]="photosSrc.photoInsideWaiting" class="photo">
-      </ion-note>
-    </ion-item>
-    <ion-item>
-       Brak możliwości wykonania zdjęcia w poczekalni
-      <ion-note item-end>
-        {{ event.noPhotoInsideWaiting ? 'Tak' : 'Nie' }}
-      </ion-note>
-    </ion-item>
-    <ion-item *ngIf="event.noPhotoInsideWaiting">
-      Powód niewykonania zdjęcia w poczekalni
-      <ion-note item-end>
-        {{ event.noPhotoInsideWaitingWhy }}
-      </ion-note>
-    </ion-item>
-    <ion-item  *ngIf="!event.noPhotoInsideOffice">
-      Zdjęcie gabinetu
-      <ion-note item-end>
-        <img [src]="photosSrc.photoInsideOffice" class="photo">
-      </ion-note>
-    </ion-item>
-    <ion-item>
-      Brak możliwości wykonania zdjęcia w gabinecie
-      <ion-note item-end>
-        {{ event.noPhotoInsideOffice ? 'Tak' : 'Nie' }}
-      </ion-note>
-    </ion-item>
-    <ion-item *ngIf="event.noPhotoInsideOffice">
-      Powód niewykonania zdjęcia w gabinecie
-      <ion-note item-end>
-        {{ event.noPhotoInsideOfficeWhy }}
-      </ion-note>
-    </ion-item>
-    <ion-item>
-      Gabinet jest częścią sieci gabinetów
-      <ion-note item-end>
-         {{ event.isOfficeNetwork ? 'Tak' : 'Nie' }}
-      </ion-note>
-    </ion-item>
-    <ion-item *ngIf="event.isOfficeNetwork">
-      Liczba placówek w ramach sieci
-      <ion-note item-end>
-        {{ event.networkOfficesCount }}
-      </ion-note>
-    </ion-item>
-    <ion-item>
-      Liczba stanowisk (foteli) w gabinecie
-      <ion-note item-end>
-        {{ event.chairsCount }}
-      </ion-note>
-    </ion-item>
-    <ion-item>
-      Liczba lekarzy pracujących w gabinecie
-      <ion-note item-end>
-        {{ event.doctorsCount }}
-      </ion-note>
-    </ion-item>
-    <ion-item>
-      Czy w gabinecie są higienistki/higieniści
-      <ion-note item-end>
-        {{ event.hasOfficeHigienists ? 'Tak' : 'Nie' }}
-      </ion-note>
-    </ion-item>
-    <ion-item>
-      Liczba higienistek/higienistów pracujących w gabinecie
-      <ion-note item-end>
-        {{ event.higienistsCount }}
-      </ion-note>
-    </ion-item>
-    <ion-item>
-      Czy kupują produkty Sonicare
-      <ion-note item-end [ngSwitch]="event.isBuyingSonicare">
-        <span *ngSwitchCase="'no'">
-          Nie
-        </span>
-        <span *ngSwitchCase="'yes'">
-          Tak, na własny użytek
-        </span>
-        <span *ngSwitchCase="'yes_sell'">
-          Tak, do odsprzedaży pacjentowi
-        </span>
-      </ion-note>
-    </ion-item>
-    <ion-item [ngSwitch]="event.doQualify">
-      <span *ngSwitchCase="'no'">
-        Brak osób kwalifikujących się do Programu
-      </span>
-      <span *ngSwitchCase="'no_deny'">
-        Brak zainteresowania, odmowa udziału
-      </span>
-      <span *ngSwitchCase="'yes'">
-        Rejestruję Uczestnika/Uczestniczkę programu dla Higienistek/Higienistów
-      </span>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Informacje dodatkowe</ion-label>
-      <div item-content ion-text padding-vertical text-left style="width:100%; white-space: pre-wrap;">{{ event.additionalInfo }}</div>
-    </ion-item>
-
     <ion-item-group *ngIf="event.office as office">
       <ion-item-divider color="light">Gabinet</ion-item-divider>
       <ion-item-sliding>
@@ -137,9 +23,126 @@
         <ion-item-options side="right">
           <button ion-button color="light" (click)="detailsOffice(office)">Podgląd</button>
           <!-- <button ion-button color="light" (click)="editOffice(office)">Edytuj</button>
-          <button ion-button color="danger" (click)="removeOffice(office)">Usuń</button> -->
+              <button ion-button color="danger" (click)="removeOffice(office)">Usuń</button> -->
         </ion-item-options>
       </ion-item-sliding>
+    </ion-item-group>
+
+    <ion-item-group>
+      <ion-item-divider color="light">Dane wizyty</ion-item-divider>
+      <ion-item>
+        Data wizyty
+        <ion-note item-end>
+          {{ event.visitDate | date: 'dd.MM.yyyy' }}
+        </ion-note>
+      </ion-item>
+      <ion-item>
+        Zdjęcie z zewnątrz
+        <ion-note item-end>
+          <img [src]="photosSrc.photoOutside" class="photo">
+        </ion-note>
+      </ion-item>
+      <ion-item *ngIf="!event.noPhotoInsideWaiting">
+        Zdjęcie poczekalni
+        <ion-note item-end>
+          <img [src]="photosSrc.photoInsideWaiting" class="photo">
+        </ion-note>
+      </ion-item>
+      <ion-item>
+        Brak możliwości wykonania zdjęcia w poczekalni
+        <ion-note item-end>
+          {{ event.noPhotoInsideWaiting ? 'Tak' : 'Nie' }}
+        </ion-note>
+      </ion-item>
+      <ion-item *ngIf="event.noPhotoInsideWaiting">
+        Powód niewykonania zdjęcia w poczekalni
+        <ion-note item-end>
+          {{ event.noPhotoInsideWaitingWhy }}
+        </ion-note>
+      </ion-item>
+      <ion-item  *ngIf="!event.noPhotoInsideOffice">
+        Zdjęcie gabinetu
+        <ion-note item-end>
+          <img [src]="photosSrc.photoInsideOffice" class="photo">
+        </ion-note>
+      </ion-item>
+      <ion-item>
+        Brak możliwości wykonania zdjęcia w gabinecie
+        <ion-note item-end>
+          {{ event.noPhotoInsideOffice ? 'Tak' : 'Nie' }}
+        </ion-note>
+      </ion-item>
+      <ion-item *ngIf="event.noPhotoInsideOffice">
+        Powód niewykonania zdjęcia w gabinecie
+        <ion-note item-end>
+          {{ event.noPhotoInsideOfficeWhy }}
+        </ion-note>
+      </ion-item>
+      <ion-item>
+        Gabinet jest częścią sieci gabinetów
+        <ion-note item-end>
+          {{ event.isOfficeNetwork ? 'Tak' : 'Nie' }}
+        </ion-note>
+      </ion-item>
+      <ion-item *ngIf="event.isOfficeNetwork">
+        Liczba placówek w ramach sieci
+        <ion-note item-end>
+          {{ event.networkOfficesCount }}
+        </ion-note>
+      </ion-item>
+      <ion-item>
+        Liczba stanowisk (foteli) w gabinecie
+        <ion-note item-end>
+          {{ event.chairsCount }}
+        </ion-note>
+      </ion-item>
+      <ion-item>
+        Liczba lekarzy pracujących w gabinecie
+        <ion-note item-end>
+          {{ event.doctorsCount }}
+        </ion-note>
+      </ion-item>
+      <ion-item>
+        Czy w gabinecie są higienistki/higieniści
+        <ion-note item-end>
+          {{ event.hasOfficeHigienists ? 'Tak' : 'Nie' }}
+        </ion-note>
+      </ion-item>
+      <ion-item>
+        Liczba higienistek/higienistów pracujących w gabinecie
+        <ion-note item-end>
+          {{ event.higienistsCount }}
+        </ion-note>
+      </ion-item>
+      <ion-item>
+        Czy kupują produkty Sonicare
+        <ion-note item-end [ngSwitch]="event.isBuyingSonicare">
+          <span *ngSwitchCase="'no'">
+            Nie
+          </span>
+          <span *ngSwitchCase="'yes'">
+            Tak, na własny użytek
+          </span>
+          <span *ngSwitchCase="'yes_sell'">
+            Tak, do odsprzedaży pacjentowi
+          </span>
+        </ion-note>
+      </ion-item>
+      <ion-item [ngSwitch]="event.doQualify">
+        <span *ngSwitchCase="'no'">
+          Brak osób kwalifikujących się do Programu
+        </span>
+        <span *ngSwitchCase="'no_deny'">
+          Brak zainteresowania, odmowa udziału
+        </span>
+        <span *ngSwitchCase="'yes'">
+          Rejestruję Uczestnika/Uczestniczkę programu dla Higienistek/Higienistów
+        </span>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Informacje dodatkowe</ion-label>
+        <div item-content ion-text padding-vertical text-left style="width:100%; white-space: pre-wrap;">{{ event.additionalInfo }}</div>
+      </ion-item>
     </ion-item-group>
 
     <ion-item-group>
