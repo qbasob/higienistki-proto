@@ -16,6 +16,17 @@
     </span>
   </span>
 
+  <!-- NIP -->
+  <span ion-text *ngIf="(officeFormGroup.get('nip').dirty || formDir.submitted) && officeFormGroup.get('nip').invalid" color="danger"
+    padding-left>
+    <span *ngIf="officeFormGroup.get('nip').errors.required">
+      To pole jest wymagane
+    </span>
+    <span *ngIf="officeFormGroup.get('nip').errors.minlength">
+      Minimum {{ officeFormGroup.get('nip').errors.minlength.requiredLength }} znaków
+    </span>
+  </span>
+
   <!-- ULICA -->
   <ion-item>
     <ion-label floating>Ulica *</ion-label>
@@ -134,16 +145,6 @@
     formControlName="nip"
     mask="0000000000">
   </ion-input-mask>
-
-  <!-- NIP -->
-  <span ion-text *ngIf="(officeFormGroup.get('nip').dirty || formDir.submitted) && officeFormGroup.get('nip').invalid" color="danger" padding-left>
-    <span *ngIf="officeFormGroup.get('nip').errors.required">
-      To pole jest wymagane
-    </span>
-    <span *ngIf="officeFormGroup.get('nip').errors.minlength">
-      Minimum {{ officeFormGroup.get('nip').errors.minlength.requiredLength }} znaków
-    </span>
-  </span>
 
   <!-- LOCATION INFO -->
   <ion-item>
