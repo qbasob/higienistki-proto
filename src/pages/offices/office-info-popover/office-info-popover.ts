@@ -10,7 +10,7 @@ export class OfficeInfoPopoverPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private viewCtrl: ViewController
+    // private viewCtrl: ViewController
   ) {
     this.content = navParams.get('content');
   }

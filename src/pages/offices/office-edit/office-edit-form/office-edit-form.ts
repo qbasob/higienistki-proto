@@ -18,10 +18,28 @@ export class OfficeEditFormComponent implements OnInit {
   onFormInit = new EventEmitter<FormGroup>();
 
   public officeFormGroup: FormGroup;
+  public voivodeships: Array<string> = [
+    'dolnośląskie',
+    'kujawsko-pomorskie',
+    'lubelskie',
+    'lubuskie',
+    'łódzkie',
+    'małopolskie',
+    'mazowieckie',
+    'opolskie',
+    'podkarpackie',
+    'podlaskie',
+    'pomorskie',
+    'śląskie',
+    'świętokrzyskie',
+    'warmińsko-mazurskie',
+    'wielkopolskie',
+    'zachodniopomorskie',
+  ];
 
   constructor(
     private formBuilder: FormBuilder,
-    private alertCtrl: AlertController,
+    // private alertCtrl: AlertController,
     private popoverCtrl: PopoverController
   ) { }
 
