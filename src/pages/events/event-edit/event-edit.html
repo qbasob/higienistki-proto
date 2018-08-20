@@ -19,7 +19,7 @@
       </ion-item> -->
 
       <!-- DATA WIZYTY -->
-      <ion-item>
+      <!-- <ion-item>
         <ion-label>Data wizyty *</ion-label>
         <ion-datetime
           displayFormat="DD.MM.YYYY"
@@ -34,212 +34,9 @@
         <span *ngIf="eventForm.get('visitDate').errors.required">
           To pole jest wymagane
         </span>
-      </span>
+      </span> -->
 
-      <ion-item>
-        Zdjęcie z zewnątrz *
-        <ion-note item-end text-center>
-          <img [src]="photosSrc.photoOutside" class="photo">
-          <input type="file" (change)="addPhoto($event, 'photoOutside')" id="file-input" style="display: none;" #fileInp0>
-          <button ion-button type="button" (click)="addPhotoClick(fileInp0)">Zrób zdjęcie</button>
-          <div ion-text *ngIf="(eventForm.get('photoOutside').dirty || formDir.submitted) && eventForm.get('photoOutside').invalid" color="danger" padding-left>
-            <span *ngIf="eventForm.get('photoOutside').errors.required">
-              To pole jest wymagane
-            </span>
-          </div>
-        </ion-note>
-      </ion-item>
-
-      <!-- ZDJĘCIE POCZEKALNI -->
-      <ion-item [hidden]="eventForm.get('noPhotoInsideWaiting').value === true">
-        Zdjęcie poczekalni
-        <ion-note item-end text-center>
-          <img [src]="photosSrc.photoInsideWaiting" class="photo">
-          <input type="file" (change)="addPhoto($event, 'photoInsideWaiting')" id="file-input" style="display: none;" #fileInp1>
-          <button ion-button type="button" (click)="addPhotoClick(fileInp1)">Zrób zdjęcie</button>
-          <div ion-text *ngIf="(eventForm.get('photoInsideWaiting').dirty || formDir.submitted) && eventForm.get('photoInsideWaiting').invalid"
-            color="danger" padding-left>
-            <span *ngIf="eventForm.get('photoInsideWaiting').errors.required">
-              To pole jest wymagane
-            </span>
-          </div>
-        </ion-note>
-      </ion-item>
-
-      <!-- BRAK MOŻLIWOŚCI WYKONANIA ZDJĘCIA W POCZEKALNI -->
-      <ion-item>
-        <ion-label>Brak możliwości wykonania zdjęcia w poczekalni</ion-label>
-        <ion-toggle formControlName="noPhotoInsideWaiting"></ion-toggle>
-      </ion-item>
-      <span ion-text *ngIf="(eventForm.get('noPhotoInsideWaiting').dirty || formDir.submitted) && eventForm.get('noPhotoInsideWaiting').invalid" color="danger" padding-left>
-        <span *ngIf="eventForm.get('noPhotoInsideWaiting').errors.required">
-          To pole jest wymagane
-        </span>
-      </span>
-
-      <!-- POWÓD NIEWYKONANIA ZDJĘCIA W POCZEKALNI -->
-      <ion-item [hidden]="eventForm.get('noPhotoInsideWaiting').value === false">
-        <ion-label floating>Wpisz powód niewykonania zdjęcia w poczekalni</ion-label>
-        <ion-input formControlName="noPhotoInsideWaitingWhy"></ion-input>
-      </ion-item>
-      <span [hidden]="eventForm.get('noPhotoInsideWaiting').value === false" ion-text *ngIf="(eventForm.get('noPhotoInsideWaitingWhy').dirty || formDir.submitted) && eventForm.get('noPhotoInsideWaitingWhy').invalid" color="danger" padding-left>
-        <span *ngIf="eventForm.get('noPhotoInsideWaitingWhy').errors.required">
-          To pole jest wymagane
-        </span>
-      </span>
-
-      <!-- ZDJĘCIE GABINETU -->
-      <ion-item [hidden]="eventForm.get('noPhotoInsideOffice').value === true">
-        Zdjęcie gabinetu
-        <ion-note item-end text-center>
-          <img [src]="photosSrc.photoInsideOffice" class="photo">
-          <input type="file" (change)="addPhoto($event, 'photoInsideOffice')" id="file-input" style="display: none;" #fileInp2>
-          <button ion-button type="button" (click)="addPhotoClick(fileInp2)">Zrób zdjęcie</button>
-          <div ion-text *ngIf="(eventForm.get('photoInsideOffice').dirty || formDir.submitted) && eventForm.get('photoInsideOffice').invalid"
-            color="danger" padding-left>
-            <span *ngIf="eventForm.get('photoInsideOffice').errors.required">
-              To pole jest wymagane
-            </span>
-          </div>
-        </ion-note>
-      </ion-item>
-
-      <!-- BRAK MOŻLIWOŚCI WYKONANIA ZDJĘCIA W GABINECIE -->
-      <ion-item>
-        <ion-label>Brak możliwości wykonania zdjęcia w gabinecie</ion-label>
-        <ion-toggle formControlName="noPhotoInsideOffice"></ion-toggle>
-      </ion-item>
-      <span ion-text *ngIf="(eventForm.get('noPhotoInsideOffice').dirty || formDir.submitted) && eventForm.get('noPhotoInsideOffice').invalid"
-        color="danger" padding-left>
-        <span *ngIf="eventForm.get('noPhotoInsideOffice').errors.required">
-          To pole jest wymagane
-        </span>
-      </span>
-
-      <!-- POWÓD NIEWYKONANIA ZDJĘCIA W GABINECIE -->
-      <ion-item [hidden]="eventForm.get('noPhotoInsideOffice').value === false">
-        <ion-label floating>Wpisz powód niewykonania zdjęcia w gabinecie</ion-label>
-        <ion-input formControlName="noPhotoInsideOfficeWhy"></ion-input>
-      </ion-item>
-      <span [hidden]="eventForm.get('noPhotoInsideOffice').value === false" ion-text *ngIf="(eventForm.get('noPhotoInsideOfficeWhy').dirty || formDir.submitted) && eventForm.get('noPhotoInsideOfficeWhy').invalid"
-        color="danger" padding-left>
-        <span *ngIf="eventForm.get('noPhotoInsideOfficeWhy').errors.required">
-          To pole jest wymagane
-        </span>
-      </span>
-
-
-      <ion-item>
-        <ion-label>Gabinet jest częścią sieci gabinetów</ion-label>
-        <ion-toggle formControlName="isOfficeNetwork"></ion-toggle>
-      </ion-item>
-
-      <!-- LICZBA PLACÓWEK -->
-      <ion-item [hidden]="eventForm.get('isOfficeNetwork').value === false">
-        <ion-label floating>Liczba placówek w ramach sieci</ion-label>
-        <ion-input type="number" formControlName="networkOfficesCount" ></ion-input>
-      </ion-item>
-      <span [hidden]="eventForm.get('isOfficeNetwork').value === false" ion-text *ngIf="(eventForm.get('networkOfficesCount').dirty || formDir.submitted) && eventForm.get('networkOfficesCount').invalid"
-        color="danger" padding-left>
-        <span *ngIf="eventForm.get('networkOfficesCount').errors.required">
-          To pole jest wymagane
-        </span>
-        <span *ngIf="eventForm.get('networkOfficesCount').errors.min">
-          Wymagany minimum 1 gabinet
-        </span>
-      </span>
-
-      <!-- LICZBA FOTELI -->
-      <ion-item>
-        <ion-label floating>Liczba stanowisk/foteli w gabinecie *</ion-label>
-        <ion-input type="number" formControlName="chairsCount"></ion-input>
-      </ion-item>
-      <span ion-text *ngIf="(eventForm.get('chairsCount').dirty || formDir.submitted) && eventForm.get('chairsCount').invalid" color="danger" padding-left>
-        <span *ngIf="eventForm.get('chairsCount').errors.required">
-          To pole jest wymagane
-        </span>
-        <span *ngIf="eventForm.get('chairsCount').errors.min">
-          Wymagane minimum 1 stanowisko
-        </span>
-      </span>
-
-      <!-- LICZBA LEKARZY -->
-      <ion-item>
-        <ion-label floating>Liczba lekarzy pracujących gabinecie *</ion-label>
-        <ion-input type="number" formControlName="doctorsCount"></ion-input>
-      </ion-item>
-      <span ion-text *ngIf="(eventForm.get('doctorsCount').dirty || formDir.submitted) && eventForm.get('doctorsCount').invalid" color="danger" padding-left>
-        <span *ngIf="eventForm.get('doctorsCount').errors.required">
-          To pole jest wymagane
-        </span>
-        <span *ngIf="eventForm.get('doctorsCount').errors.min">
-          Wymagany minimum 1 lekarz
-        </span>
-      </span>
-
-      <ion-item>
-        <ion-label>Czy w gabinecie są higienistki/higieniści</ion-label>
-        <ion-toggle formControlName="hasOfficeHigienists"></ion-toggle>
-      </ion-item>
-
-      <!-- LICZBA HIGIENISTEK -->
-      <ion-item [hidden]="eventForm.get('hasOfficeHigienists').value === false">
-        <ion-label floating>Liczba higienistek/higienistów</ion-label>
-        <ion-input type="number" formControlName="higienistsCount"></ion-input>
-      </ion-item>
-      <span [hidden]="eventForm.get('hasOfficeHigienists').value === false" ion-text *ngIf="(eventForm.get('higienistsCount').dirty || formDir.submitted) && eventForm.get('higienistsCount').invalid"
-        color="danger" padding-left>
-        <span *ngIf="eventForm.get('higienistsCount').errors.required">
-          To pole jest wymagane
-        </span>
-        <span *ngIf="eventForm.get('higienistsCount').errors.min">
-          Wymagana/y minimum 1 higienistka/higienista
-        </span>
-      </span>
-
-      <ion-item-group radio-group formControlName="isBuyingSonicare">
-        <ion-item-divider color="light">Czy kupują produkty Sonicare?</ion-item-divider>
-
-        <ion-item>
-          <ion-label>Nie</ion-label>
-          <ion-radio value="no"></ion-radio>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>Tak, na własny użytek</ion-label>
-          <ion-radio value="yes_own"></ion-radio>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>Tak, do odsprzedaży pacjentowi</ion-label>
-          <ion-radio value="yes_sell"></ion-radio>
-        </ion-item>
-      </ion-item-group>
-
-      <ion-item-group radio-group formControlName="doQualify">
-        <ion-item-divider color="light">Czy kupują produkty Sonicare?</ion-item-divider>
-
-        <ion-item>
-          <ion-label>Brak osób kwalifikujących się do Programu</ion-label>
-          <ion-radio value="no"></ion-radio>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>Brak zainteresowania, odmowa udziału</ion-label>
-          <ion-radio value="no_deny"></ion-radio>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>Rejestruję Uczestnika/Uczestniczkę programu dla Higienistek/Higienistów</ion-label>
-          <ion-radio value="yes"></ion-radio>
-        </ion-item>
-
-        <ion-item>
-          <ion-label floating>Informacje dodatkowe</ion-label>
-          <ion-textarea rows="7" formControlName="additionalInfo"></ion-textarea>
-        </ion-item>
-      </ion-item-group>
-
+      <!-- GABINET -->
       <ion-item-group *ngIf="eventRelations.office as office">
         <ion-item-divider color="light">Gabinet</ion-item-divider>
         <ion-item-sliding>
@@ -273,6 +70,213 @@
           <button ion-button type="button" (click)="addOffice()">
             Dodaj nowy gabinet
           </button>
+        </ion-item>
+      </ion-item-group>
+
+      <ion-item-group *ngIf="eventRelations.office as office">
+        <ion-item-divider color="light">Dane wizyty</ion-item-divider>
+        <ion-item>
+          Zdjęcie z zewnątrz *
+          <ion-note item-end text-center>
+            <img [src]="photosSrc.photoOutside" class="photo">
+            <input type="file" (change)="addPhoto($event, 'photoOutside')" id="file-input" style="display: none;" #fileInp0>
+            <button ion-button type="button" (click)="addPhotoClick(fileInp0)">Zrób zdjęcie</button>
+            <div ion-text *ngIf="(eventForm.get('photoOutside').dirty || formDir.submitted) && eventForm.get('photoOutside').invalid" color="danger" padding-left>
+              <span *ngIf="eventForm.get('photoOutside').errors.required">
+                To pole jest wymagane
+              </span>
+            </div>
+          </ion-note>
+        </ion-item>
+
+        <!-- ZDJĘCIE POCZEKALNI -->
+        <ion-item [hidden]="eventForm.get('noPhotoInsideWaiting').value === true">
+          Zdjęcie poczekalni
+          <ion-note item-end text-center>
+            <img [src]="photosSrc.photoInsideWaiting" class="photo">
+            <input type="file" (change)="addPhoto($event, 'photoInsideWaiting')" id="file-input" style="display: none;" #fileInp1>
+            <button ion-button type="button" (click)="addPhotoClick(fileInp1)">Zrób zdjęcie</button>
+            <div ion-text *ngIf="(eventForm.get('photoInsideWaiting').dirty || formDir.submitted) && eventForm.get('photoInsideWaiting').invalid"
+              color="danger" padding-left>
+              <span *ngIf="eventForm.get('photoInsideWaiting').errors.required">
+                To pole jest wymagane
+              </span>
+            </div>
+          </ion-note>
+        </ion-item>
+
+        <!-- BRAK MOŻLIWOŚCI WYKONANIA ZDJĘCIA W POCZEKALNI -->
+        <ion-item>
+          <ion-label>Brak możliwości wykonania zdjęcia w poczekalni</ion-label>
+          <ion-toggle formControlName="noPhotoInsideWaiting"></ion-toggle>
+        </ion-item>
+        <span ion-text *ngIf="(eventForm.get('noPhotoInsideWaiting').dirty || formDir.submitted) && eventForm.get('noPhotoInsideWaiting').invalid" color="danger" padding-left>
+          <span *ngIf="eventForm.get('noPhotoInsideWaiting').errors.required">
+            To pole jest wymagane
+          </span>
+        </span>
+
+        <!-- POWÓD NIEWYKONANIA ZDJĘCIA W POCZEKALNI -->
+        <ion-item [hidden]="eventForm.get('noPhotoInsideWaiting').value === false">
+          <ion-label floating>Wpisz powód niewykonania zdjęcia w poczekalni</ion-label>
+          <ion-input formControlName="noPhotoInsideWaitingWhy"></ion-input>
+        </ion-item>
+        <span [hidden]="eventForm.get('noPhotoInsideWaiting').value === false" ion-text *ngIf="(eventForm.get('noPhotoInsideWaitingWhy').dirty || formDir.submitted) && eventForm.get('noPhotoInsideWaitingWhy').invalid" color="danger" padding-left>
+          <span *ngIf="eventForm.get('noPhotoInsideWaitingWhy').errors.required">
+            To pole jest wymagane
+          </span>
+        </span>
+
+        <!-- ZDJĘCIE GABINETU -->
+        <ion-item [hidden]="eventForm.get('noPhotoInsideOffice').value === true">
+          Zdjęcie gabinetu
+          <ion-note item-end text-center>
+            <img [src]="photosSrc.photoInsideOffice" class="photo">
+            <input type="file" (change)="addPhoto($event, 'photoInsideOffice')" id="file-input" style="display: none;" #fileInp2>
+            <button ion-button type="button" (click)="addPhotoClick(fileInp2)">Zrób zdjęcie</button>
+            <div ion-text *ngIf="(eventForm.get('photoInsideOffice').dirty || formDir.submitted) && eventForm.get('photoInsideOffice').invalid"
+              color="danger" padding-left>
+              <span *ngIf="eventForm.get('photoInsideOffice').errors.required">
+                To pole jest wymagane
+              </span>
+            </div>
+          </ion-note>
+        </ion-item>
+
+        <!-- BRAK MOŻLIWOŚCI WYKONANIA ZDJĘCIA W GABINECIE -->
+        <ion-item>
+          <ion-label>Brak możliwości wykonania zdjęcia w gabinecie</ion-label>
+          <ion-toggle formControlName="noPhotoInsideOffice"></ion-toggle>
+        </ion-item>
+        <span ion-text *ngIf="(eventForm.get('noPhotoInsideOffice').dirty || formDir.submitted) && eventForm.get('noPhotoInsideOffice').invalid"
+          color="danger" padding-left>
+          <span *ngIf="eventForm.get('noPhotoInsideOffice').errors.required">
+            To pole jest wymagane
+          </span>
+        </span>
+
+        <!-- POWÓD NIEWYKONANIA ZDJĘCIA W GABINECIE -->
+        <ion-item [hidden]="eventForm.get('noPhotoInsideOffice').value === false">
+          <ion-label floating>Wpisz powód niewykonania zdjęcia w gabinecie</ion-label>
+          <ion-input formControlName="noPhotoInsideOfficeWhy"></ion-input>
+        </ion-item>
+        <span [hidden]="eventForm.get('noPhotoInsideOffice').value === false" ion-text *ngIf="(eventForm.get('noPhotoInsideOfficeWhy').dirty || formDir.submitted) && eventForm.get('noPhotoInsideOfficeWhy').invalid"
+          color="danger" padding-left>
+          <span *ngIf="eventForm.get('noPhotoInsideOfficeWhy').errors.required">
+            To pole jest wymagane
+          </span>
+        </span>
+
+
+        <ion-item>
+          <ion-label>Gabinet jest częścią sieci gabinetów</ion-label>
+          <ion-toggle formControlName="isOfficeNetwork"></ion-toggle>
+        </ion-item>
+
+        <!-- LICZBA PLACÓWEK -->
+        <ion-item [hidden]="eventForm.get('isOfficeNetwork').value === false">
+          <ion-label floating>Liczba placówek w ramach sieci</ion-label>
+          <ion-input type="number" formControlName="networkOfficesCount" ></ion-input>
+        </ion-item>
+        <span [hidden]="eventForm.get('isOfficeNetwork').value === false" ion-text *ngIf="(eventForm.get('networkOfficesCount').dirty || formDir.submitted) && eventForm.get('networkOfficesCount').invalid"
+          color="danger" padding-left>
+          <span *ngIf="eventForm.get('networkOfficesCount').errors.required">
+            To pole jest wymagane
+          </span>
+          <span *ngIf="eventForm.get('networkOfficesCount').errors.min">
+            Wymagany minimum 1 gabinet
+          </span>
+        </span>
+
+        <!-- LICZBA FOTELI -->
+        <ion-item>
+          <ion-label floating>Liczba stanowisk/foteli w gabinecie *</ion-label>
+          <ion-input type="number" formControlName="chairsCount"></ion-input>
+        </ion-item>
+        <span ion-text *ngIf="(eventForm.get('chairsCount').dirty || formDir.submitted) && eventForm.get('chairsCount').invalid" color="danger" padding-left>
+          <span *ngIf="eventForm.get('chairsCount').errors.required">
+            To pole jest wymagane
+          </span>
+          <span *ngIf="eventForm.get('chairsCount').errors.min">
+            Wymagane minimum 1 stanowisko
+          </span>
+        </span>
+
+        <!-- LICZBA LEKARZY -->
+        <ion-item>
+          <ion-label floating>Liczba lekarzy pracujących gabinecie *</ion-label>
+          <ion-input type="number" formControlName="doctorsCount"></ion-input>
+        </ion-item>
+        <span ion-text *ngIf="(eventForm.get('doctorsCount').dirty || formDir.submitted) && eventForm.get('doctorsCount').invalid" color="danger" padding-left>
+          <span *ngIf="eventForm.get('doctorsCount').errors.required">
+            To pole jest wymagane
+          </span>
+          <span *ngIf="eventForm.get('doctorsCount').errors.min">
+            Wymagany minimum 1 lekarz
+          </span>
+        </span>
+
+        <ion-item>
+          <ion-label>Czy w gabinecie są higienistki/higieniści</ion-label>
+          <ion-toggle formControlName="hasOfficeHigienists"></ion-toggle>
+        </ion-item>
+
+        <!-- LICZBA HIGIENISTEK -->
+        <ion-item [hidden]="eventForm.get('hasOfficeHigienists').value === false">
+          <ion-label floating>Liczba higienistek/higienistów</ion-label>
+          <ion-input type="number" formControlName="higienistsCount"></ion-input>
+        </ion-item>
+        <span [hidden]="eventForm.get('hasOfficeHigienists').value === false" ion-text *ngIf="(eventForm.get('higienistsCount').dirty || formDir.submitted) && eventForm.get('higienistsCount').invalid"
+          color="danger" padding-left>
+          <span *ngIf="eventForm.get('higienistsCount').errors.required">
+            To pole jest wymagane
+          </span>
+          <span *ngIf="eventForm.get('higienistsCount').errors.min">
+            Wymagana/y minimum 1 higienistka/higienista
+          </span>
+        </span>
+      </ion-item-group>
+
+      <ion-item-group radio-group formControlName="isBuyingSonicare">
+        <ion-item-divider color="light">Czy kupują produkty Sonicare?</ion-item-divider>
+
+        <ion-item>
+          <ion-label>Nie</ion-label>
+          <ion-radio value="no"></ion-radio>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Tak, na własny użytek</ion-label>
+          <ion-radio value="yes_own"></ion-radio>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Tak, do odsprzedaży pacjentowi</ion-label>
+          <ion-radio value="yes_sell"></ion-radio>
+        </ion-item>
+      </ion-item-group>
+
+      <ion-item-group radio-group formControlName="doQualify">
+        <ion-item-divider color="light">Czy kwalifikują się do programu?</ion-item-divider>
+
+        <ion-item>
+          <ion-label>Brak osób kwalifikujących się do Programu</ion-label>
+          <ion-radio value="no"></ion-radio>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Brak zainteresowania, odmowa udziału</ion-label>
+          <ion-radio value="no_deny"></ion-radio>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Rejestruję Uczestnika/Uczestniczkę programu dla Higienistek/Higienistów</ion-label>
+          <ion-radio value="yes"></ion-radio>
+        </ion-item>
+
+        <ion-item>
+          <ion-label floating>Informacje dodatkowe</ion-label>
+          <ion-textarea rows="7" formControlName="additionalInfo"></ion-textarea>
         </ion-item>
       </ion-item-group>
 
