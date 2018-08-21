@@ -42,7 +42,7 @@
     </ion-item-sliding>
   </ion-list>
 
-  <ion-fab right bottom #fab>
+  <!-- <ion-fab right bottom #fab>
     <button ion-fab color="secondary">
       <ion-icon name="add"></ion-icon>
     </button>
@@ -56,5 +56,10 @@
         <div class="label">Dodaj</div>
       </button>
     </ion-fab-list>
+  </ion-fab> -->
+  <ion-fab right bottom #fab>
+    <button (click)="wizard(fab)" ion-fab color="secondary">
+      <ion-icon name="add"></ion-icon>
+    </button>
   </ion-fab>
 </ion-content>
