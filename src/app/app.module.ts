@@ -9,6 +9,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../providers/auth-interceptor/auth-interceptor';
 import { IonMaskModule } from '@pluritech/ion-mask';
 import { SelectSearchableModule } from 'ionic-select-searchable';
+import { Ng2SlideDownModule } from 'ng2-slide-down';
 import { MyApp } from './app.component';
 
 import { EventsPage } from '../pages/events/events';
@@ -86,7 +87,8 @@ import { PhotoService } from '../providers/photo-service/photo-service';
     HttpClientModule,
     BrowserAnimationsModule,
     IonMaskModule.forRoot(),
-    SelectSearchableModule
+    SelectSearchableModule,
+    Ng2SlideDownModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

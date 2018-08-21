@@ -65,3 +65,14 @@
     min-height: 0;
     height: 0;
 }
+
+// fix na bordery slide-down
+div[ng-reflect-slide-down] {
+    ion-item {
+        border: none!important;
+
+        .item-inner {
+            border-bottom: 1px solid #dedede!important;;
+        }
+    }
+}

@@ -15,21 +15,23 @@
       </ion-item-group>
 
       <!-- ZDJĘCIE POCZEKALNI -->
-      <ion-item [hidden]="stepForm.get('noPhotoInsideWaiting').value === true">
-        <ion-row>
-          <ion-col text-center>
-            <img [src]="photosSrc.photoInsideWaiting" class="photo">
-            <input type="file" (change)="addPhoto($event, 'photoInsideWaiting')" id="file-input" style="display: none;" #fileInp1>
-            <button ion-button type="button" (click)="addPhotoClick(fileInp1)">Zrób zdjęcie</button>
-            <div ion-text *ngIf="(stepForm.get('photoInsideWaiting').dirty || formDir.submitted) && stepForm.get('photoInsideWaiting').invalid"
-              color="danger" padding-left>
-              <span *ngIf="stepForm.get('photoInsideWaiting').errors.required">
-                To pole jest wymagane
-              </span>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-item>
+      <div [slide-down]="stepForm.get('noPhotoInsideWaiting').value === false">
+        <ion-item>
+          <ion-row>
+            <ion-col text-center>
+              <img [src]="photosSrc.photoInsideWaiting" class="photo">
+              <input type="file" (change)="addPhoto($event, 'photoInsideWaiting')" id="file-input" style="display: none;" #fileInp1>
+              <button ion-button type="button" (click)="addPhotoClick(fileInp1)">Zrób zdjęcie</button>
+              <div ion-text *ngIf="(stepForm.get('photoInsideWaiting').dirty || formDir.submitted) && stepForm.get('photoInsideWaiting').invalid"
+                color="danger" padding-left>
+                <span *ngIf="stepForm.get('photoInsideWaiting').errors.required">
+                  To pole jest wymagane
+                </span>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-item>
+      </div>
 
       <!-- BRAK MOŻLIWOŚCI WYKONANIA ZDJĘCIA W POCZEKALNI -->
       <ion-item>
@@ -44,34 +46,38 @@
       </span>
 
       <!-- POWÓD NIEWYKONANIA ZDJĘCIA W POCZEKALNI -->
-      <ion-item [hidden]="stepForm.get('noPhotoInsideWaiting').value === false">
-        <ion-label floating>Wpisz powód niewykonania zdjęcia w poczekalni</ion-label>
-        <ion-input formControlName="noPhotoInsideWaitingWhy"></ion-input>
-      </ion-item>
-      <span [hidden]="stepForm.get('noPhotoInsideWaiting').value === false" ion-text *ngIf="(stepForm.get('noPhotoInsideWaitingWhy').dirty || formDir.submitted) && stepForm.get('noPhotoInsideWaitingWhy').invalid"
-        color="danger" padding-left>
-        <span *ngIf="stepForm.get('noPhotoInsideWaitingWhy').errors.required">
-          To pole jest wymagane
+      <div [slide-down]="stepForm.get('noPhotoInsideWaiting').value === true">
+        <ion-item>
+          <ion-label floating>Wpisz powód niewykonania zdjęcia w poczekalni</ion-label>
+          <ion-input formControlName="noPhotoInsideWaitingWhy"></ion-input>
+        </ion-item>
+        <span ion-text *ngIf="(stepForm.get('noPhotoInsideWaitingWhy').dirty || formDir.submitted) && stepForm.get('noPhotoInsideWaitingWhy').invalid"
+          color="danger" padding-left>
+          <span *ngIf="stepForm.get('noPhotoInsideWaitingWhy').errors.required">
+            To pole jest wymagane
+          </span>
         </span>
-      </span>
+      </div>
 
 
       <!-- ZDJĘCIE GABINETU -->
-      <ion-item [hidden]="stepForm.get('noPhotoInsideOffice').value === true">
-        <ion-row>
-          <ion-col text-center>
-            <img [src]="photosSrc.photoInsideOffice" class="photo">
-            <input type="file" (change)="addPhoto($event, 'photoInsideOffice')" id="file-input" style="display: none;" #fileInp2>
-            <button ion-button type="button" (click)="addPhotoClick(fileInp2)">Zrób zdjęcie</button>
-            <div ion-text *ngIf="(stepForm.get('photoInsideOffice').dirty || formDir.submitted) && stepForm.get('photoInsideOffice').invalid"
-              color="danger" padding-left>
-              <span *ngIf="stepForm.get('photoInsideOffice').errors.required">
-                To pole jest wymagane
-              </span>
-            </div>
-          </ion-col>
-        </ion-row>
-      </ion-item>
+      <div [slide-down]="stepForm.get('noPhotoInsideOffice').value === false">
+        <ion-item>
+          <ion-row>
+            <ion-col text-center>
+              <img [src]="photosSrc.photoInsideOffice" class="photo">
+              <input type="file" (change)="addPhoto($event, 'photoInsideOffice')" id="file-input" style="display: none;" #fileInp2>
+              <button ion-button type="button" (click)="addPhotoClick(fileInp2)">Zrób zdjęcie</button>
+              <div ion-text *ngIf="(stepForm.get('photoInsideOffice').dirty || formDir.submitted) && stepForm.get('photoInsideOffice').invalid"
+                color="danger" padding-left>
+                <span *ngIf="stepForm.get('photoInsideOffice').errors.required">
+                  To pole jest wymagane
+                </span>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-item>
+      </div>
 
       <!-- BRAK MOŻLIWOŚCI WYKONANIA ZDJĘCIA W GABINECIE -->
       <ion-item>
@@ -86,16 +92,18 @@
       </span>
 
       <!-- POWÓD NIEWYKONANIA ZDJĘCIA W GABINECIE -->
-      <ion-item  [hidden]="stepForm.get('noPhotoInsideOffice').value === false">
-        <ion-label floating>Wpisz powód niewykonania zdjęcia w gabinecie</ion-label>
-        <ion-input formControlName="noPhotoInsideOfficeWhy"></ion-input>
-      </ion-item>
-      <span [hidden]="stepForm.get('noPhotoInsideOffice').value === false" ion-text *ngIf="(stepForm.get('noPhotoInsideOfficeWhy').dirty || formDir.submitted) && stepForm.get('noPhotoInsideOfficeWhy').invalid"
-        color="danger" padding-left>
-        <span *ngIf="stepForm.get('noPhotoInsideOfficeWhy').errors.required">
-          To pole jest wymagane
+      <div [slide-down]="stepForm.get('noPhotoInsideOffice').value === true">
+        <ion-item>
+          <ion-label floating>Wpisz powód niewykonania zdjęcia w gabinecie</ion-label>
+          <ion-input formControlName="noPhotoInsideOfficeWhy"></ion-input>
+        </ion-item>
+        <span ion-text *ngIf="(stepForm.get('noPhotoInsideOfficeWhy').dirty || formDir.submitted) && stepForm.get('noPhotoInsideOfficeWhy').invalid"
+          color="danger" padding-left>
+          <span *ngIf="stepForm.get('noPhotoInsideOfficeWhy').errors.required">
+            To pole jest wymagane
+          </span>
         </span>
-      </span>
+      </div>
     </ion-list>
 
     <ion-row>

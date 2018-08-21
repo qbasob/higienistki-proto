@@ -93,10 +93,12 @@
     <ion-label>Wręczono pakiet startowy</ion-label>
     <ion-toggle formControlName="gotStarter"></ion-toggle>
   </ion-item>
-  <ion-item [hidden]="!personFormGroup.get('gotStarter').value">
-    <ion-label floating>Numer pakietu startowego</ion-label>
-    <ion-input type="text" formControlName="starterNo"></ion-input>
-  </ion-item>
+  <div [slide-down]="personFormGroup.get('gotStarter').value">
+    <ion-item>
+      <ion-label floating>Numer pakietu startowego</ion-label>
+      <ion-input type="text" formControlName="starterNo"></ion-input>
+    </ion-item>
+  </div>
   <span ion-text *ngIf="(personFormGroup.get('starterNo').dirty || formDir.submitted) && personFormGroup.get('starterNo').invalid" color="danger"
     padding-left>
     <span *ngIf="personFormGroup.get('starterNo').errors.required">

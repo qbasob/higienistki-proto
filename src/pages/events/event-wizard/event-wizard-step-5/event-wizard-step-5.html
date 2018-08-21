@@ -17,19 +17,21 @@
         </ion-item>
 
         <!-- LICZBA PLACÓWEK -->
-        <ion-item [hidden]="stepForm.get('isOfficeNetwork').value === false">
-          <ion-label floating>Liczba placówek w ramach sieci</ion-label>
-          <ion-input type="number" formControlName="networkOfficesCount"></ion-input>
-        </ion-item>
-        <span [hidden]="stepForm.get('isOfficeNetwork').value === false" ion-text *ngIf="(stepForm.get('networkOfficesCount').dirty || formDir.submitted) && stepForm.get('networkOfficesCount').invalid"
-          color="danger" padding-left>
-          <span *ngIf="stepForm.get('networkOfficesCount').errors.required">
-            To pole jest wymagane
+        <div [slide-down]="stepForm.get('isOfficeNetwork').value === true">
+          <ion-item>
+            <ion-label floating>Liczba placówek w ramach sieci</ion-label>
+            <ion-input type="number" formControlName="networkOfficesCount"></ion-input>
+          </ion-item>
+          <span ion-text *ngIf="(stepForm.get('networkOfficesCount').dirty || formDir.submitted) && stepForm.get('networkOfficesCount').invalid"
+            color="danger" padding-left>
+            <span *ngIf="stepForm.get('networkOfficesCount').errors.required">
+              To pole jest wymagane
+            </span>
+            <span *ngIf="stepForm.get('networkOfficesCount').errors.min">
+              Wymagany minimum 1 gabinet
+            </span>
           </span>
-          <span *ngIf="stepForm.get('networkOfficesCount').errors.min">
-            Wymagany minimum 1 gabinet
-          </span>
-        </span>
+        </div>
 
         <!-- LICZBA FOTELI -->
         <ion-item>
@@ -65,19 +67,21 @@
         </ion-item>
 
         <!-- LICZBA HIGIENISTEK -->
-        <ion-item [hidden]="stepForm.get('hasOfficeHigienists').value === false">
-          <ion-label floating>Liczba higienistek/higienistów</ion-label>
-          <ion-input type="number" formControlName="higienistsCount"></ion-input>
-        </ion-item>
-        <span [hidden]="stepForm.get('hasOfficeHigienists').value === false" ion-text *ngIf="(stepForm.get('higienistsCount').dirty || formDir.submitted) && stepForm.get('higienistsCount').invalid"
-          color="danger" padding-left>
-          <span *ngIf="stepForm.get('higienistsCount').errors.required">
-            To pole jest wymagane
+        <div [slide-down]="stepForm.get('hasOfficeHigienists').value === true">
+          <ion-item>
+            <ion-label floating>Liczba higienistek/higienistów</ion-label>
+            <ion-input type="number" formControlName="higienistsCount"></ion-input>
+          </ion-item>
+          <span ion-text *ngIf="(stepForm.get('higienistsCount').dirty || formDir.submitted) && stepForm.get('higienistsCount').invalid"
+            color="danger" padding-left>
+            <span *ngIf="stepForm.get('higienistsCount').errors.required">
+              To pole jest wymagane
+            </span>
+            <span *ngIf="stepForm.get('higienistsCount').errors.min">
+              Wymagana/y minimum 1 higienistka/higienista
+            </span>
           </span>
-          <span *ngIf="stepForm.get('higienistsCount').errors.min">
-            Wymagana/y minimum 1 higienistka/higienista
-          </span>
-        </span>
+        </div>
         <ion-item class="full-line no-height"></ion-item>
       </ion-item-group>
 
