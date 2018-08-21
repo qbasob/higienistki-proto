@@ -40,7 +40,7 @@
       <ion-item-group *ngIf="eventRelations.office as office">
         <ion-item-divider color="light">Gabinet</ion-item-divider>
         <ion-item-sliding>
-          <button ion-item type="button" (click)="detailsOffice(office)">
+          <button ion-item class="full-line" type="button" (click)="detailsOffice(office)">
             {{ office.name }}
             <ion-note item-end *ngIf="office.needSync && !office.isRemoved">
               <ion-icon name="alert" color="danger"></ion-icon>
@@ -66,7 +66,7 @@
             </ion-option>
           </ion-select>
         </ion-item>
-        <ion-item>
+        <ion-item class="full-line">
           <button ion-button type="button" (click)="addOffice()">
             Dodaj nowy gabinet
           </button>
@@ -235,6 +235,7 @@
             Wymagana/y minimum 1 higienistka/higienista
           </span>
         </span>
+        <ion-item class="full-line no-height"></ion-item>
       </ion-item-group>
 
       <ion-item-group radio-group formControlName="isBuyingSonicare">

@@ -46,3 +46,22 @@
         color: #76aecb;
     }
 }
+
+// poprawki linii grup ion-items
+.list-md .item-radio:last-child {
+    border-bottom: 1px solid #dedede;
+}
+
+.full-line {
+    border-bottom: 1px solid #dedede;
+
+    .item-inner {
+        border: none!important;
+    }
+}
+
+.no-height {
+    margin-top: -1px;
+    min-height: 0;
+    height: 0;
+}

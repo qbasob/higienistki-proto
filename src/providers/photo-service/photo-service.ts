@@ -150,7 +150,6 @@ export class PhotoService {
             })
             // i w obu przypadkach zwracamy wygenerowany url zdjęcia
             .map((storagePhoto: PhotoObject): SafeUrl => {
-              console.log('blad na bledzie', storagePhoto );
               if (storagePhoto) {
                 return this._getSanitizedUrl(storagePhoto);
               }

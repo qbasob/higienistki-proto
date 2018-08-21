@@ -10,66 +10,68 @@
 <ion-content>
   <form novalidate [formGroup]="stepForm" (ngSubmit)="next()">
     <ion-list>
-      <ion-item>
-        {{ person.gender === 'F' ? 'Uczestniczka' : 'Uczestnik' }} programu programu
-        <ion-note item-end>
-          {{ person.gender === 'F' ? 'Pani' : 'Pan' }} {{ person.name }}
-        </ion-note>
-      </ion-item>
-      <ion-item>
-        Adres E-mail
-        <ion-note item-end>
-          {{ person.email }}
-        </ion-note>
-      </ion-item>
-      <ion-item>
-        Telefon komórkowy
-        <ion-note item-end>
-          {{ person.phone }}
-        </ion-note>
-      </ion-item>
-      <ion-item>
-        Pracuję w {{ person.officesNo }} gabinetach
-      </ion-item>
-      <ion-item>
-        {{ person.sonicareUser ? 'Jestem' : 'NIE jestem' }} {{ person.gender === 'F' ? 'użytkowniczką' : 'użytkownikiem' }} Sonicare
-      </ion-item>
-      <ion-item>
-        {{ person.sonicareRecom ? 'Jestem' : 'NIE jestem' }} {{ person.gender === 'F' ? 'zainteresowana' : 'zainteresowany' }} rekomendowaniem
-        produktów Sonicare pacjentom
-      </ion-item>
-      <ion-item *ngIf="person.gotStarter">
-        Wręczono pakiet startowy z kodami rabatowymi o numerze {{ person.starterNo }}
-      </ion-item>
-      <ion-item>
-        {{ person.gotExpositor ? 'Wręczono ekspozytor' : 'NIE wręczono ekspozytora' }} Sonicare
-      </ion-item>
-      <ion-item>
-        <ion-label>Zgłaszam swój udział w programie "Program Ambasadorski Philips Sonicare"</ion-label>
-        <ion-toggle formControlName="agreeReg"></ion-toggle>
-      </ion-item>
+      <ion-item-group>
+        <ion-item>
+          {{ person.gender === 'F' ? 'Uczestniczka' : 'Uczestnik' }} programu programu
+          <ion-note item-end>
+            {{ person.gender === 'F' ? 'Pani' : 'Pan' }} {{ person.name }}
+          </ion-note>
+        </ion-item>
+        <ion-item>
+          Adres E-mail
+          <ion-note item-end>
+            {{ person.email }}
+          </ion-note>
+        </ion-item>
+        <ion-item>
+          Telefon komórkowy
+          <ion-note item-end>
+            {{ person.phone }}
+          </ion-note>
+        </ion-item>
+        <ion-item>
+          Pracuję w {{ person.officesNo }} gabinetach
+        </ion-item>
+        <ion-item>
+          {{ person.sonicareUser ? 'Jestem' : 'NIE jestem' }} {{ person.gender === 'F' ? 'użytkowniczką' : 'użytkownikiem' }} Sonicare
+        </ion-item>
+        <ion-item>
+          {{ person.sonicareRecom ? 'Jestem' : 'NIE jestem' }} {{ person.gender === 'F' ? 'zainteresowana' : 'zainteresowany' }} rekomendowaniem
+          produktów Sonicare pacjentom
+        </ion-item>
+        <ion-item *ngIf="person.gotStarter">
+          Wręczono pakiet startowy z kodami rabatowymi o numerze {{ person.starterNo }}
+        </ion-item>
+        <ion-item>
+          {{ person.gotExpositor ? 'Wręczono ekspozytor' : 'NIE wręczono ekspozytora' }} Sonicare
+        </ion-item>
+        <ion-item  class="full-line">
+          <ion-label>Zgłaszam swój udział w programie "Program Ambasadorski Philips Sonicare"</ion-label>
+          <ion-toggle formControlName="agreeReg"></ion-toggle>
+        </ion-item>
+      </ion-item-group>
+      <ion-item-group>
+        <ion-item-divider color="light">Oświadczenie osoby, której zgody dotyczą</ion-item-divider>
+        <ion-item text-wrap>
+          <ion-label>Wyrażam zgodę Philips Polska na przetwarzanie moich danych osobowych w celu dostarczania ofert handlowych.</ion-label>
+          <ion-toggle formControlName="agreeMark1"></ion-toggle>
+        </ion-item>
+        <ion-item text-wrap>
+          <ion-label>Wyrażam Philips Koninklijke N.V. zgodę na przetwarzanie moich danych osobowych w celach marketingowych.</ion-label>
+          <ion-toggle formControlName="agreeMark2"></ion-toggle>
+        </ion-item>
+        <ion-item text-wrap>
+          <ion-label>Wyrażam zgodę na otrzymywanie od Philips Koninklijke N.V. informacji handlowej dotyczącej produktów i usług Philips,
+            kierowanej na podany przeze mnie adres email.</ion-label>
+          <ion-toggle formControlName="agreeMark3"></ion-toggle>
+        </ion-item>
+        <ion-item text-wrap>
+          <ion-label>Wyrażam zgodę na przekazywanie mi przez Philips Koninklijke N.V. informacji handlowych dotyczących produktów i usług
+            Philips na podany przeze mnie numer telefonu, w tym przy użyciu automatycznych systemów wywołujących.</ion-label>
+          <ion-toggle formControlName="agreeMark4"></ion-toggle>
+        </ion-item>
+      </ion-item-group>
     </ion-list>
-    <ion-item-group>
-      <ion-item-divider color="light">Oświadczenie osoby, której zgody dotyczą</ion-item-divider>
-      <ion-item text-wrap>
-        <ion-label>Wyrażam zgodę Philips Polska na przetwarzanie moich danych osobowych w celu dostarczania ofert handlowych.</ion-label>
-        <ion-toggle formControlName="agreeMark1"></ion-toggle>
-      </ion-item>
-      <ion-item text-wrap>
-        <ion-label>Wyrażam Philips Koninklijke N.V. zgodę na przetwarzanie moich danych osobowych w celach marketingowych.</ion-label>
-        <ion-toggle formControlName="agreeMark2"></ion-toggle>
-      </ion-item>
-      <ion-item text-wrap>
-        <ion-label>Wyrażam zgodę na otrzymywanie od Philips Koninklijke N.V. informacji handlowej dotyczącej produktów i usług Philips,
-          kierowanej na podany przeze mnie adres email.</ion-label>
-        <ion-toggle formControlName="agreeMark3"></ion-toggle>
-      </ion-item>
-      <ion-item text-wrap>
-        <ion-label>Wyrażam zgodę na przekazywanie mi przez Philips Koninklijke N.V. informacji handlowych dotyczących produktów i usług
-          Philips na podany przeze mnie numer telefonu, w tym przy użyciu automatycznych systemów wywołujących.</ion-label>
-        <ion-toggle formControlName="agreeMark4"></ion-toggle>
-      </ion-item>
-    </ion-item-group>
 
     <ion-row>
       <ion-col text-center>

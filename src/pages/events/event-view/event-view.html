@@ -17,7 +17,7 @@
     <ion-item-group *ngIf="event.office as office">
       <ion-item-divider color="light">Gabinet</ion-item-divider>
       <ion-item-sliding>
-        <button ion-item (click)="detailsOffice(office)">
+        <button ion-item class="full-line" (click)="detailsOffice(office)">
           {{office.name}}
         </button>
         <ion-item-options side="right">
@@ -139,7 +139,7 @@
           Rejestruję Uczestnika/Uczestniczkę programu dla Higienistek/Higienistów
         </span>
       </ion-item>
-      <ion-item>
+      <ion-item class="full-line">
         <ion-label stacked>Informacje dodatkowe</ion-label>
         <div item-content ion-text padding-vertical text-left style="width:100%; white-space: pre-wrap;">{{ event.additionalInfo }}</div>
       </ion-item>
