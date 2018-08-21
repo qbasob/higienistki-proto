@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, LoadingController/*, Loading*/ } from 'ionic-angular';
+import { NavController, NavParams, AlertController, LoadingController,/*, Loading*/
+Platform} from 'ionic-angular';
 // import { Observable } from 'rxjs/Observable';
 import { PEvent } from '../../../shared/event.model';
 import { Office } from '../../../shared/office.model';
@@ -19,6 +20,9 @@ import { PersonViewAcceptPage } from '../../people/person-view-accept/person-vie
 import { PersonEditPage } from '../../people/person-edit/person-edit';
 import { SafeUrl } from '@angular/platform-browser';
 import { CustomValidators } from '../../../validators/custom-validators';
+
+import { Camera, CameraOptions } from '@ionic-native/camera';
+import { File, FileEntry, IFile } from '@ionic-native/file';
 
 // import { CustomValidators } from '../../../validators/custom-validators';
 
@@ -54,7 +58,10 @@ export class EventEditPage {
     private eventsStore: EventsStore,
     private officesStore: OfficesStore,
     private peopleStore: PeopleStore,
-    private photoService: PhotoService
+    private photoService: PhotoService,
+    private platform: Platform,
+    private camera: Camera,
+    private file: File
   ) {
 
     if (navParams.get('event')) {
@@ -184,12 +191,48 @@ export class EventEditPage {
     }
   };
 
-  public addPhotoClick(element){
-    element.click();
+  public addPhotoClick(element, index) {
+    // jeżeli appka
+    if (this.platform.is('android')) {
+      this.addPhotoPlugin(index);
+    }
+    // jeżeli przeglądarka
+    else {
+      element.click();
+    }
   }
 
+
+  // wymaga pluginów Camera i File
+  public addPhotoPlugin(index) {
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+
+    this.camera.getPicture(options).then((imageURL) => {
+      this.file.resolveLocalFilesystemUrl(imageURL)
+        .then((fileEntry: FileEntry) => {
+          console.log("got image file entry: " + fileEntry.fullPath);
+          fileEntry.file((fileSelected: IFile) => {
+            this.photoService.addPhoto(fileSelected)
+              .mergeMap((photoId) => {
+                this.eventForm.patchValue({ [index]: photoId });
+                return this.photoService.getPhotoUrl(photoId);
+              })
+              .subscribe((photoUrl) => {
+                this.photosSrc[index] = photoUrl;
+              });
+          });
+        });
+    });
+  }
+
+
   public addPhoto($event, index) {
-    const fileSelected: File = $event.target.files[0];
+    const fileSelected = $event.target.files[0];
       this.photoService.addPhoto(fileSelected)
         .mergeMap((photoId) => {
           this.eventForm.patchValue({ [index]: photoId });

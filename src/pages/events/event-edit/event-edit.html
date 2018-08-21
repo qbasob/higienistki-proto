@@ -80,7 +80,7 @@
           <ion-note item-end text-center>
             <img [src]="photosSrc.photoOutside" class="photo">
             <input type="file" (change)="addPhoto($event, 'photoOutside')" id="file-input" style="display: none;" #fileInp0>
-            <button ion-button type="button" (click)="addPhotoClick(fileInp0)">Zrób zdjęcie</button>
+            <button ion-button type="button" (click)="addPhotoClick(fileInp0, 'photoOutside')">Zrób zdjęcie</button>
             <div ion-text *ngIf="(eventForm.get('photoOutside').dirty || formDir.submitted) && eventForm.get('photoOutside').invalid" color="danger" padding-left>
               <span *ngIf="eventForm.get('photoOutside').errors.required">
                 To pole jest wymagane
@@ -96,7 +96,7 @@
             <ion-note item-end text-center>
               <img [src]="photosSrc.photoInsideWaiting" class="photo">
               <input type="file" (change)="addPhoto($event, 'photoInsideWaiting')" id="file-input" style="display: none;" #fileInp1>
-              <button ion-button type="button" (click)="addPhotoClick(fileInp1)">Zrób zdjęcie</button>
+              <button ion-button type="button" (click)="addPhotoClick(fileInp1, 'photoInsideWaiting')">Zrób zdjęcie</button>
               <div ion-text *ngIf="(eventForm.get('photoInsideWaiting').dirty || formDir.submitted) && eventForm.get('photoInsideWaiting').invalid"
                 color="danger" padding-left>
                 <span *ngIf="eventForm.get('photoInsideWaiting').errors.required">
@@ -138,7 +138,7 @@
             <ion-note item-end text-center>
               <img [src]="photosSrc.photoInsideOffice" class="photo">
               <input type="file" (change)="addPhoto($event, 'photoInsideOffice')" id="file-input" style="display: none;" #fileInp2>
-              <button ion-button type="button" (click)="addPhotoClick(fileInp2)">Zrób zdjęcie</button>
+              <button ion-button type="button" (click)="addPhotoClick(fileInp2, 'photoInsideOffice')">Zrób zdjęcie</button>
               <div ion-text *ngIf="(eventForm.get('photoInsideOffice').dirty || formDir.submitted) && eventForm.get('photoInsideOffice').invalid"
                 color="danger" padding-left>
                 <span *ngIf="eventForm.get('photoInsideOffice').errors.required">
