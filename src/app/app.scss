@@ -72,7 +72,16 @@ div[ng-reflect-slide-down] {
         border: none!important;
 
         .item-inner {
-            border-bottom: 1px solid #dedede!important;;
+            border-bottom: 1px solid #dedede!important;
         }
+
+        &.ng-invalid .item-inner {
+            border-bottom: 1px solid color($colors, danger, base)!important;
+        }
+
+        &.input-has-focus .item-inner {
+            border-bottom: 1px solid color($colors, primary, base)!important;
+        }
+
     }
 }
