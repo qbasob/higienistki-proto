@@ -22,7 +22,7 @@ import { SafeUrl } from '@angular/platform-browser';
 import { CustomValidators } from '../../../validators/custom-validators';
 
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { File, FileEntry, IFile } from '@ionic-native/file';
+import { File as CFile, FileEntry, IFile } from '@ionic-native/file';
 
 // import { CustomValidators } from '../../../validators/custom-validators';
 
@@ -61,7 +61,7 @@ export class EventEditPage {
     private photoService: PhotoService,
     private platform: Platform,
     private camera: Camera,
-    private file: File
+    private file: CFile
   ) {
 
     if (navParams.get('event')) {
@@ -216,7 +216,7 @@ export class EventEditPage {
       this.file.resolveLocalFilesystemUrl(imageURL)
         .then((fileEntry: FileEntry) => {
           console.log("got image file entry: " + fileEntry.fullPath);
-          fileEntry.file((fileSelected: IFile) => {
+          fileEntry.file((fileSelected: any) => {
             this.photoService.addPhoto(fileSelected)
               .mergeMap((photoId) => {
                 this.eventForm.patchValue({ [index]: photoId });
@@ -232,7 +232,7 @@ export class EventEditPage {
 
 
   public addPhoto($event, index) {
-    const fileSelected = $event.target.files[0];
+    const fileSelected: File = $event.target.files[0];
       this.photoService.addPhoto(fileSelected)
         .mergeMap((photoId) => {
           this.eventForm.patchValue({ [index]: photoId });
