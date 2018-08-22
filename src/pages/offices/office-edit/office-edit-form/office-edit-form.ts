@@ -56,7 +56,7 @@ export class OfficeEditFormComponent implements OnInit {
       // county: null,
       voivodeship: [null, Validators.required],
       phone: [null, [Validators.required, Validators.minLength(9)]],
-      krsName: [null, Validators.required],
+      krsName: null, //[null, Validators.required],
       locationInfo: null
     });
     this.officeFormGroup.patchValue(this.office);
