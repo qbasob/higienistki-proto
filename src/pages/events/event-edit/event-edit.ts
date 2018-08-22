@@ -36,6 +36,7 @@ export class EventEditPage {
   private _isAdd: boolean;
   public offices: Array<Office>;
   public people: Array<Person>;
+  public filteredPeople: Array<Person>;
   public eventRelations: {
     office?: Office,
     people?: Array<Person>
@@ -77,6 +78,7 @@ export class EventEditPage {
     });
     this.peopleStore.records$.subscribe((people) => {
       this.people = people;
+      this.filteredPeople = people;
     });
 
     this.loadPhotos();
@@ -336,6 +338,8 @@ export class EventEditPage {
           return true;
         }
       });
+
+      this.filterSelectPeople();
     }
   }
 
@@ -345,6 +349,7 @@ export class EventEditPage {
       this.eventRelations.people.some((eventPerson, index) => {
         if (eventPerson.localId === person.localId) {
           this.eventRelations.people.splice(index, 1);
+          this.filterSelectPeople();
           return true;
         }
       });
@@ -368,6 +373,12 @@ export class EventEditPage {
   }
 
   // helpery
+
+  private filterSelectPeople() {
+    this.filteredPeople = this.people.filter((person) => {
+      return this.eventRelations.people.indexOf(person) === -1;
+    });
+  }
 
   // private _showLoading() {
   //   if (this._loading && !this._isLoading) {
