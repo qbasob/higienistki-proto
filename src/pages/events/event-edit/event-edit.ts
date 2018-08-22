@@ -349,10 +349,10 @@ export class EventEditPage {
       this.eventRelations.people.some((eventPerson, index) => {
         if (eventPerson.localId === person.localId) {
           this.eventRelations.people.splice(index, 1);
-          this.filterSelectPeople();
           return true;
         }
       });
+      this.filterSelectPeople();
     }
 
     const confirm = this.alertCtrl.create({
