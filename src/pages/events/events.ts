@@ -11,6 +11,7 @@ import 'rxjs/add/operator/finally';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/catch';
 import { EventsStore } from '../../providers/events-store/events-store';
+import * as moment from 'moment';
 
 @Component({
   selector: 'page-events',
@@ -20,6 +21,7 @@ export class EventsPage {
   public events$: Observable<Array<PEvent>>;
   public filter: string;
   public noname: string;
+  public targetVal: number;
   private _loading: Loading; // jeden wspólny loading, dla ułatwienia
   private _isLoading: boolean;
 
@@ -31,6 +33,7 @@ export class EventsPage {
     private eventsStore: EventsStore,
     private storage: Storage
   ) {
+    this.targetVal = 0;
     this.populateEvents();
     this.noname = '<brak gabinetu>';
 
@@ -52,7 +55,8 @@ export class EventsPage {
 
     this.events$ = this.eventsStore.getFilteredRecords(this.filter)
       .do(
-        () => {
+        (events: Array<PEvent>) => {
+          this.calculateTargetVal(events);
           this._hideLoading();
         },
         () => {
@@ -144,6 +148,13 @@ export class EventsPage {
       this._isLoading = false;
       this._loading.dismiss();
     }
+  }
+
+  private calculateTargetVal(events: Array<PEvent>) {
+    const thisMonthEvents = events.filter((event) => {
+      return moment(event.visitDate).isSame(moment.now(), 'month');
+    });
+    this.targetVal = thisMonthEvents.length / 50 * 100;
   }
 
 }
