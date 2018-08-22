@@ -33,9 +33,6 @@
           <ion-icon *ngIf="office.needSync && office.isRemoved" name="remove-circle" color="danger"></ion-icon>
           {{office.city}}
         </ion-note>
-        <ion-note item-end *ngIf="office.needSync && office.isRemoved">
-          <ion-icon name="remove-circle" color="danger"></ion-icon>
-        </ion-note>
       </button>
       <ion-item-options side="right">
         <button ion-button color="light" (click)="details(office)" *ngIf="!office.isRemoved">Podgląd</button>
