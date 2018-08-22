@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, AlertController, App, Events } from 'ionic-angular';
 import { Person, Gender } from '../../../../shared/person.model';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'page-event-wizard-step-7',
@@ -9,8 +9,11 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 })
 export class EventWizardStep7Page {
   public stepForm: FormGroup;
+  public cleanStepForm: FormGroup;
   private _stepData: any;
   public person: Person;
+
+  @ViewChild('formDir') formDir: NgForm;
 
   constructor(
     public navCtrl: NavController,
@@ -35,7 +38,9 @@ export class EventWizardStep7Page {
         gender: Gender.Pani
       }
       this.stepForm.reset();
+      this.formDir.resetForm();
       this.stepForm.patchValue(this.person);
+      this.stepForm.patchValue(this.cleanStepForm.value);
     }
 
     if (this.navParams.get('person')) {
@@ -50,6 +55,7 @@ export class EventWizardStep7Page {
 
   patchForm(formGroup: FormGroup) {
     this.stepForm = formGroup;
+    this.cleanStepForm = Object.assign({}, formGroup);
   }
 
 
