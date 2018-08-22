@@ -141,6 +141,10 @@ export class EventWizardPage implements OnInit, OnDestroy {
       if (to === 2) {
         this.tab3Params.office = this.eventForm.value.office;
       }
+      // jeżeli idziemy na stronę 6 z 7 to przekazujemy jej aktualne dane person
+      if (from === 7 && to === 6) {
+        this.tab7Params.person = this.people.slice(-1)[0];
+      }
       // jeżeli idziemy na stronę 7 to przekazujemy jej aktualne dane person
       if (to === 7) {
         this.tab8Params.person = this.people.slice(-1)[0];

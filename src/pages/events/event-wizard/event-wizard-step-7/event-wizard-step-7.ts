@@ -37,6 +37,11 @@ export class EventWizardStep7Page {
       this.stepForm.reset();
       this.stepForm.patchValue(this.person);
     }
+
+    if (this.navParams.get('person')) {
+      this.person = this.navParams.get('person');
+      this.stepForm.patchValue(this.person);
+    }
   }
 
   ngOnInit(): void {
