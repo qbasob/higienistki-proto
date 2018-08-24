@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, AlertController, App, Events } from 'ionic-angular';
+import { NavController, NavParams, AlertController, App, Events, LoadingController } from 'ionic-angular';
 import { SafeUrl } from '@angular/platform-browser';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { PhotoService } from '../../../../providers/photo-service/photo-service';
@@ -24,7 +24,8 @@ export class EventWizardStep4Page implements OnInit {
     private appCtrl: App,
     private tabEvents: Events,
     private photoService: PhotoService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private loadingCtrl: LoadingController
   ) {
     this.photosSrc = {
       photoInsideWaiting: 'assets/imgs/placeholder-image.jpg',
@@ -49,6 +50,12 @@ export class EventWizardStep4Page implements OnInit {
 
   public addPhoto($event, index) {
     const fileSelected: File = $event.target.files[0];
+
+    let loading = this.loadingCtrl.create({
+      content: 'Przetwarzanie...'
+    });
+    loading.present();
+
     this.photoService.addPhoto(fileSelected)
       .mergeMap((photoId) => {
         this.stepForm.patchValue({ [index]: photoId });
@@ -56,6 +63,7 @@ export class EventWizardStep4Page implements OnInit {
       })
       .subscribe((photoUrl) => {
         this.photosSrc[index] = photoUrl;
+        loading.dismiss();
       });
   }
 
