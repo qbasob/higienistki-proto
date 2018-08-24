@@ -9,7 +9,8 @@ import { FormGroup, FormBuilder, NgForm } from '@angular/forms';
 })
 export class EventWizardStep7Page {
   public stepForm: FormGroup;
-  public cleanStepForm: FormGroup;
+  public needCleanStepForm: boolean;
+  public cleanStepFormValue: any;
   private _stepData: any;
   public person: Person;
 
@@ -28,9 +29,15 @@ export class EventWizardStep7Page {
       name: '',
       gender: Gender.Pani
     }
+    this.needCleanStepForm = true;
   }
 
   ionViewDidEnter() {
+    if (this.navParams.get('person')) {
+      this.person = this.navParams.get('person');
+      this.stepForm.patchValue(this.person);
+    }
+
     if (this.navParams.get('clear') === true) {
       this.person = {
         id: null,
@@ -40,12 +47,7 @@ export class EventWizardStep7Page {
       this.stepForm.reset();
       this.formDir.resetForm();
       this.stepForm.patchValue(this.person);
-      this.stepForm.patchValue(this.cleanStepForm.value);
-    }
-
-    if (this.navParams.get('person')) {
-      this.person = this.navParams.get('person');
-      this.stepForm.patchValue(this.person);
+      this.stepForm.patchValue(this.cleanStepFormValue);
     }
   }
 
@@ -55,7 +57,11 @@ export class EventWizardStep7Page {
 
   patchForm(formGroup: FormGroup) {
     this.stepForm = formGroup;
-    this.cleanStepForm = Object.assign({}, formGroup);
+    if (this.needCleanStepForm) {
+
+      this.cleanStepFormValue = Object.assign({}, formGroup.value);
+      this.needCleanStepForm = false;
+    }
   }
 
 
