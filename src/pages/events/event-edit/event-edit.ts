@@ -195,7 +195,8 @@ export class EventEditPage {
 
   public addPhotoClick(element, index) {
     // jeżeli appka
-    if (this.platform.is('android')) {
+    console.log("PLATFORMS", this.platform.platforms());
+    if (this.platform.is('cordova')) {
       this.addPhotoPlugin(index);
     }
     // jeżeli przeglądarka
