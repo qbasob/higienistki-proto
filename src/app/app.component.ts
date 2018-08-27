@@ -34,6 +34,7 @@ import { AuthService } from '../providers/auth-service/auth-service';
 })
 export class MyApp {
   rootPage: any = 'LoginPage';
+  // exitCounter = 0;
 
   @ViewChild(Nav) nav: Nav;
   public isOnline: boolean;
@@ -114,6 +115,25 @@ export class MyApp {
       this.statusBar.backgroundColorByHexString("#085c86");
       this.splashScreen.hide();
       this.handleErrorEvents();
+
+      /*
+      // tylko cordova:
+      this.platform.registerBackButtonAction(() => {
+        if (this.exitCounter == 0) {
+          this.exitCounter++;
+          const exitToast = this.toastCtrl.create({
+            message: 'Naciśnij ponownie wstecz, aby wyjść',
+            position: 'bottom',
+            duration: 3000
+          });
+          exitToast.present();
+          setTimeout(() => { this.exitCounter = 0 }, 3000)
+        } else {
+          // console.log("exitapp");
+          this.platform.exitApp();
+        }
+      }, 0);
+      */
 
       if (window['isUpdateAvailable']) {
         window['isUpdateAvailable']
