@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, Events, NavController } from 'ionic-angular';
+import { Nav, Platform, Events, NavController, ToastController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 // import { Storage } from '@ionic/storage';
@@ -56,7 +56,8 @@ export class MyApp {
     private peopleStore: PeopleStore,
     private officesStore: OfficesStore,
     private eventsStore: EventsStore,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastCtrl: ToastController
   ) {
 
     this.isOnline = navigator.onLine;
@@ -114,6 +115,21 @@ export class MyApp {
       this.splashScreen.hide();
       this.handleErrorEvents();
 
+      window['isUpdateAvailable']
+        .then(isAvailable => {
+          if (isAvailable) {
+            const toast = this.toastCtrl.create({
+              message: 'Nowa wersja aplikacji jest dostępna',
+              position: 'bottom',
+              showCloseButton: true,
+              closeButtonText: 'Odśwież'
+            });
+            toast.present();
+            toast.onDidDismiss(() => {
+              location.reload();
+            });
+          }
+        });
     });
   }
 
