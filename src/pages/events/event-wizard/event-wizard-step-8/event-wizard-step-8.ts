@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController, App, Events } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, NavParams, AlertController, App, Events, Content } from 'ionic-angular';
 import { Person, Gender } from '../../../../shared/person.model';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
@@ -13,6 +13,7 @@ export class EventWizardStep8Page {
   private _stepData: any;
 
   public Gender = Gender; // do używania w template
+  @ViewChild(Content) content: Content;
 
   constructor(
     public navCtrl: NavController,
@@ -42,7 +43,8 @@ export class EventWizardStep8Page {
   }
 
   ionViewDidEnter() {
-    console.log("paramperson", this.navParams.get('person'));
+    // console.log("paramperson", this.navParams.get('person'));
+    this.content.scrollToTop();
     if (this.navParams.get('person')) {
       this.person = this.navParams.get('person');
     } else {
