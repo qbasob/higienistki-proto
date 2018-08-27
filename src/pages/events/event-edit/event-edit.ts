@@ -236,14 +236,21 @@ export class EventEditPage {
 
   public addPhoto($event, index) {
     const fileSelected: File = $event.target.files[0];
-      this.photoService.addPhoto(fileSelected)
-        .mergeMap((photoId) => {
-          this.eventForm.patchValue({ [index]: photoId });
-          return this.photoService.getPhotoUrl(photoId);
-        })
-        .subscribe((photoUrl) => {
-          this.photosSrc[index] = photoUrl;
-        });
+
+    let loading = this.loadingCtrl.create({
+      content: 'Przetwarzanie...'
+    });
+    loading.present();
+
+    this.photoService.addPhoto(fileSelected)
+      .mergeMap((photoId) => {
+        this.eventForm.patchValue({ [index]: photoId });
+        return this.photoService.getPhotoUrl(photoId);
+      })
+      .subscribe((photoUrl) => {
+        this.photosSrc[index] = photoUrl;
+        loading.dismiss();
+      });
   }
 
   // opcje gabinetu
