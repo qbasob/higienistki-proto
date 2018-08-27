@@ -93,7 +93,7 @@ export abstract class AbstractStore<T extends LocalModel> {
     if (this._dataStore) {
       const doNeedSync = this._dataStore.filter(record => record.needSync);
       if (doNeedSync.length > 0) {
-        return Observable.throw("Nie można pobrać danych z serwera, dopóki istnieją lokalne dane niezsynchronizowane z serwerem.");
+        return Observable.throw(new Error("Nie można pobrać danych z serwera, dopóki istnieją lokalne dane niezsynchronizowane z serwerem."));
       }
     }
     return this.http.get<Array<T>>(this._apiUrl + this._apiSuffix)
@@ -203,6 +203,7 @@ export abstract class AbstractStore<T extends LocalModel> {
         return Observable.of(record);
       })
       .switchMap((serverRecord: T) => {
+        console.log('noo!', serverRecord);
         // jeżeli dane zapisane na serwerze (lub błąd serwera), to edytujemy rekord w store
         this._dataStore.forEach((arrayRecord, index) => {
           // szukamy po lokalnym id i aktualizujemy

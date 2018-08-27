@@ -98,7 +98,7 @@ export class EventsStore extends AbstractStore<PEvent> {
     if (this._dataStore) {
       const doNeedSync = this._dataStore.filter(record => record.needSync);
       if (doNeedSync.length > 0) {
-        return Observable.throw("Nie można pobrać danych z serwera, dopóki istnieją lokalne dane niezsynchronizowane z serwerem.");
+        return Observable.throw(new Error("Nie można pobrać danych z serwera, dopóki istnieją lokalne dane niezsynchronizowane z serwerem."));
       }
     }
     return this.http.get<Array<PEvent>>(this._apiUrl + this._apiSuffix)
