@@ -41,7 +41,7 @@ export class EventWizardStep5Page implements OnInit {
 
     if (this.stepForm.valid) {
       this._stepData = Object.assign({}, this.stepForm.value);
-      if (this.stepForm.value.isBuyingSonicare === "yes") {
+      if (this.stepForm.value.isBuyingSonicare === "yes_own") {
         this.tabEvents.publish('event-wizard-change-tab', 4, 5, this._stepData);
       } else {
         const confirm = this.alertCtrl.create({
