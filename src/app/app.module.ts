@@ -49,6 +49,7 @@ import { PhotoService } from '../providers/photo-service/photo-service';
 
 import { Camera } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
+import { FocusToggleChangeDirective } from '../directives/focus-toggle-change.directive';
 
 
 // import { CustomValidators } from '../validators/custom-validators';
@@ -82,7 +83,8 @@ import { File } from '@ionic-native/file';
     PersonViewPage,
     PersonPopoverPage,
     PersonViewAcceptPage,
-    SettingsPage
+    SettingsPage,
+    FocusToggleChangeDirective
   ],
   imports: [
     BrowserModule,

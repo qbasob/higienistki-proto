@@ -110,7 +110,7 @@
         <!-- BRAK MOŻLIWOŚCI WYKONANIA ZDJĘCIA W POCZEKALNI -->
         <ion-item>
           <ion-label>Brak możliwości wykonania zdjęcia w poczekalni</ion-label>
-          <ion-toggle formControlName="noPhotoInsideWaiting"></ion-toggle>
+          <ion-toggle focusToggleChange formControlName="noPhotoInsideWaiting"></ion-toggle>
         </ion-item>
         <span ion-text *ngIf="(eventForm.get('noPhotoInsideWaiting').dirty || formDir.submitted) && eventForm.get('noPhotoInsideWaiting').invalid" color="danger" padding-left>
           <span *ngIf="eventForm.get('noPhotoInsideWaiting').errors.required">
@@ -152,7 +152,7 @@
         <!-- BRAK MOŻLIWOŚCI WYKONANIA ZDJĘCIA W GABINECIE -->
         <ion-item>
           <ion-label>Brak możliwości wykonania zdjęcia w gabinecie</ion-label>
-          <ion-toggle formControlName="noPhotoInsideOffice"></ion-toggle>
+          <ion-toggle focusToggleChange formControlName="noPhotoInsideOffice"></ion-toggle>
         </ion-item>
         <span ion-text *ngIf="(eventForm.get('noPhotoInsideOffice').dirty || formDir.submitted) && eventForm.get('noPhotoInsideOffice').invalid"
           color="danger" padding-left>
@@ -178,7 +178,7 @@
 
         <ion-item>
           <ion-label>Gabinet jest częścią sieci gabinetów</ion-label>
-          <ion-toggle formControlName="isOfficeNetwork"></ion-toggle>
+          <ion-toggle focusToggleChange formControlName="isOfficeNetwork"></ion-toggle>
         </ion-item>
 
         <!-- LICZBA PLACÓWEK -->
@@ -228,7 +228,7 @@
 
         <ion-item>
           <ion-label>Czy w gabinecie są higienistki/higieniści</ion-label>
-          <ion-toggle formControlName="hasOfficeHigienists"></ion-toggle>
+          <ion-toggle focusToggleChange formControlName="hasOfficeHigienists"></ion-toggle>
         </ion-item>
 
         <!-- LICZBA HIGIENISTEK -->

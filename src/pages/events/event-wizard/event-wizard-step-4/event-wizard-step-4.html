@@ -36,7 +36,7 @@
       <!-- BRAK MOŻLIWOŚCI WYKONANIA ZDJĘCIA W POCZEKALNI -->
       <ion-item>
         <ion-label>Brak możliwości wykonania zdjęcia</ion-label>
-        <ion-toggle formControlName="noPhotoInsideWaiting"></ion-toggle>
+        <ion-toggle focusToggleChange formControlName="noPhotoInsideWaiting"></ion-toggle>
       </ion-item>
       <span ion-text *ngIf="(stepForm.get('noPhotoInsideWaiting').dirty || formDir.submitted) && stepForm.get('noPhotoInsideWaiting').invalid"
         color="danger" padding-left>
@@ -82,7 +82,7 @@
       <!-- BRAK MOŻLIWOŚCI WYKONANIA ZDJĘCIA W GABINECIE -->
       <ion-item>
         <ion-label>Brak możliwości wykonania zdjęcia</ion-label>
-        <ion-toggle formControlName="noPhotoInsideOffice"></ion-toggle>
+        <ion-toggle focusToggleChange formControlName="noPhotoInsideOffice"></ion-toggle>
       </ion-item>
       <span ion-text *ngIf="(stepForm.get('noPhotoInsideOffice').dirty || formDir.submitted) && stepForm.get('noPhotoInsideOffice').invalid"
         color="danger" padding-left>

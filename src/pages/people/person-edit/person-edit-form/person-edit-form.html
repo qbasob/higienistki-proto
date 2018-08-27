@@ -73,25 +73,25 @@
       <span *ngSwitchCase="Gender.Pani">Użytkowniczka</span>
       <span *ngSwitchCase="Gender.Pan">Użytkownik</span>
       Sonicare</ion-label>
-    <ion-toggle formControlName="sonicareUser"></ion-toggle>
+    <ion-toggle focusToggleChange formControlName="sonicareUser"></ion-toggle>
   </ion-item>
   <ion-item>
     <ion-label [ngSwitch]="personFormGroup.get('gender').value">
       <span *ngSwitchCase="Gender.Pani">Zainteresowana</span>
       <span *ngSwitchCase="Gender.Pan">Zainteresowany</span>
       rekomendowaniem Sonicare</ion-label>
-    <ion-toggle formControlName="sonicareRecom"></ion-toggle>
+    <ion-toggle focusToggleChange formControlName="sonicareRecom"></ion-toggle>
   </ion-item>
   <ion-item>
     <ion-label [ngSwitch]="personFormGroup.get('gender').value">
       <span *ngSwitchCase="Gender.Pani">Zainteresowana</span>
       <span *ngSwitchCase="Gender.Pan">Zainteresowany</span>
       otrzymaniem kodów rabatowych</ion-label>
-    <ion-toggle formControlName="wantCodes"></ion-toggle>
+    <ion-toggle focusToggleChange formControlName="wantCodes"></ion-toggle>
   </ion-item>
   <ion-item>
     <ion-label>Wręczono pakiet startowy</ion-label>
-    <ion-toggle formControlName="gotStarter"></ion-toggle>
+    <ion-toggle focusToggleChange formControlName="gotStarter"></ion-toggle>
   </ion-item>
   <div [slide-down]="personFormGroup.get('gotStarter').value">
     <ion-item>
@@ -107,26 +107,26 @@
   </span>
   <ion-item>
     <ion-label>Wręczono ekspozytor Sonicare</ion-label>
-    <ion-toggle formControlName="gotExpositor"></ion-toggle>
+    <ion-toggle focusToggleChange formControlName="gotExpositor"></ion-toggle>
   </ion-item>
   <ion-item>
     <ion-label>Zgłaszam udział w programie</ion-label>
-    <ion-toggle formControlName="agreeReg"></ion-toggle>
+    <ion-toggle focusToggleChange formControlName="agreeReg"></ion-toggle>
   </ion-item>
   <ion-item>
     <ion-label>Zgoda marketingowa 1</ion-label>
-    <ion-toggle formControlName="agreeMark1"></ion-toggle>
+    <ion-toggle focusToggleChange formControlName="agreeMark1"></ion-toggle>
   </ion-item>
   <ion-item>
     <ion-label>Zgoda marketingowa 2</ion-label>
-    <ion-toggle formControlName="agreeMark2"></ion-toggle>
+    <ion-toggle focusToggleChange formControlName="agreeMark2"></ion-toggle>
   </ion-item>
   <ion-item>
     <ion-label>Zgoda marketingowa 3</ion-label>
-    <ion-toggle formControlName="agreeMark3"></ion-toggle>
+    <ion-toggle focusToggleChange formControlName="agreeMark3"></ion-toggle>
   </ion-item>
   <ion-item>
     <ion-label>Zgoda marketingowa 4</ion-label>
-    <ion-toggle formControlName="agreeMark4"></ion-toggle>
+    <ion-toggle focusToggleChange formControlName="agreeMark4"></ion-toggle>
   </ion-item>
 </ion-list>
