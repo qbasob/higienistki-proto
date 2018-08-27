@@ -115,21 +115,23 @@ export class MyApp {
       this.splashScreen.hide();
       this.handleErrorEvents();
 
-      window['isUpdateAvailable']
-        .then(isAvailable => {
-          if (isAvailable) {
-            const toast = this.toastCtrl.create({
-              message: 'Nowa wersja aplikacji jest dostępna',
-              position: 'bottom',
-              showCloseButton: true,
-              closeButtonText: 'Odśwież'
-            });
-            toast.present();
-            toast.onDidDismiss(() => {
-              location.reload();
-            });
-          }
-        });
+      if (window['isUpdateAvailable']) {
+        window['isUpdateAvailable']
+          .then(isAvailable => {
+            if (isAvailable) {
+              const toast = this.toastCtrl.create({
+                message: 'Nowa wersja aplikacji jest dostępna',
+                position: 'bottom',
+                showCloseButton: true,
+                closeButtonText: 'Odśwież'
+              });
+              toast.present();
+              toast.onDidDismiss(() => {
+                location.reload();
+              });
+            }
+          });
+      }
     });
   }
 

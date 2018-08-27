@@ -7,7 +7,7 @@
 'use strict';
 importScripts('./build/sw-toolbox.js');
 
-const cacheVersion = 4;
+const cacheVersion = 5;
 
 self.addEventListener('install', function (event) {
   self.skipWaiting();
