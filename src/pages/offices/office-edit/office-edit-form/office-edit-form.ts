@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { Office } from '../../../../shared/office.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AlertController, PopoverController } from 'ionic-angular';
+import { PopoverController } from 'ionic-angular';
 import { OfficeInfoPopoverPage } from '../../office-info-popover/office-info-popover';
 
 @Component({

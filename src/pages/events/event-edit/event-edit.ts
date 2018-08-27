@@ -22,7 +22,7 @@ import { SafeUrl } from '@angular/platform-browser';
 import { CustomValidators } from '../../../validators/custom-validators';
 
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { File as CFile, FileEntry, IFile } from '@ionic-native/file';
+import { File as CFile, FileEntry } from '@ionic-native/file';
 
 // import { CustomValidators } from '../../../validators/custom-validators';
 
