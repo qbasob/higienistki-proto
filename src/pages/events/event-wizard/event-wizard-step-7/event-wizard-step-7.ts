@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, AlertController, App, Events } from 'ionic-angular';
+import { NavController, NavParams, AlertController, App, Events, Content } from 'ionic-angular';
 import { Person, Gender } from '../../../../shared/person.model';
 import { FormGroup, FormBuilder, NgForm } from '@angular/forms';
 
@@ -15,6 +15,7 @@ export class EventWizardStep7Page {
   public person: Person;
 
   @ViewChild('formDir') formDir: NgForm;
+  @ViewChild(Content) content: Content;
 
   constructor(
     public navCtrl: NavController,
@@ -48,6 +49,7 @@ export class EventWizardStep7Page {
       this.formDir.resetForm();
       this.stepForm.patchValue(this.person);
       this.stepForm.patchValue(this.cleanStepFormValue);
+      this.content.scrollToTop();
     }
   }
 
