@@ -49,7 +49,7 @@ export class OfficeEditFormComponent implements OnInit {
       name: [null, [Validators.required, Validators.minLength(5)]],
       nip: [null, Validators.minLength(10)],
       street: [null, Validators.required],
-      buildingNo: [null, Validators.required],
+      buildingNo: null,
       localNo: null,
       postal: [null, [Validators.required, Validators.minLength(5)]],
       city: [null, Validators.required],
