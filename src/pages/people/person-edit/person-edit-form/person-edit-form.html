@@ -46,6 +46,7 @@
     label="Telefon komórkowy *"
     typeLabel="floating"
     formControlName="phone"
+    [dropSpecialCharacters]="false"
     mask="000-000-000">
   </ion-input-mask>
   <span ion-text *ngIf="(personFormGroup.get('phone').dirty || formDir.submitted) && personFormGroup.get('phone').invalid" color="danger" padding-left>

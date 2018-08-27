@@ -21,7 +21,13 @@
       <ion-label floating>NIP</ion-label>
       <ion-input type="text" formControlName="nip"></ion-input>
     </ion-item> -->
-  <ion-input-mask type="text" label="NIP" typeLabel="floating" formControlName="nip" mask="0000000000">
+  <ion-input-mask
+    type="text"
+    label="NIP"
+    typeLabel="floating"
+    formControlName="nip"
+    [dropSpecialCharacters]="false"
+    mask="0000000000">
   </ion-input-mask>
   <span ion-text *ngIf="(officeFormGroup.get('nip').dirty || formDir.submitted) && officeFormGroup.get('nip').invalid" color="danger"
     padding-left>
@@ -71,6 +77,7 @@
     label="Kod pocztowy *"
     typeLabel="floating"
     formControlName="postal"
+    [dropSpecialCharacters]="false"
     mask="00-000">
   </ion-input-mask>
   <span ion-text *ngIf="(officeFormGroup.get('postal').dirty || formDir.submitted) && officeFormGroup.get('postal').invalid" color="danger" padding-left>
@@ -116,9 +123,10 @@
   </ion-item> -->
   <ion-input-mask
     type="text"
-    label="Numer telefonu do gabinetu *"
+    label="Numer telefonu do gabinetu"
     typeLabel="floating"
     formControlName="phone"
+    [dropSpecialCharacters]="false"
     mask="000-000-000">
   </ion-input-mask>
   <span ion-text *ngIf="(officeFormGroup.get('phone').dirty || formDir.submitted) && officeFormGroup.get('phone').invalid" color="danger" padding-left>

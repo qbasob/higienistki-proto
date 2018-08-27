@@ -55,7 +55,7 @@ export class OfficeEditFormComponent implements OnInit {
       city: [null, Validators.required],
       // county: null,
       voivodeship: [null, Validators.required],
-      phone: [null, [Validators.required, Validators.minLength(9)]],
+      phone: [null, [Validators.minLength(9)]],
       krsName: null, //[null, Validators.required],
       locationInfo: null
     });
