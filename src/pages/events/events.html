@@ -4,7 +4,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title float-left>Wizyty</ion-title>
-    <ion-title float-right><small>Twój miesięczny target: {{ targetVal }}%</small></ion-title>
+    <ion-title float-right><small>Twój miesięczny target: {{ targetVal | number: '1.2-2' }}%</small></ion-title>
   </ion-navbar>
 </ion-header>
 
