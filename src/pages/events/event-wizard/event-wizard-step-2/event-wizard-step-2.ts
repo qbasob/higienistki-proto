@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams, AlertController, App, Events, LoadingController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, App, Events, Platform, LoadingController } from 'ionic-angular';
 import { SafeUrl } from '@angular/platform-browser';
 import { PhotoService } from '../../../../providers/photo-service/photo-service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 
 @Component({
   selector: 'page-event-wizard-step-2',
@@ -23,7 +24,9 @@ export class EventWizardStep2Page implements OnInit {
     private tabEvents: Events,
     private photoService: PhotoService,
     private formBuilder: FormBuilder,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private platform: Platform,
+    private camera: Camera
   ) {
     this.photosSrc = {
       photoOutside: 'assets/imgs/placeholder-image.jpg',
@@ -36,8 +39,44 @@ export class EventWizardStep2Page implements OnInit {
     });
   }
 
-  public addPhotoClick(element) {
-    element.click();
+  public addPhotoClick(element, index) {
+    // jeżeli appka
+    if (this.platform.is('cordova')) {
+      this.addPhotoCordova(index);
+    }
+    // jeżeli przeglądarka
+    else {
+      element.click();
+    }
+  }
+
+  // wymaga pluginów Camera i File
+  public addPhotoCordova(index) {
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+
+    let loading = this.loadingCtrl.create({
+      content: 'Przetwarzanie...'
+    });
+    loading.present();
+
+    this.camera.getPicture(options).then((imageURL) => {
+      this.photoService.addPhotoCordova(imageURL)
+        .mergeMap((photoId) => {
+          this.stepForm.patchValue({ [index]: photoId });
+          return this.photoService.getPhotoUrl(photoId);
+        })
+        .subscribe(
+          (photoUrl) => {
+            this.photosSrc[index] = photoUrl;
+            loading.dismiss();
+          }
+        );
+    });
   }
 
   public addPhoto($event, index) {

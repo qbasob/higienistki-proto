@@ -133,7 +133,7 @@ export class EventWizardPage implements OnInit, OnDestroy {
 
       // jeżeli wracamy na stronę 1 to przekazujemy jej aktualne dane office
       if (from === 1 && to === 0) {
-        console.log("from 1 to 0", this.eventForm.value.office);
+        // console.log("from 1 to 0", this.eventForm.value.office);
         this.tab1Params.office = this.eventForm.value.office;
       }
 

@@ -21,7 +21,7 @@
             <ion-col text-center>
               <img [src]="photosSrc.photoInsideWaiting" class="photo">
               <input type="file" (change)="addPhoto($event, 'photoInsideWaiting')" id="file-input" style="display: none;" #fileInp1>
-              <button ion-button type="button" (click)="addPhotoClick(fileInp1)">Zrób zdjęcie</button>
+              <button ion-button type="button" (click)="addPhotoClick(fileInp1, 'photoInsideWaiting')">Zrób zdjęcie</button>
               <div ion-text *ngIf="(stepForm.get('photoInsideWaiting').dirty || formDir.submitted) && stepForm.get('photoInsideWaiting').invalid"
                 color="danger" padding-left>
                 <span *ngIf="stepForm.get('photoInsideWaiting').errors.required">
@@ -67,7 +67,7 @@
             <ion-col text-center>
               <img [src]="photosSrc.photoInsideOffice" class="photo">
               <input type="file" (change)="addPhoto($event, 'photoInsideOffice')" id="file-input" style="display: none;" #fileInp2>
-              <button ion-button type="button" (click)="addPhotoClick(fileInp2)">Zrób zdjęcie</button>
+              <button ion-button type="button" (click)="addPhotoClick(fileInp2, 'photoInsideOffice')">Zrób zdjęcie</button>
               <div ion-text *ngIf="(stepForm.get('photoInsideOffice').dirty || formDir.submitted) && stepForm.get('photoInsideOffice').invalid"
                 color="danger" padding-left>
                 <span *ngIf="stepForm.get('photoInsideOffice').errors.required">

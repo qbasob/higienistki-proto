@@ -17,7 +17,7 @@
       <ion-col text-center>
         <img [src]="photosSrc.photoOutside" class="photo">
         <input type="file" (change)="addPhoto($event, 'photoOutside')" id="file-input" style="display: none;" #fileInp0>
-        <button ion-button type="button" (click)="addPhotoClick(fileInp0)">Zrób zdjęcie</button>
+        <button ion-button type="button" (click)="addPhotoClick(fileInp0, 'photoOutside')">Zrób zdjęcie</button>
       </ion-col>
     </ion-row>
     <ion-row>

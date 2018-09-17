@@ -22,7 +22,6 @@ import { SafeUrl } from '@angular/platform-browser';
 import { CustomValidators } from '../../../validators/custom-validators';
 
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { File as CFile, FileEntry } from '@ionic-native/file';
 
 // import { CustomValidators } from '../../../validators/custom-validators';
 
@@ -61,8 +60,7 @@ export class EventEditPage {
     private peopleStore: PeopleStore,
     private photoService: PhotoService,
     private platform: Platform,
-    private camera: Camera,
-    private file: CFile
+    private camera: Camera
   ) {
 
     if (navParams.get('event')) {
@@ -195,9 +193,8 @@ export class EventEditPage {
 
   public addPhotoClick(element, index) {
     // jeżeli appka
-    console.log("PLATFORMS", this.platform.platforms());
     if (this.platform.is('cordova')) {
-      this.addPhotoPlugin(index);
+      this.addPhotoCordova(index);
     }
     // jeżeli przeglądarka
     else {
@@ -207,7 +204,7 @@ export class EventEditPage {
 
 
   // wymaga pluginów Camera i File
-  public addPhotoPlugin(index) {
+  public addPhotoCordova(index) {
     const options: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.FILE_URI,
@@ -215,21 +212,23 @@ export class EventEditPage {
       mediaType: this.camera.MediaType.PICTURE
     }
 
+    let loading = this.loadingCtrl.create({
+      content: 'Przetwarzanie...'
+    });
+    loading.present();
+
     this.camera.getPicture(options).then((imageURL) => {
-      this.file.resolveLocalFilesystemUrl(imageURL)
-        .then((fileEntry: FileEntry) => {
-          console.log("got image file entry: " + fileEntry.fullPath);
-          fileEntry.file((fileSelected: any) => {
-            this.photoService.addPhoto(fileSelected)
-              .mergeMap((photoId) => {
-                this.eventForm.patchValue({ [index]: photoId });
-                return this.photoService.getPhotoUrl(photoId);
-              })
-              .subscribe((photoUrl) => {
-                this.photosSrc[index] = photoUrl;
-              });
-          });
-        });
+      this.photoService.addPhotoCordova(imageURL)
+        .mergeMap((photoId) => {
+          this.eventForm.patchValue({ [index]: photoId });
+          return this.photoService.getPhotoUrl(photoId);
+        })
+        .subscribe(
+          (photoUrl) => {
+            this.photosSrc[index] = photoUrl;
+            loading.dismiss();
+          }
+        );
     });
   }
 

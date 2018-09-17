@@ -203,7 +203,6 @@ export abstract class AbstractStore<T extends LocalModel> {
         return Observable.of(record);
       })
       .switchMap((serverRecord: T) => {
-        console.log('noo!', serverRecord);
         // jeżeli dane zapisane na serwerze (lub błąd serwera), to edytujemy rekord w store
         this._dataStore.forEach((arrayRecord, index) => {
           // szukamy po lokalnym id i aktualizujemy

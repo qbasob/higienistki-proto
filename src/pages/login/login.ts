@@ -47,7 +47,7 @@ export class LoginPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage', ENV);
+    // console.log('ionViewDidLoad LoginPage', ENV);
 
     if (this.isLoggedIn) {
       this.navCtrl.setRoot(EventsPage)
@@ -72,7 +72,7 @@ export class LoginPage {
         },
         // jeśli złe dane, pokazujemy toast
         error => {
-          console.log("er", error);
+          // console.log("er", error);
           const toast = this.toastCtrl.create({
             message: (error.error && error.error.message) || error.message,
             duration: 3000,

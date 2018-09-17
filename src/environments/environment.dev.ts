@@ -1,8 +1,5 @@
 export const ENV = {
     mode: 'Development',
-    endpoint: 'http://localhost/higienistki-cake',
-    // endpoint: 'http://localhost/higienistki',
-    // endpoint: 'http://localhost:3000',
-    // endpoint: 'https://www.karlsbad.pl/sonicare',
+    endpoint: 'http://192.168.1.15/higienistki-cake',
     endpointSuffix: '.json'
 }
